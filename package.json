@@ -1,0 +1,41 @@
+{
+  "name": "fb-myday",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/react": "^18.0.31",
+    "@types/react-dom": "^18.0.11",
+    "@typescript-eslint/eslint-plugin": "^5.49.0",
+    "@typescript-eslint/parser": "^5.49.0",
+    "eslint": "^8.32.0",
+    "eslint-plugin-react": "^7.32.1",
+    "parcel-bundler": "^1.12.5",
+    "prettier": "^2.7.1",
+    "react-css-modules": "^4.7.11",
+    "typescript": "^4.8.4"
+  },
+  "homepage": "https://celtunoorg.github.io",
+  "scripts": {
+    "dev": "parcel src/index.html",
+    "predeploy": "parcel build src/index.html",
+    "deploy": "gh-pages -d build",
+    "build": "parcel build src/index.html"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.10.4",
+    "@emotion/styled": "^11.10.4",
+    "@mui/material": "^5.10.8",
+    "@react-firebase/auth": "^0.2.10",
+    "bootstrap": "^5.2.1",
+    "firebase": "^9.10.0",
+    "gh-pages": "^5.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router": "^6.4.2",
+    "react-router-dom": "^6.4.1",
+    "react-scripts": "^5.0.1",
+    "react-select": "^5.4.0",
+    "save-dev": "^0.0.1-security"
+  }
+}
