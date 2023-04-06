@@ -35,29 +35,35 @@ let filteredDaysNames: string[] = []
 //   selectedDay: string
 // }
 
-// type State = {
-//   days: IDay[] | null
-//   daysFiltered: IDay[] | null
-//   
-//   selectChoices: object
-//   selectedDay: string
-// };
-// let tName = "nonMatchingDayName";
+type State = {
+  days: IDay[] | null
+  daysFiltered: IDay[] | null
+  
+  selectChoices: object
+  selectedDay: string
+};
+
 
 export const Daysfunc = () => {
+  
   const [key, setKey] = useState({
     selectedDay: "0",
     testString: "Test",
     selectedDayName: ""
   });
+  
   const initDays: IDay[] = [];
+  
   const [stateDays, setDays] = useState({
     days: initDays,
   })
+
   const [stateFilterDays, setFilterDays] = useState({
     daysFiltered: initDays
   })
+
   // let selectedDayName = ""
+
   useEffect(() => {
     const fetchData = async () => {
       await getAllDbEntries();
@@ -68,34 +74,23 @@ export const Daysfunc = () => {
     fetchData().then(
     setKeyFromDate)
       // make sure to catch any error
-      .catch(console.error)
+      .catch(console.error);
 
-  
-    
+    if(stateDays.days.length >0){
+      setKeyFromDate
+
+    }  
+
     // alert(
     //   `Loaded ${dayArray.length} days from DB` //"This was the componentDidMount in Cats.js but now it's coming from the ChangeCat.js useEffect to the DOM"
     // );
+
   }, []);
-  const handleClick = (e) => setKey({ ...key, selectedDay: e.target.value });
-  const handleClick1 = (newKey) => setKey({ ...key, selectedDay: newKey});
 
+  // const handleClick = (e) => setKey({ ...key, selectedDay: e.target.value });
+  const setDayKey = (newKey) => setKey({ ...key, selectedDay: newKey});
 
-
-
-  // constructor(props: Props) {
-  //   super(props);
-  //   this.getFilteredDays = this.getFilteredDays.bind(this);
-  //   // this.setDays = this.setDays.bind(this);
-  //   this.state = {
-  //     selectChoices: {},
-  //     days: null,
-  //     daysFiltered: null,
-  //     filteredDaysNames: [],
-  //     selectedDay: ""
-  //   };
-
-  // }
-
+ 
   // setDays() {
   //   this.setState({
   //     days: dayArray,
@@ -106,11 +101,6 @@ export const Daysfunc = () => {
   //   console.log(this.state.selectedDay)
 
   // }
-  const getDb = (e) => {
-    getAllDbEntries();
-    return
-  }
-
 
   async function getAllDbEntries() {
     dayArray.length = 0;
@@ -127,17 +117,17 @@ export const Daysfunc = () => {
         // const snapshotValue = snapshot.val();
         // console.log(data.toJSON)
         if (snapshot.exists()) {
-          console.log("Mapping data:");
+          console.log("Snapshot found, mapping data:");
           snapshot.forEach(function (childSnapshot) {
             const key = childSnapshot.key;
             const childData = childSnapshot.val() as IDay;
             childData.key = key;
             dayArray.push(childData);
           })
-          console.log("AllDataDBlength: ");
+          console.log("DB items found:");
           console.log(dayArray.length)
           filteredDayArray = dayArray
-          console.log("DOne")
+          // console.log("DOne")
           dayArray.map((item, index) => {
             dayNameArray.push(
               {
@@ -145,20 +135,28 @@ export const Daysfunc = () => {
                 label: item.name//.toLocaleUpperCase()
               })
           })
-          setDays({ ...stateDays, days: dayArray })
-          setKeyFromDate
           // setDays();
-console.log("fetched " + dayArray.length + " days")
-
+          console.log("fetched " + dayArray.length + " days")
+          setFilterDays({...stateFilterDays, daysFiltered: filteredDayArray})
+          setKeyFromDate
         }
       })
-    }).finally(() => {
-      
-      console.log("Finally")
+    }).then(()=> {
+      setDays({ ...stateDays, days: dayArray })
+      setFilterDays({...stateFilterDays, daysFiltered: filteredDayArray})
+      setKeyFromDate
     })
-
-  }
-
+    .catch((ex)=>{
+      console.log(ex)
+    })
+    .finally(() => {      
+      console.log("Finally")
+        
+    setFilterDays({...stateFilterDays, daysFiltered: filteredDayArray})
+    setDays({ ...stateDays, days: dayArray })
+    setKeyFromDate
+    })
+  } 
 
   function setFilteredDays() {  
    
@@ -192,31 +190,23 @@ console.log("fetched " + dayArray.length + " days")
     }
   }
 
-  // changeContext = () => {
-  //   console.log("#state    -> " + this.state.user.userName)
-  //   console.log("#userData -> " + userData.user.userName)
-  //   // console.log("#props    -> " + this.props.testString)
-  //   console.log("#propschi -> " + this.props.children)
-  //   // this.setState(state => ({
-  //   //   user: {
-  //   //     userName: state.user.userName === userData.user.userName ? userData.user.userName : "NewUser",
-  //   //     loggedIn: state.user.loggedIn === true ? false : true,
-  //   //   }
-  //   //   // buttonTheme: state.buttonTheme === buttonThemes.primary ? buttonThemes.secondary : buttonThemes.primary,
-  //   // }));
-  //   return null
-  // }
 
   // openFilters = () => {
   //   <SetFilter daysFromParent={dayArray} myCallBack={this.handleReturn} choiceNames={dayNameArray} currentfilter={selectedFilters} ></SetFilter>
   // }
 
-  // parseTheInt(stringToCHeck: string | null | undefined) {
-  //   if (stringToCHeck === null || stringToCHeck === undefined)
-  //     return 0;
+  function parseTheInt(stringToCHeck: string | null | undefined) {
+    if (stringToCHeck === null || stringToCHeck === undefined)
+      return 0;
 
-  //   return Number.parseInt(stringToCHeck.toString() ?? 0)
-  // }
+    return Number.parseInt(stringToCHeck.toString() ?? 0)
+  }
+
+  function capitalizeString(str : string){
+
+    const tmmpString = str.toLowerCase().charAt(0).toUpperCase().concat(str.slice(1));
+    return tmmpString
+  }
 
   const checkData = (values: IDay[]) => {
     // console.log("Start check ");
@@ -262,18 +252,7 @@ console.log("fetched " + dayArray.length + " days")
       return d.toString();
     }    
   }
-  // componentDidMount() {
-  //   console.log("mount")
-  //   this.getAllDbEnt2();
-
-  //   const datekey = this.setKeyFromDate()
-  //   this.gotoDay(datekey)
-  // }
-
-  // componentDidUpdate(prevProps) {
-  //   console.log("Update 1");
-  // }
-
+  
   // hasDaysInList() {
   //   if (dayArray.length === 0)//!key)
   //     return true;//return "hidden";
@@ -282,27 +261,28 @@ console.log("fetched " + dayArray.length + " days")
 
   const resetselectColor = (key: string | null | undefined) => {
     if (key !== null && key !== undefined) {
-      console.log("Key")
+      // console.log("Key")
       for (let i = 1; i <= 7; i++) {
         const element = document.getElementById("day" + i)
         if (element) {
-          console.log("Element")
+          // console.log("Element")
           element.style.background = "#99d3b618"
         }
       }
     }
   }
+
   let theDay = "";
   function gotoDay(key: string | null | undefined){
     if (key !== null && key !== undefined) {
       theDay = key;
-      console.log(theDay)
+      console.log(`Key day set to: ${theDay}`)
       resetselectColor(key);
       const element = document.getElementById("day" + key)
       if (element)
-      element.style.background = '#858e8d31'
+        element.style.background = '#858e8d31'
       // const tmpName = dayNameArray?.at(Number.parseInt(key)).label ?? ""
-      handleClick1(theDay);
+      setDayKey(theDay);
       
     }
   }
@@ -321,92 +301,9 @@ console.log("fetched " + dayArray.length + " days")
   //         </button>
 
   //       </div> */}
-  //       <div>
-  //         <div className="col-md-6">
-  //           <SetFilter daysFromParent={dayArray} myCallBack={this.handleReturn} choiceNames={dayNameArray} currentfilter={selectedFilters} />
-  //           <button
-  //             className="m-3 btn btn-sm btn-success"
-  //             hidden={selectDayAr.length === 0}// {this.hasKey("dummy") && this.state.daysFiltered === null && this.state.filteredDaysNames?.length > 0}
-  //             onClick={
-  //               this.getFilteredDays}
-  //           >
-  //             Apply filter
-  //           </button>
-  //           <button
-  //             className="m-3 btn btn-sm btn-success"
-
-  //             onClick={
-  //               this.clearFilter}
-  //           >
-  //             Clear filter
-  //           </button>
-
-  //           <UpdateDayModal selectedDay={this.state.selectedDay} runOnLoadingParent={true} isOpen={false} getfunc={() => { return theDay }}></UpdateDayModal>
-  //         </div>
-  //         <div className="dayListContainer ">
-  //           {
-  //             active ? (
-  //               <div className="grid-container">
-
-  //                 {
-
-  //                   filteredDayArray?.map((day, index) =>
-  //                   (
-  //                     <div className="dayItem" id={"day" + day.key} onClick={() => { this.gotoDay(day.key) }} key={day.key}>
 
 
-  //                       <div className="dKey" >
 
-  //                         {day.name.toLowerCase().charAt(0).toUpperCase().concat(day.name.slice(1))}
-  //                       </div>
-
-  //                       <div className="grid-item">
-  //                         <ul className="">
-  //                           <li key={"1-" + anum + index}>
-  //                             {/* {day.formiddag} */}
-  //                             <br />
-  //                             <div className="imagecontainer">
-
-  //                               <img onError={e => { e.currentTarget.src = "/images/error.png" }} src={"/images/" + day.formiddag} alt={day.formiddag}></img>
-  //                             </div>
-  //                           </li>
-  //                           <li key={"2-" + anum + index}>
-  //                             {/* {day.ettermiddag} */}
-  //                             <div className="imagecontainer">
-
-  //                               <img onError={e => { e.currentTarget.src = "/images/error.png" }} src={"/images/" + day.ettermiddag} alt={day.ettermiddag}></img>
-  //                             </div>
-  //                           </li>
-  //                           <li key={"3-" + anum}>
-  //                             {/* {day.natt} */}
-  //                             <div className="imagecontainer">
-
-  //                               <img onError={e => { e.currentTarget.src = "/images/error.png" }} src={"/images/" + day.natt} alt={day.natt}></img>
-  //                             </div>
-  //                           </ li>
-  //                         </ul>
-  //                       </div>
-  //                     </div>
-  //                   ))
-  //                 }
-
-  //               </div>
-
-  //             )
-  //               :
-  //               (
-  //                 <div className="box">
-  //                   <a onClick={this.getAllDbEnt2}>
-  //                     Click to fetch
-  //                   </a>
-  //                 </div>
-  //               )
-  //           }
-  //         </div>
-  //       </div >
-  //     </div>
-  //   );
-  // }
   const anum = 1
   return (
     <>
@@ -415,11 +312,12 @@ console.log("fetched " + dayArray.length + " days")
 
       <h4>
         { 
-        filteredDayArray.at(Number.parseInt(key.selectedDay)-1)?.name//.toLowerCase().charAt(0).toUpperCase().concat(filteredDayArray.at(Number.parseInt(key.selectedDay))?.name.slice(1))  ({key.selectedDay}) Test: {key.testString}
-}
-        .
+        filteredDayArray.at(parseTheInt(key.selectedDay)-1)?.name//.toLowerCase().charAt(0).toUpperCase().concat(filteredDayArray.at(Number.parseInt(key.selectedDay))?.name.slice(1))  ({key.selectedDay}) Test: {key.testString}
+        }
+        
       </h4>
         <p>                   </p>
+        <div className="buttonBox">
       <UpdateDayModal theBool={true} runOnLoadingParent={true} key={key.selectedDay} selectedDayId={key.selectedDay.toString()} />
       <SetFilter daysFromParent={stateDays.days} myCallBack={handleReturn} choiceNames={dayNameArray} currentfilter={selectedFilters} />
       <button
@@ -438,6 +336,7 @@ console.log("fetched " + dayArray.length + " days")
       >
         Clear filter
       </button>
+      </div>
       <div className="dayListContainer ">
 
         <div className="grid-container">
@@ -461,21 +360,21 @@ console.log("fetched " + dayArray.length + " days")
                       <br />
                       <div className="imagecontainer">
 
-                        <img onError={e => { e.currentTarget.src = "/images/error.png" }} src={"/images/" + day.formiddag} alt={day.formiddag}></img>
+                        <img onError={e => { e.currentTarget.src = "images/error.png" }} src={"assets/" + day.formiddag} alt={day.formiddag}></img>
                       </div>
                     </li>
                     <li key={"2-" + anum + index}>
                       {/* {day.ettermiddag} */}
                       <div className="imagecontainer">
 
-                        <img onError={e => { e.currentTarget.src = "/images/error.png" }} src={"/images/" + day.ettermiddag} alt={day.ettermiddag}></img>
+                        <img onError={e => { e.currentTarget.src = "images/error.png" }} src={"images/" + day.ettermiddag} alt={day.ettermiddag}></img>
                       </div>
                     </li>
                     <li key={"3-" + anum}>
                       {/* {day.natt} */}
                       <div className="imagecontainer">
 
-                        <img onError={e => { e.currentTarget.src = "/images/error.png" }} src={"/images/" + day.natt} alt={day.natt}></img>
+                        <img onError={e => { e.currentTarget.src = "images/error.png" }} src={"images/" + day.natt} alt={day.natt}></img>
                       </div>
                     </ li>
                   </ul>

@@ -4,7 +4,6 @@ import React, { useState, useContext } from 'react';
 import { MyContext } from "../Context"
 import IDay from "../types/day.type";
 import DayService from "../services/day-firebase-service"
-import DaysList2 from './day-list2.component';
 const style = {
     position: 'absolute' as const,
     top: '50%',
@@ -59,7 +58,8 @@ export default class UpdateDayModal extends React.Component<Props, State> {
         // })
         // this.getDay();
         console.log("Updated day page");
-        console.log(this.state.day?.name)
+        if(this.state.day)        
+            console.log(this.state.day?.name)
         
     }
     componentDidMount() {
@@ -67,14 +67,18 @@ export default class UpdateDayModal extends React.Component<Props, State> {
         if (this.props.runOnLoadingParent === true) {
             // alert("Opening");
         }
-        console.log("Key from parent")
+        console.log("#updateDay# \nKey from parent")
         console.log(this.props.selectedDayId)
-        this.setState({
-            theDay : this.props.selectedDayId
-        })
-        this.getDay();
-        console.log("Loaded day page");
-        console.log(this.state.day?.name)
+        if(this.props.selectedDayId && this.props.selectedDayId != "0"){
+
+            this.setState({
+                theDay : this.props.selectedDayId
+            })
+            this.getDay();
+            console.log("Loaded day page");
+            if(this.state.day)        
+            console.log(this.state.day?.name)
+        }
     }
 
     hasKey(key: string) {
@@ -143,7 +147,7 @@ export default class UpdateDayModal extends React.Component<Props, State> {
         DayService.updateItemDb(key, this.state.day)
         console.log("Day added?")
     }
-    getDay() {
+    getDay = async () => {
         const key =this.props.selectedDayId;
         if (key === undefined || key === null || key === "") {
             console.log("No key provided"); 
@@ -151,10 +155,10 @@ export default class UpdateDayModal extends React.Component<Props, State> {
         else{
             console.log("PreKey:")
             console.log(key)
-            const getTheeDay = DayService.getOnedb1(key)
+            await  DayService.getOnedb1(key)
             .then((snapshot) => {
-                console.log(snapshot.val());
                 if (snapshot.exists()) {
+                    console.log(snapshot.val());
                     console.log("snap")
                     console.log(snapshot.val());
                     this.setState({
@@ -176,25 +180,24 @@ export default class UpdateDayModal extends React.Component<Props, State> {
 
 
     render() {
-        console.log("this.props.selectedDay")
-        console.log(this.props.selectedDayId)
         return (
             <>
-{/* <div key={this.props.selectedDay}>{this.props.selectedDay}</div> */}
                 {/* <div className="d-flex align-items-center justify-content-center"
                     style={{ height: "50vh" }}
                 ></div> */}
+                <div className=''>
                 <button 
                     className='m-3 btn-sm btn btn-success' 
                     hidden={this.hasKey(this.props.selectedDayId)} 
                     onClick={this.openModal}
-                >
+                    >
                     Edit
                 </button>
+                    </div>
                 
                 <Modal
                     open={this.state.isOpen} onClose={this.closeModal}>
-                    {/* <Fade in={this.state.isOpen}> */}
+                    <Fade in={this.state.isOpen}>
                         <div className='updateDay'>
                             {/* className="paper"> */}
                             <h4>Modify day: </h4>
@@ -223,8 +226,8 @@ export default class UpdateDayModal extends React.Component<Props, State> {
                         <div className='box3'>
                             <label>
                                 Formiddag:<br/> 
-                                <input type="text" name="formiddag" value={this.state.day?.formiddag} onChange={this.handleChange} />
-                                <div className='imagecontainer row'>
+                                <input className='inputUpdate' type="text" name="formiddag" value={this.state.day?.formiddag} onChange={this.handleChange} />
+                                <div className='updateImagecontainer '>
                                     <img onError={e=>{e.currentTarget.src = "/images/error.png"}} src={"/images/" + this.state.day?.formiddag} alt={this.state.day?.formiddag}></img>
                                 </div>
                             </label>
@@ -233,7 +236,7 @@ export default class UpdateDayModal extends React.Component<Props, State> {
                             <label>
                                 Ettermiddag:<br/> 
                                 <input type="text" name="ettermiddag" value={this.state.day?.ettermiddag} onChange={this.handleChange} />
-                                <div className='imagecontainer row'>
+                                <div className='updateImagecontainer '>
                                     <img onError={e=>{e.currentTarget.src = "/images/error.png"}} src={"/images/" + this.state.day?.ettermiddag} alt={this.state.day?.ettermiddag}></img>
                                 </div>
                             </label></div>
@@ -242,39 +245,24 @@ export default class UpdateDayModal extends React.Component<Props, State> {
                                 Natt:
                                 <br/>      
                                 <input type="text" name="natt" value={this.state.day?.natt} onChange={this.handleChange} />
-                                <div className='imagecontainer row'>
+                                <div className='updateImagecontainer '>
                                     <img onError={e=>{e.currentTarget.src = "/images/error.png"}} src={"/images/" + this.state.day?.natt} alt={this.state.day?.natt}></img>
                                 </div>
                             </label>
                         </div>
 
-                            <input type="submit" value="Save" /> 
+                            < input className='m-3 btn btn-sm btn-success Button' type="submit" value="Save" /> 
                         </form>
 
-                    {/* 
+                         
                         {/* this.props.selectedDay !== null ? this.updateDay(this.props.selectedDay) : this.updateDay}>Save</Button> */}
-{/* <button onClick={this.updateDay("1")}></button> */}
+                        {/* <button onClick={this.updateDay("1")}></button> */}
                         </div>
 
 
-                        {/* <MyContext.Consumer>
-                            {({ user }) => (
-                                <div>
-                                <button
-                                onClick={this.buttonthing}
-                                >
-                                Toggle Theme
-                                </button>
-                                {user}
-                                </div>
-                                )}
-                            </MyContext.Consumer> */}
+                       
                     {/* </div> */}
-                {/* </Fade> */}
-                {/* <Box>
-                        Woohoo, you're reading this text in a modal!
-                    </Box> */}
-
+                </Fade>
             </Modal>
                     
             </>

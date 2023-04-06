@@ -84,7 +84,9 @@ code {
   'sidebar main main ';
   grid-template-columns:  10rem  100%;
 } */
-
+button{
+  border-radius: 1.5rem;
+}
 .maincontainer {
   grid-area: main;
   /* overflow:scroll; */
@@ -114,8 +116,8 @@ code {
   /* min-width: 90%; */
   overflow: auto;
   background-color: #e6e4e4ec;
-  min-height: 100%;
-  scroll-behavior: auto;
+  min-height: max-content;
+  /* scroll-behavior: auto; */
 }
 
 .maingridContainer {
@@ -124,7 +126,7 @@ code {
     'header main ';
   grid-template-columns: 100%;
   overflow: auto;
-  /* min-height: 100%; */
+  min-height: max-content;
 }
 
 .dayListContainer {
@@ -133,8 +135,11 @@ code {
   padding: 1% 5% 0% 5%;
   min-width: 90%;
   /* min-height: 10%; */
-  min-height: min-content;
+  min-height: 85%;
   /* margin: 20px; */
+  /* align-items: flex-start;
+  display: flex;
+  flex-direction: column; */
   background-color: #858e8b31;
 
 
@@ -159,6 +164,7 @@ code {
   background-color: #99d3b618;
   /* padding: 1px; */
   min-height: inherit;
+  max-height: max-content;
 }
 
 @media only screen and (max-width: 1070px) {
@@ -212,55 +218,125 @@ code {
 .filterDays {
   background-color: #435e45ee;
   border: '2px solid #000';
-  margin: 5rem;
+  margin-left: 30%;
+  margin-right: 40%;
+  margin-top: 10%;
   padding: 1rem;
-  min-height: 12rem;
-  min-width: min-content;
+  /* min-height: 12rem;
+  min-width: max-content;
+  max-width: 30%; */
+  max-width: 50%;
+  min-width: 30%;
+  min-height: 10%;
+  max-height: 95%;
 }
 
+.box2 {
+  align-items: left;
+  align-content: center;
+  /* text-align: center; */
+  /* max-height: 300px; */
+  /* padding: 200px; */
+  /* height: min-content; */
+  margin: .2rem;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  background-color: rgb(250, 235, 215,0.281);
+  /* min-width: 100%; */
+  /* padding: 15px; */
+  /* min-height: min-content; */
+}
+
+.box2 > label > input[type=text]{
+  max-width: max-content;
+  width: 100%;
+}
+.box3 {
+  align-items: left;
+  align-content: center;
+  /* height: min-content; */
+  /* max-height: 300px; */
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  padding: 1em;
+  margin: 0.2rem;
+  background-color: rgba(240, 233, 225, 0.281);
+  /* min-width: 100%; */
+  /* min-height: 100px; */
+}
+.box3 > label > input[type=text]{
+  max-width: max-content;
+  width: 100%;
+}
+.updateDay > ExtendModalUnstyled {
+  scrollbar-color: rebeccapurple green;
+  scrollbar-width: thin;
+}
 .updateDay {
+   scrollbar-color: rebeccapurple green;
+  scrollbar-width: thin;
   /* align-items: center; */
   /* align-content: center; */
   flex:content;
   direction: column;
   background-color: #7b7c7af8;
-
+  overflow-y:auto;
   /* border: '2px solid #000'; */
+  /* margin-left: 10%;
+  margin-right: 10%; */
   margin-left: 30%;
-  margin-right: 20%;
-  padding: 1em;/*0em,0em,0em,0em;*/
+  margin-right: 40%;
+  margin-top: 10%;
+  /*padding: 1em; /*0em,0em,0em,0em;*/
   display:block;
   /* padding: 2rem, 4rem, 3rem 3rem; */
-  max-width: 30rem;
-  min-width: 25rem;
+  /* max-width: 35rem;
+  min-width: 15rem;
   min-height: 10%;
-  max-height: 100%;
+  max-height: 95%; */
+    max-width: 50%;
+  min-width: 30%;
+  min-height: 10%;
+  max-height: 95%;
   
   scroll-behavior: auto;
 }
-@media only screen and (max-width: 680px) {
+@media only screen and (max-width: 1070px) {
 .updateDay {
-  /* align-items: center; */
+  align-content: center;
   /* align-content: center; */
   /* flex:content; */
   direction: column;
   background-color: #7b7c7af8;
   /* border: '2px solid #000'; */
-  margin: 2rem;
+  margin-left: 10%;
+  margin-right: 10%;
   /* display:block; */
   /* padding: 2rem, 4rem, 3rem 3rem; */
-  max-width: 25rem;
+  max-width: 35rem;
 
-  min-width: 20rem;
-  padding: 0.5em;
+  min-width: 10rem;
+  /* padding: 0.5em; */
   /* scroll-behavior: auto; */
 }}
-.updateDay > img {
-padding:5px;
-margin:5px;
-/* 
-max-width: 10px;
-min-height: 200px; */
+.updateImagecontainer{
+
+  direction: column;
+/* min-width: 10%; */
+min-height: 10%; 
+padding: 2%;
+/* flex:auto; */
+}
+.updateImagecontainer >img{
+
+ max-width: 55%;
+ /* max-height: 35%; */
+ /* width: auto; */
+min-width: 3rem;
+min-height: 100%; 
 }
 
 .dayItem {
@@ -281,38 +357,6 @@ min-height: 200px; */
   flex-wrap: wrap;
 } */
 
-.box2 {
-  align-items: left;
-  align-content: center;
-  /* text-align: center; */
-  /* max-height: 300px; */
-  /* padding: 200px; */
-  /* height: min-content; */
-  margin: .2rem;
-  padding: 0.5rem;
-  display: flex;
-  flex-direction: column;
-  flex-wrap: nowrap;
-  background-color: rgb(250, 235, 215,0.281);
-  min-width: 100%;
-  /* padding: 15px; */
-  /* min-height: min-content; */
-}
-
-.box3 {
-  align-items: left;
-  align-content: center;
-  /* height: min-content; */
-  /* max-height: 300px; */
-  display: flex;
-  flex-direction: column;
-  flex-wrap: nowrap;
-  padding: 1em;
-  margin: 0.2rem;
-  background-color: rgba(240, 233, 225, 0.281);
-  min-width: 100%;
-  /* min-height: 100px; */
-}
 
 /* .box>* {
   flex: 1 1 180px;
@@ -370,6 +414,32 @@ min-height: 200px; */
 /* @media only screen and (max-width: 980px) {
 */
 
+.buttonBox {
+  display: grid;
+  
+  grid-gap: 0.1rem;
+  width: 50%;
+  grid-template-columns: repeat(4, 1fr);
+}
+@media screen and (max-width: 680px) {
+  .buttonBox {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media screen and (max-width: 280px) {
+  .buttonBox {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+/* .buttonBox >button{
+  
+  display: block;
+} */
+/* @media only screen and (max-width: 680px) {
+.buttonBox{
+  max-width: fit-content;
+} */
+/* } */
    .imagecontainer {
     /* height: 150px; */
 
@@ -396,6 +466,36 @@ align-content:flex-start; */
   /* background-color: #bb947513; */
 }
 
+@media only screen and (max-width: 1070px) {
+  .imagecontainer>img {
+    /* grid-area: left;  */
+    /* min-width: 185px; */
+    /* align-items: center;
+  align-content:flex-start; */
+    max-width: 35%;
+    min-width: 25%;
+    max-height: 100%;
+    min-height: 25%;
+  /* margin: 2px; */
+    /* padding: 2px; */
+    /* background-color: #bb947513; */
+  }
+  }
+  @media only screen and (max-width: 770px) {
+.imagecontainer>img {
+  /* grid-area: left;  */
+  /* min-width: 185px; */
+  /* align-items: center;
+align-content:flex-start; */
+  max-width: 65%;
+  min-width: 35%;
+  max-height: 100%;
+  min-height: 25%;
+/* margin: 2px; */
+  /* padding: 2px; */
+  /* background-color: #bb947513; */
+}
+}
 .btn-success {
   width: 100px;
   /* background-color: #198754;

@@ -1,12 +1,8 @@
 import React , { Component}from 'react';
-import { Routes, Link, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import * as DayService from "./services/day-firebase-service"
 import DaysList2 from "./components/day-list2.component";
-import Day from "./components/Unused/day";
 import "../styles/App.css"
-import useModal from "./components/useModal";
-import {  Context2 } from './Context2';
-import TestModal from './components/TestModal';
 type State = {
         isOpen3: boolean
 }

@@ -17,10 +17,10 @@
   },
   "homepage": "https://celtunoorg.github.io",
   "scripts": {
-    "dev": "parcel src/index.html",
-    "predeploy": "parcel build src/index.html",
-    "deploy": "gh-pages -d build",
-    "build": "parcel build src/index.html"
+    "dev": "parcel index.html",
+    "predeploy": "parcel build index.html --out-dir build",
+    "deploy": "gh-pages -d build ",
+    "build": "parcel build index.html --out-dir build"
   },
   "dependencies": {
     "@emotion/react": "^11.10.4",
