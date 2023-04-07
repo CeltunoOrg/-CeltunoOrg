@@ -360,7 +360,7 @@ export const Daysfunc = () => {
                       <br />
                       <div className="imagecontainer">
 
-                        <img onError={e => { e.currentTarget.src = "images/error.png" }} src={"assets/" + day.formiddag} alt={day.formiddag}></img>
+                        <img onError={e => { e.currentTarget.src = "images/error.png" }} src={"images/" + day.formiddag} alt={day.formiddag}></img>
                       </div>
                     </li>
                     <li key={"2-" + anum + index}>
