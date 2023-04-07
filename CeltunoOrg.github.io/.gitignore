@@ -23,8 +23,8 @@ chrome-user-data
 .vscode
 *.swp
 *.swo
-.cache
-.parcel-cache
+#.cache
+#.parcel-cache
 packages/react-devtools-core/dist
 packages/react-devtools-extensions/chrome/build
 packages/react-devtools-extensions/chrome/*.crx
