@@ -8,7 +8,7 @@ scripts/flow/*/.flowconfig
 _SpecRunner.html
 __benchmarks__
 build/
-Celtunoorg.github.io/dist/
+CeltunoOrg.github.io/dist/
 remote-repo/
 coverage/
 .module-cache
