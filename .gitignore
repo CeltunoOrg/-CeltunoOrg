@@ -8,7 +8,6 @@ scripts/flow/*/.flowconfig
 _SpecRunner.html
 __benchmarks__
 build/
-dist/
 remote-repo/
 coverage/
 .module-cache
@@ -38,6 +37,5 @@ packages/react-devtools-extensions/.tempUserDataDir
 packages/react-devtools-inline/dist
 packages/react-devtools-shell/dist
 packages/react-devtools-timeline/dist
-CeltunoOrg.github.io/dist/
-CeltunoOrg.github.io/dist/index.html
-CeltunoOrg.github.io/dist/index.html
+CeltunoOrg.github.io/dist/*.*
+
