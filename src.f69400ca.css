@@ -206,7 +206,7 @@ button {
 
 }
 
-@media only screen and (min-width: 1000px) {
+@media only screen and (min-width: 600px) {
   .dayListContainer {
     border-radius: 25px;
     /* grid-area: main; */
@@ -244,7 +244,7 @@ button {
 
 }
 
-@media only screen and (min-width: 1000px) {
+@media only screen and (min-width: 600px) {
   .presetDayListContainer {
     border-radius: 15px;
     /* grid-area: main; */
@@ -310,7 +310,7 @@ button {
 
 }
 
-@media only screen and (max-width: 1000px) {
+@media only screen and (min-width: 600px) {
   .activityImageListcontainer>img {
     min-height: 100%;
     max-width: 55%;
@@ -357,7 +357,7 @@ button {
   /* max-height: max-content; */
 }
 
-@media only screen and (max-width: 1000px) {
+@media only screen and (max-width: 600px) {
   /* hide element on small screens */
 
   .preset-grid-container {
@@ -402,7 +402,7 @@ button {
   /* max-height: max-content; */
 }
 
-@media only screen and (max-width: 1000px) {
+@media only screen and (max-width: 600px) {
   /* hide element on small screens */
 
   .grid-container {
@@ -544,7 +544,7 @@ button {
   scroll-behavior: auto;
 }
 
-@media only screen and (max-width: 1000px) {
+@media only screen and (max-width: 600px) {
   .updateDay {
     align-content: center;
     /* align-content: center; */
