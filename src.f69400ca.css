@@ -110,7 +110,9 @@ button {
 
   /* scroll-behavior: auto; */
 }
-
+.padder{
+  /* margin: 13%; */
+}
 .maingridContainer {
   grid-area: main;
   grid-template-areas:
@@ -122,21 +124,69 @@ button {
 .dayListContainerRow {
   border-radius: 25px;
   /* grid-area: main; */
-  padding: 1% 5% 1% 5%;
-  min-width: 90%;
+  /* padding: 1% 5% 1% 5%; */
+  max-width: 100%;
   /* min-height: 10%; */
   /* min-height: 85%; */
   /* margin: 20px; */
   /* align-items: flex-start;
   */
+  min-height: 14em;
   align-items: center;
   flex-direction: row;
   display: flex;
+  flex-direction: row;
+  vertical-align: bottom;
+  /* background-color: #858e8b31; */
+  /* padding-left: 5rem; */
+  /* padding-right: 5rem; */
+
+
+
+}
+.dayListContainerRowButtons {
+  border-radius: 25px;
+  /* grid-area: main; */
+  /* padding: 1% 5% 1% 5%; */
+  /* min-width: 90%; */
+  /* min-height: 10%; */
+  /* min-height: 85%; */
+  /* margin: 20px; */
+  /* align-items: flex-start;
+  */
+  /* padding-bottom: 7rem ; */
+  flex-direction: column;
+  float: right;
+  align-items: center;
+  min-height: 100%;
+  max-width: 100%;
+  vertical-align: middle;
+  /* flex-direction: row; */
+  /* display: flex; */
+  /* flex-direction: column; */
   /* background-color: #858e8b31; */
 
 
 
 }
+.dayListContainerRowImages {
+  /* direction: column; */
+  /* min-width: 10%; */
+  /* float: left; */
+  min-height: 10rem;
+  padding: 2%;
+  max-width: 20rem;
+  justify-content: center;
+  align-items: center;
+  vertical-align: middle;
+  min-height: 100%;
+  margin-left: 3rem;
+}.dayListContainerRowImages >img {
+  max-width: 55%;
+  min-width: 3rem;
+  max-height: 100%;
+}
+
 .dayListContainer {
   border-radius: 25px;
   /* grid-area: main; */
@@ -156,7 +206,7 @@ button {
 
 }
 
-@media only screen and (min-width: 1070px) {
+@media only screen and (min-width: 1000px) {
   .dayListContainer {
     border-radius: 25px;
     /* grid-area: main; */
@@ -175,7 +225,7 @@ button {
 }
 
 .presetDayListContainer {
-  border-radius: 25px;
+  border-radius: 15px;
   /* grid-area: main; */
   padding: 1% 5% 1% 5%;
   min-width: 90%;
@@ -194,11 +244,11 @@ button {
 
 }
 
-@media only screen and (min-width: 1070px) {
+@media only screen and (min-width: 1000px) {
   .presetDayListContainer {
-    border-radius: 25px;
+    border-radius: 15px;
     /* grid-area: main; */
-    padding: 1% 5% 1% 5%;
+    padding: 1% 3% 1% 3%;
     min-width: 90%;
     /* min-height: 10%; */
     /* min-height: 85%; */
@@ -260,7 +310,7 @@ button {
 
 }
 
-@media only screen and (max-width: 1070px) {
+@media only screen and (max-width: 1000px) {
   .activityImageListcontainer>img {
     min-height: 100%;
     max-width: 55%;
@@ -296,18 +346,18 @@ button {
 }
 
 .preset-grid-container {
-  border-radius: 15px;
+  border-radius: 5px;
   display: inline-flex;
   /* grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr; */
   /* auto auto auto auto auto auto auto; */
   grid-auto-rows: minmax(min-content, 100%);
   background-color: #99d3b618;
-  padding: 2%;
+  /* padding: 2%; */
   min-height: inherit;
   /* max-height: max-content; */
 }
 
-@media only screen and (max-width: 470px) {
+@media only screen and (max-width: 1000px) {
   /* hide element on small screens */
 
   .preset-grid-container {
@@ -336,11 +386,12 @@ button {
   /* max-width: 70%; */
   max-height: max-content;
   padding: 0.5%;
+  border-radius: 1%;
   /* grid-auto-rows: auto; */
 }
 
 .grid-container {
-  border-radius: 15px;
+  border-radius: 5px;
   display: inline-grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
   /* auto auto auto auto auto auto auto; */
@@ -351,7 +402,7 @@ button {
   /* max-height: max-content; */
 }
 
-@media only screen and (max-width: 1070px) {
+@media only screen and (max-width: 1000px) {
   /* hide element on small screens */
 
   .grid-container {
@@ -493,7 +544,7 @@ button {
   scroll-behavior: auto;
 }
 
-@media only screen and (max-width: 1070px) {
+@media only screen and (max-width: 1000px) {
   .updateDay {
     align-content: center;
     /* align-content: center; */
