@@ -1,4 +1,4 @@
-// import React, { Component, useEffect } from 'react';
+import React, { Component, useEffect } from 'react';
 // import { Routes, Link, Route } from "react-router-dom";
 // import { useParams, useMatch } from 'react-router';
 
@@ -39,7 +39,7 @@
 // //     </div>
 // //    )
 // //         }
-// class App extends React.Component {
+class App extends React.Component {
 
 
 
@@ -154,10 +154,10 @@
 //             </div>
 //         );
 //     }
-// }
+}
 
 
 
 // // const root = createRoot(document.getElementById("root") as HTMLElement);
 // // render (<App/>, document.getElementById("root"));
-// export default App
+export default App
