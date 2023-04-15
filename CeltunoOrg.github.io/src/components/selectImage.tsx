@@ -11,7 +11,7 @@ import Typography from '@mui/material/Typography';
 import PresetDataService from "../services/preset-firebase-service"
 // import DayService from "../services/day-firebase-service"
 import { IDayActivity, IImagePreset, IMyDay, IPreset, ISelectImage } from '../types/day.type';
-import { ImageList, ImageListItem, ImageListItemBar, TextField } from '@mui/material';
+import { FormControl, ImageList, ImageListItem, ImageListItemBar, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import DoneIcon from '@mui/icons-material/Done';
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -57,9 +57,9 @@ interface Props {
     children?: React.ReactNode
     images: string[]
     activities: IDayActivity[]
-    selectCallback: (theSelected: Array<ISelectImage>) =>Array<ISelectImage>//theSelected: ISelectImage []}
+    selectCallback: (theSelected: Array<ISelectImage>) => Array<ISelectImage>//theSelected: ISelectImage []}
 
-}   
+}
 
 export default function SelectImage(props: Props) {
     const [open, setOpen] = React.useState(false);
@@ -75,6 +75,7 @@ export default function SelectImage(props: Props) {
         setOpen(false);
     };
     const handleCancel = () => {
+
         setOpen(false);
     };
 
@@ -84,17 +85,17 @@ export default function SelectImage(props: Props) {
 
 
 
-    const getimages  = () => {
+    const getimages = () => {
         let tmp: ISelectImage[] = []
-        tmp = {...selected}
+        tmp = { ...selected }
         return tmp
     }
     const imageClick = (image: string, index: number) => {
         if (image) {
             // let tmpImages: ISelectImage[]
-             initImages = {...selected}
+            initImages = { ...selected }
             // let tmpSelcted: string[] = []
-            initImages[index].Selected = initImages[index].Selected === true ? false :true;
+            initImages[index].Selected = initImages[index].Selected === true ? false : true;
             setSelected(initImages)
             // tmpSelcted =  { ...selected }
             // tmpSelcted.push(image)
@@ -104,7 +105,7 @@ export default function SelectImage(props: Props) {
         }
     }
     let selectTest = false;
-    let initImages : IDayActivity[] = [];
+    let initImages: IDayActivity[] = [];
     function merge(arr1: unknown[], arr2: unknown[]) {
         const newArr: unknown[] = [...arr1];
         for (let i = 0; i < arr2.length; i++) {
@@ -151,16 +152,16 @@ export default function SelectImage(props: Props) {
     //     updatePreset(id)
 
     // }
-    initImages = initImages.length <=0 ?  testActivities : initImages// props.activities ?? [] : initImages 
-    const result = (arr1: IDayActivity[], arr2: IDayActivity[]) =>{
+    initImages = initImages.length <= 0 ? testActivities : initImages// props.activities ?? [] : initImages 
+    const result = (arr1: IDayActivity[], arr2: IDayActivity[]) => {
         return arr2.reduce(
             (acc, item) => {
                 return acc.includes(item) ? acc : [...acc, item]
             },
             [...arr1]
-            )
-        } 
-        // {initImages = result( initImages,testActivities)}
+        )
+    }
+    // {initImages = result( initImages,testActivities)}
     // { initImages = (props.activities && props.activities.length >0)? merge(props.activities ?? [], testActivities) as unknown as IDayActivity[] : [] }
     return (
         <div>
@@ -176,12 +177,13 @@ export default function SelectImage(props: Props) {
                     Select images
                 </BootstrapDialogTitle>
                 <DialogContent dividers>
+                    
                     {/* <Typography gutterBottom>
                         Name - Image - Description
                     </Typography> */}
-                    {(initImages && initImages.length >0) ?
-                    
-                    //props.images ?
+                    {(initImages && initImages.length > 0) ?
+
+                        //props.images ?
                         <>
                             {
                                 <div>
@@ -189,9 +191,9 @@ export default function SelectImage(props: Props) {
                                     } /> */}
                                     <div className='selectImageBox'>
                                         <ImageList sx={{ width: 500, height: 650 }} cols={3} rowHeight={164}>
-                                            
+
                                             {
-                                                
+
                                                 //props.images.map((image, imgIndex) =>
                                                 initImages.map((selectActivity, imgIndex) =>
                                                 (
@@ -208,7 +210,7 @@ export default function SelectImage(props: Props) {
                                                                 <IconButton
                                                                     sx={{ color: 'white' }}
                                                                     aria-label={`star ${""}`}
-                                                                    onClick={() => imageClick(selectActivity.Image,imgIndex)}
+                                                                    onClick={() => imageClick(selectActivity.Image, imgIndex)}
                                                                 >
                                                                     {selectActivity.Selected ?
                                                                         <DoneIcon /> : ""
@@ -275,56 +277,56 @@ export default function SelectImage(props: Props) {
 const testActivities: IDayActivity[] =
     [
         {
-             Id: 2,
-                    Name: "Preset",
+            Id: 2,
+            Name: "Preset",
             Image: "image5.png",
             Selected: false,
             Order: "0",
         },
         {
-             Id: 2,
-                    Name: "Preset",
+            Id: 2,
+            Name: "Preset",
             Image: "image6.png",
             Selected: false,
             Order: "0",
         },
         {
-             Id: 2,
-                    Name: "Preset",
+            Id: 2,
+            Name: "Preset",
             Image: "image7.png",
             Selected: false,
             Order: "0",
         },
         {
-             Id: 2,
-                    Name: "Preset",
+            Id: 2,
+            Name: "Preset",
             Image: "image8.png",
             Selected: false,
             Order: "0",
         },
         {
-             Id: 2,
-                    Name: "Preset",
+            Id: 2,
+            Name: "Preset",
             Image: "image9.png",
             Selected: false,
             Order: "0",
         },
         {
-             Id: 2,
-                    Name: "Preset",
+            Id: 2,
+            Name: "Preset",
             Image: "image10.png",
             Selected: false,
             Order: "0",
         },
         {
-             Id: 2,
-                    Name: "Preset",
+            Id: 2,
+            Name: "Preset",
             Image: "image11.png",
             Selected: false,
             Order: "0",
         },
 
-    ] 
+    ]
 const testImages: ISelectImage[] =
     [
         {
@@ -356,7 +358,7 @@ const testImages: ISelectImage[] =
             Selected: false
         },
 
-    ] 
+    ]
 
 const testData: IMyDay[] =
     [

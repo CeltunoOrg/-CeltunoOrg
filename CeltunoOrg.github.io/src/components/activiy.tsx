@@ -22,7 +22,8 @@ const Activity = (Props: Props) => {
     useEffect(() => {
         // handleDay(testData[0])
         // getAllData(null);
-        getAllData("planner")
+        getDayDbData("planner")
+
 
 
     })
@@ -39,6 +40,7 @@ const Activity = (Props: Props) => {
         Activities: []
     });
 
+    const [presets, setPresets] = useState<IPreset[]>([]);
 
     const [activity, setActivity] = useState<IDayActivity>({
         Id: 0,
@@ -47,8 +49,9 @@ const Activity = (Props: Props) => {
         Order: "0",
         Selected: false
     });
-    const [days, setDays] = useState<IMyDay[]>([]);
+    const [days, setDays] = useState<Array<IMyDay>>(new Array<IMyDay>);
 
+    const [topId, setTopId] = useState<number>(0);
     const myPreset: IImagePreset[] =
         [
             {
@@ -67,8 +70,8 @@ const Activity = (Props: Props) => {
         //    return newState;//useModal().isOpen3
     }
 
-    let tmpData: IMyDay[] = []
-    const getAllData = (path: string | null) => {
+    let tmpData: Array<IMyDay> = new Array<IMyDay>;
+    const getDayDbData = (path: string | null) => {
         PresetDataService.getDbAllDays(path).then((data) => {
 
             // useTheRef(db, '/');
@@ -78,9 +81,16 @@ const Activity = (Props: Props) => {
                 if (snapshot.exists()) {
                     console.log("Snapshot found, mapping data:");
                     snapshot.forEach(function (childSnapshot) {
-                        console.log(childSnapshot.val())
+                        // console.log(childSnapshot.val())
                         const key = childSnapshot.key;
-                        let childData = childSnapshot.val() as IMyDay;
+                        const values = childSnapshot.val()
+                        let childData: IMyDay = {
+                            Id: Number.parseInt(key ?? "0") ?? "",
+                            Name: values.Name,
+                            Description: values.Descritption,
+                            Activities: values.Activities
+                        }
+                        // childSnapshot.val() as IMyDay;
                         childData.Id = Number.parseInt(key ?? "0") ?? "";
                         tmpData.push(childData);
                     })
@@ -92,21 +102,31 @@ const Activity = (Props: Props) => {
             })
         })
         // if (tmpData.length > 0)
-            // handlePreset(tmpData[0])
+        // handlePreset(tmpData[0])
 
-            return tmpData
+        return tmpData
     }
+
+    const sortDaysByKey = (array: IMyDay[]) => {
+        return array.sort((a, b) => {
+            return a.Id >= b.Id
+                ? 1
+                : -1
+        })
+    }
+
     const removeDayItem = (key: number | null) => {
         if (key === null)
             return
         PresetDataService.removeDayItemDb(key)
-        getAllData("planner")
+        getDayDbData("planner")
     }
     const setTheDays = (day: IMyDay | null) => {
         if (day)
             setDay(day)
         setDays(tmpData)
     }
+
     // const theFakePreset = fakeDay()?.Activities[0];
     // const selectCallback = (theSelected: Array<ISelectImage>) => {
     //     console.log(theSelected)
@@ -116,19 +136,56 @@ const Activity = (Props: Props) => {
             console.log(`Edit Callback: ${theSelected.Id}`)
             if (theSelected.Id !== null) {
                 PresetDataService.updateMyDayItemDb(theSelected.Id, theSelected)
-                getAllData("planner")
+                getDayDbData("planner")
             }
         }
         return theSelected
     }
+    // const highestFilter = Object.values(arr.reduce((r, o) => {
+    //     r[o.Id] = (r[o.Id] && r[o.Id].value > o.value) ? r[o.Id] : o
 
+    //     return r
+    //   }, {}))
+    // const getHighestFilterByName = (arr:Array<IMyDay>) => {
+    //     let tmpArr:Array<IMyDay> = []
+    //     arr.map((item) => (
+    //         tmpArr.push(item)
+    //     ))
 
+    //     const highestFilterByName = Object.values(arr.reduce((r, o) => {
+    //         r[o.Name] = (r[o.Name] && r[o.Id].Id > o.Id) ? r[o.Name] : o
+
+    //         return r
+    //     }, {}))
+    //     return highestFilterByName
+    // }
+    const theHighest = () => {
+       console.log(`Activity-Highest: ${topId}`)
+     function getHighest() {
+            if (days.length > 0) {
+
+                let sortedDays = days.sort((a, b) => (a.Id > b.Id) ? -1 : 1);
+                return sortedDays[0].Id
+            }
+            else
+                return 0
+        }
+        setTopId(getHighest())
+        console.log(`Activity-Highest: ${topId}`)
+    }
     return (
         <>
             {setTheDays}
             <div className='appMainContainer'>
                 <div className='maingridContainer '>
                     <h4>Activities</h4>
+                    <div style={{display: 'flex',flexDirection: 'row'}}>
+
+                    {/* {activities.length <= 0 ? */}
+                    <Button variant='outlined' onClick={() => { getDayDbData("planner") }}><i class="fa fa-refresh" aria-hidden="true"></i></Button>
+                    <ActivityEditor editCallback={editCallback} myDay={day} dayArrayLength={topId} />
+
+                    </div>
                     <div className="preset-grid-container">
                         {
                             days?.map((dayItem, index) => (
@@ -137,10 +194,10 @@ const Activity = (Props: Props) => {
                                     <div className="presetDayListContainer ">
                                         {dayItem.Activities ?
                                             //    preset?.Activities.map((activity, index) =>
-                                            dayItem?.Activities.map((activity, index) =>
+                                            dayItem?.Activities.map((activity, aactivityIndex) =>
                                             (
 
-                                                <div className="activityDayItem" id={"day" + activity.Id} onClick={() => { alert(activity.Id) }} key={activity.Id} style={{ order: (activity.Order), }}>
+                                                <div className="activityDayItem" id={"day" + activity.Id} onClick={() => { alert(activity.Id) }} key={aactivityIndex} style={{ order: (activity.Order), }}>
                                                     {/* <div className="grid-item"> */}
 
                                                     <div>
@@ -158,7 +215,7 @@ const Activity = (Props: Props) => {
                                         }
                                     </div>
 
-                                    <ActivityEditor editCallback={editCallback} myDay={dayItem} dayArrayLength={days.length} />
+                                    <ActivityEditor editCallback={editCallback} myDay={dayItem} dayArrayLength={topId} />
                                     {/* {dayItem.Name !== "string" && dayItem.Name ?
                                         ""
                                         : <Button onClick={() => { getAllData("planner"); setTheActivities() }}>Fetch</Button>
@@ -176,11 +233,7 @@ const Activity = (Props: Props) => {
                             ))
                         }
                     </div>
-                    <ActivityEditor editCallback={editCallback} myDay={day} dayArrayLength={days.length} />
-                    {/* {activities.length <= 0 ? */}
-                    <Button variant='outlined' onClick={() => { getAllData("planner") }}>Fetch</Button>
-                    {/* : ""
-                    } */}
+
                 </div>
             </div>
         </>

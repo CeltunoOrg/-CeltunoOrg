@@ -1,4 +1,4 @@
-import { IDay , IImagePreset, IMyDay, IPreset } from "../types/day.type";
+import { IDay, IImagePreset, IMyDay, IPreset } from "../types/day.type";
 
 // import {fb, db} from "../../firebase"
 import { getDatabase, onValue, set, update, get, push, orderByKey, orderByChild, child, DatabaseReference, remove, ref } from "firebase/database";
@@ -31,26 +31,40 @@ class PresetDataService {
   //     console.log("Get one by key: " + key)
   //     return  get(child(useTheRef(db), `/` + key));   
   // }
-async getDbAllDays(path: string |null) {
-    let  databaseReference : DatabaseReference | null = null
+  async getDbAllDays(path: string | null) {
+    let databaseReference: DatabaseReference | null = null
     console.log("Connecting to db...");//Getting all from db");
-    path ? 
-    databaseReference = useTheRef(db, `/${path}`) // orderByChild('name'));     
-    :
-    databaseReference = useTheRef(db, '/planner') // orderByChild('name')); 
-    return databaseReference;
-  }
-  
-async getDbOne(path: string |null ,key:number) {
-    let  databaseReference : DatabaseReference | null = null
-    console.log("Connecting to db...");//Getting all from db");
-    path ? 
-    databaseReference = useTheRef(db, `/${path}/${key}/`) // orderByChild('name'));     
-    :
-    databaseReference = useTheRef(db, `/planner/${key}/`) // orderByChild('name')); 
+    path ?
+      databaseReference = useTheRef(db, `/${path}`) // orderByChild('name'));     
+      :
+      databaseReference = useTheRef(db, '/planner') // orderByChild('name')); 
     return databaseReference;
   }
 
+  async getDbOne(path: string | null, key: number) {
+    let databaseReference: DatabaseReference | null = null
+    console.log("Connecting to db...");//Getting all from db");
+    path ?
+      databaseReference = useTheRef(db, `/${path}/${key}/`) // orderByChild('name'));     
+      :
+      databaseReference = useTheRef(db, `/planner/${key}/`) // orderByChild('name')); 
+    return databaseReference;
+  }
+
+  InsertDay = function writeUserData(day: IMyDay) {
+    const db = getDatabase();
+    set(ref(db, '/planner/' + day.Id), day);
+  }
+
+
+
+  InsertPreset = function writeUserData(preset: IPreset) {
+    if (preset) {
+
+      const db = getDatabase();
+      set(ref(db, '/presets/' + preset.Id), preset)
+    }
+  }
 
   // async getdb() {
 
@@ -74,7 +88,7 @@ async getDbOne(path: string |null ,key:number) {
   //     return result //as IDay[]
   //   })
   // }
-async updateMyDayItemDb(key: number, theActivity: IMyDay | null) {
+  async updateMyDayItemDb(key: number, theActivity: IMyDay | null) {
     try {
 
       if (theActivity === null) {
@@ -114,39 +128,39 @@ async updateMyDayItemDb(key: number, theActivity: IMyDay | null) {
       // return e
     }
   }
-  removePresetItemDb(key: number){
+  removePresetItemDb(key: number) {
     const itemref = `/preset/${key}`
-      
+
     return remove(ref(db, itemref))
   }
-    removePresetActivityItemDb(dayKey: number, activityKey: number){
+  removePresetActivityItemDb(dayKey: number, activityKey: number) {
     const itemref = `/preset/${dayKey}/${activityKey}`
-      
-    remove(useTheRef(db, itemref)).then( () =>
+
+    remove(useTheRef(db, itemref)).then(() =>
       console.log("DOne removing?")
-    ).catch((e)=>
-    console.log(e)
+    ).catch((e) =>
+      console.log(e)
     )
   }
-  removeDayItemDb(key: number){
+  removeDayItemDb(key: number) {
     const itemref = `/planner/${key}`
-      
-    return remove(useTheRef(db, itemref)).then( () =>
+
+    return remove(useTheRef(db, itemref)).then(() =>
       console.log("DOne removing?")
-    ).catch((e)=>
-    console.log(e)
+    ).catch((e) =>
+      console.log(e)
     )
   }
-  removeDayActivityItemDb(dayKey: number, activityKey: number, day:IMyDay){
+  removeDayActivityItemDb(dayKey: number, activityKey: number, day: IMyDay) {
     const itemref = `/planner/${dayKey}/Activities/${activityKey}`
     const updates = {};
     updates[`/planner/${dayKey}/Activities/${activityKey}`] = null
-    console.log("Cleared activity: " +activityKey)
+    console.log("Cleared activity: " + activityKey)
     // return update(useTheRef(db), updates)
-    update(useTheRef(db),updates).then( () =>
+    update(useTheRef(db), updates).then(() =>
       console.log("DOne removing?")
-    ).catch((e)=>
-    console.log(e)
+    ).catch((e) =>
+      console.log(e)
     )
   }
   inintDb() {

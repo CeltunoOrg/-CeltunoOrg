@@ -10,7 +10,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
 import PresetDataService from "../services/preset-firebase-service"
 import IDay, { IDayActivity, IImagePreset, IMyDay, IPreset, ISelectImage } from '../types/day.type';
-import { ImageListItemBar, TextField } from '@mui/material';
+import { Divider, FormControl, ImageListItemBar, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import SelectImage from './selectImage';
 import { useTheOnValue } from '../../firebase-planner';
 
@@ -25,7 +25,6 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 
 export interface DialogTitleProps {
     id: string;
-    images: Array<string> | null;
     children?: React.ReactNode;
     onClose: () => void;
 
@@ -58,6 +57,7 @@ function BootstrapDialogTitle(props: DialogTitleProps) {
 interface Props {
     children?: React.ReactNode
     // activities: IDayActivity[]
+
     myDay: IMyDay | null
     dayArrayLength: number
     editCallback: (theEdited: IMyDay | null) => IMyDay | null//theSelected: ISelectImage []}
@@ -70,117 +70,187 @@ export default function ActivityEditor(props: Props) {
         setOpen(true);
         if (props.myDay && props.myDay !== myDay)
             setMyDay(props.myDay)
+        // if (props.dayArrayLength > topId)
+        //     setTopId(props.dayArrayLength)
+        getPresetDbData()
+        if (topId <= 0)
+            getAll()
 
     };
     const handleClose = (save: boolean) => {
 
-        if (save) {
-            console.log("Saved")
-            setMyDay(myDay);
+        console.log("Saved")
+        if (myDay.Id > 0)
             updateMyDay(myDay.Id);
-        }
+        else console.log("CLOSING -ID was NULL - no update")
         props.editCallback(myDay)
         setOpen(false);
     };
-
+    const [topId, setTopId] = React.useState<number>(0);
+    const [presets, setPresets] = React.useState<IPreset[]>([]);
     const [myDay, setMyDay] = React.useState<IMyDay>(
         {
-            Id: null,
+            Id: 0,
             Name: "",
             Description: "",
             Activities: []
-
         }
     );
-    const initDay: IMyDay =
-    {
-        Id: props.dayArrayLength,
-        Name: "",
-        Description: "",
-        Activities: []
-    }
-    // const currentPreset = props.myDay !== null ?
-    //     props.myDay
-    //     :
-    //     initDay
-
-
 
     useEffect(() => {
-        // if (currentPreset !== null)
+
         if (props.myDay && props.myDay !== myDay)
             setMyDay(props.myDay)
+        if (presets.length <= 0)
+            getPresetDbData()
 
-        // PresetDataService.getdbAll().then((data) => {
+        getAll()
+        // if (props.dayArrayLength > topId)
+        //     setTopId(props.dayArrayLength)
 
-        //     // useTheRef(db, '/');
-        //     useTheOnValue(data, (snapshot) => {
-        //         // const snapshotValue = snapshot.val();
-        //         // console.log(data.toJSON)
-        //         if (snapshot.exists()) {
-        //             console.log("Snapshot found, mapping data:");
-        //             snapshot.forEach(function (childSnapshot) {
-        //                 console.log(childSnapshot.val())
-        //                 const key = childSnapshot.key;
-        //                 const childData = childSnapshot.val() as IPreset;
-        //                 childData.Id = key ?? "";
-        //                 //   dayArray.push(childData);
-        //             })
-        //             console.log("DB items found:");
-        //             // console.log(dayArray.length)
-        //         }
-        //     })
-        // })
+    }, []);
+
+    const tmpData: Array<IMyDay> = new Array<IMyDay>;
+    
+    function getHighest() {        
+        const calculateHighest = () => {
+            if (tmpData.length > 0) {
+
+                let sortedDays = tmpData.sort((a, b) => (a.Id > b.Id) ? -1 : 1);
+                return sortedDays[0].Id + 1
+            }
+            else
+                return 1
+        }
+        const theHighest = calculateHighest()
+        setTopId(theHighest)
+        // console.log(`GETHIGHEST - Activity-Highest: ${topId}`)
     }
-        , []);
+    const getAll = () => {
+
+
+        PresetDataService.getDbAllDays("planner").then((data) => {
+            useTheOnValue(data, (snapshot) => {
+                if (snapshot.exists()) {
+                    console.log("Snapshot found, mapping PLANNER data:");
+                    snapshot.forEach(function (childSnapshot) {
+                        const key = childSnapshot.key;
+                        if(!key)
+                            return
+                        const values = childSnapshot.val()
+                        let childData: IMyDay = {
+                            Id: Number.parseInt(key),
+                            Name: values.Name ?? "",
+                            Description: values.Descritption ?? "",
+                            Activities: values.Activities
+                        }
+                        childData.Id = Number.parseInt(key);
+                        tmpData.push(childData);
+                    })                  
+                    getHighest()
+                    console.log(`DB items found: ${tmpData.length} Top Id: ${topId}`);
+                }
+            })
+        }).then(() => {
+            console.log("After all days")
+            getHighest()
+        })
+        return tmpData
+    }
 
     const updateMyDay = (id: number | null) => {
-        // const key = this.props.selectedDayId;
-        if (id === undefined || id === null) {
+        const tmpDay = myDay
+        if (id === undefined || id === null || id === 0) {
             console.log("No id provided, creating new...");
-            id = props.dayArrayLength
-
-
+            getAll()
+            id = topId
         }
         console.log("Updating activity");
+        if (id === 0)
+            return
+        if (tmpDay.Description == undefined)
+            tmpDay.Description = ""
         PresetDataService.updateMyDayItemDb(id, myDay)
     }
+
+
     const getOneDay = (key: number) => {
         let day: IMyDay;
         if (key) {
             PresetDataService.getDbOne("planner", key).then((data) => {
-
-                // useTheRef(db, '/');
                 useTheOnValue(data, (snapshot) => {
-                    // const snapshotValue = snapshot.val();
-                    // console.log(data.toJSON)
                     if (snapshot.exists()) {
-                        console.log("Snapshot found, mapping data:");
+                        console.log("Snapshot found PLANNER setting ONE:");
                         let childData = snapshot.val() as IMyDay;
-                        // const key = childSnapshot.key;
                         console.log(snapshot.val())
+                        if (childData.Description == undefined)
+                            childData.Description = ""
                         childData.Id = key;
                         day = childData;
                     }
-                    // if (tmpData.length !== activities.length)
-                    //     setTheActivities()
-                    console.log("DB item found:");
-                    console.log(day)
-                })
-                handleDay(day)
-
+                    handleDay(day)
+                })                
             })
         }
     }
+
     const handleDay = (day: IMyDay) => {
         setMyDay(day)
     }
-    const updateName = (event, daysName: string) => {
 
+    let tmpPreset: IPreset[] = []
+    
+    const setThePresets = () => {
+        setPresets(tmpPreset)
+    }
+    
+    
+    const getPresetDbData = () => {
+        PresetDataService.getDbAllDays("presets").then((data) => {
+            useTheOnValue(data, (snapshot) => {
+                if (snapshot.exists()) {
+                    console.log("Snapshot found, mapping PRESET data:");
+                    snapshot.forEach(function (childSnapshot) {
+                        const key = childSnapshot.key;
+                        if(!key)
+                            return
+                        let childData = childSnapshot.val() as IPreset;
+                        childData.Id = Number.parseInt(key);
+                        tmpPreset.push(childData);
+                    })
+                    if (tmpPreset.length !== presets.length)
+                        setThePresets()
+                    console.log(tmpPreset.length)
+                }
+            })
+        })
+        return tmpPreset
+    }
+
+
+    const setActivitiesFromPreset = (key: string) => {
+        const keyInt = Number.parseInt(key);
+
+        if (keyInt !== null && keyInt !== undefined) {
+            const tmpPreset = { ...presets[keyInt] }
+            const tmpDay = { ...myDay }
+            tmpDay.Activities = tmpPreset.Activities
+            setMyDay(tmpDay)
+            updateMyDay(tmpDay.Id)
+        }
+    }
+
+    const updateName = (event) => {
         let name = event.target.value;
         const tmpActivity = { ...myDay }
         tmpActivity.Name = name
+        if (tmpActivity.Id === 0) {
+            getAll();
+            console.log("UPDATENAME - TOPAFTER GETALLL")
+            tmpActivity.Id = topId
+        }
         setMyDay(tmpActivity)
+        return null
         updateMyDay(tmpActivity.Id)
     }
 
@@ -189,8 +259,10 @@ export default function ActivityEditor(props: Props) {
         let activityDiv = document.getElementById(`act${index.toString()}`);
         if (activityDiv && id !== null) {
             const tmpActivity: IMyDay = { ...myDay }
+            if (tmpActivity.Id == 0)
+                tmpActivity.Id = props.dayArrayLength
             if (tmpActivity.Activities.length > 0) {
-                const activity = tmpActivity?.Activities[index]
+                const activity = tmpActivity?.Activities[id]
                 let activityIdNum = Number.parseInt(activity.Order ?? "0");
                 console.log(`Style: ${activity?.Order}`)
                 if (activityIdNum > 0)
@@ -214,10 +286,10 @@ export default function ActivityEditor(props: Props) {
                 const activity = tmpActivity?.Activities[index]
                 let activityIdNum = Number.parseInt(activity.Order ?? "0");
                 console.log(`Style: ${activity?.Order}`)
-                if (activityIdNum <= 0)
-                    activityIdNum += 2;
-                else
-                    activityIdNum += 1;
+                // if (activityIdNum <= 0)
+                //     activityIdNum += 2;
+                // else
+                activityIdNum += 1;
                 activityDiv.style.order = `${activityIdNum}`
                 activity.Order = activityIdNum ? activityIdNum.toString() : "0";
                 tmpActivity.Activities[index] = activity
@@ -285,7 +357,7 @@ export default function ActivityEditor(props: Props) {
     }
     return (
         <div>
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
             <Button variant="outlined" onClick={handleClickOpen}>
                 {(myDay.Activities && myDay.Activities.length > 0) ? "Edit activity" : "Add activity"}
             </Button>
@@ -294,47 +366,49 @@ export default function ActivityEditor(props: Props) {
                 aria-labelledby="customized-dialog-title"
                 open={open}
             >
-                <BootstrapDialogTitle id="customized-dialog-title" onClose={() => handleClose(false)} images={null}>
-                    Edit Activity
+                <BootstrapDialogTitle id="customized-dialog-title" onClose={() => handleClose(false)}>
+                    <Typography gutterBottom>
+                        Edit Activity
+                    </Typography>
                 </BootstrapDialogTitle>
                 <DialogContent dividers>
-                    {/* <Typography gutterBottom>
-                        Name - Image - Description
-                    </Typography> */}
                     <>
                         {
 
                             // props.preset?.map((preset, presetIndex) =>
                             // (
-                            <div>
-                                <TextField
-                                    id="standard-basic"
-                                    label="Activity name"
-                                    variant="standard"
-                                    value={myDay.Name}
-                                    onChange={e => updateName(e, myDay.Name)}
-                                />
+                            <div className='padder'>
+                                <div>
+                                    <TextField
+                                        id="standard-basic"
+                                        label="Activity name"
+                                        variant="standard"
+                                        value={myDay.Name}
+                                        onChange={e => updateName(e)}
+                                    />
+                                </div>
+
+                                <Divider component="li" sx={{ margin: '5%' }} variant='inset' />
                                 {/* {currentPreset.Name} */}
                                 {myDay.Activities ?
                                     <div className='updateBox' >
                                         {
                                             myDay.Activities.map((activity, activityIndex) =>
                                             (
-                                                <div className="dayListContainerRow">
-
+                                                <div className="dayListContainerRow" id={"act" + activityIndex.toString()} key={activityIndex} style={{ order: (activity.Order), }}>
                                                     <div
-                                                        id={"act" + activityIndex.toString()} key={"act" + activityIndex} style={{ order: (activity.Order), }}
-                                                        className='editImageContainer  '
+
+                                                        className='dayListContainerRowImages  '
                                                     // onClick={() => { selectImage(activityIndex, activity.Id) }}
                                                     //     style={{
                                                     //         // backgroundColor: 'salmon',
                                                     // }}
                                                     >
-
-                                                        {/* <img src={`../images/image${index+4}.png`} /> */}
                                                         <img src={`../images/${activity.Image}`} />
+                                                        <Divider component="li" sx={{ margin: '5%' }} variant='middle' />
                                                     </div>
-                                                    <div>
+                                                    <Divider component="li" orientation="vertical" flexItem />
+                                                    <div className='dayListContainerRowButtons'>
                                                         {activity.Order !== "0" ?
                                                             <Button onClick={() => moveUp(activityIndex, myDay.Id)}>Up</Button>
                                                             :
@@ -349,21 +423,30 @@ export default function ActivityEditor(props: Props) {
                                             )
                                             )}
                                     </div>
-                                    :
-
-
-                                    <p>
-                                        {"No activities"}
-                                    </p>
+                                    : <p>{"No activities"}</p>
                                 }
                             </div>
-
                         }
                     </>
-
-
                 </DialogContent>
                 <DialogActions>
+                    <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+                        <InputLabel id="demo-simple-select-standard-label">From presets</InputLabel>
+                        <Select
+                            labelId="demo-simple-select-standard-label"
+                            id="presetSelector"
+                            value={``}
+                            onChange={e => setActivitiesFromPreset(e.target.value)}
+                            label="Preset"
+                        >
+                            <MenuItem value="" key={999}>
+                                <em>None</em>
+                            </MenuItem>
+                            {presets.map((preset, index) => (
+                                <MenuItem key={index} value={index}>{preset.Name}</MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
                     {props.dayArrayLength > 0 ?
                         <SelectImage selectCallback={selectCallback} activities={myDay.Activities} images={["image10.png", "image11.png", "image5.png", "image6.png", "image10.png", "image11.png", "image5.png", "image6.png", "image7.png", "image8.png"]} />
                         :
