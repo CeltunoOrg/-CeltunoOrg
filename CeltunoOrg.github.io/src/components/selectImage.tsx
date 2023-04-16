@@ -64,14 +64,24 @@ interface Props {
 export default function SelectImage(props: Props) {
     const [open, setOpen] = React.useState(false);
 
+    // const result = (arr1: IDayActivity[], arr2: IDayActivity[]) => {
+    //     return arr2.reduce(
+    //         (acc, item) => {
+    //             return acc.includes(item) ? acc : [...acc, item]
+    //         },
+    //         [...arr1]
+    //     )
+    // }
     const handleClickOpen = () => {
+        const ttt = result(props.activities,testActivities)
         setOpen(true);
     };
-    const handleClose = () => {
+    const handleClose = (save:boolean) => {
         // selected.map((item) => (
         //     props.images.push(item)
         // ));
-        props.selectCallback(selected)
+        if(save)
+            props.selectCallback(selected)
         setOpen(false);
     };
     const handleCancel = () => {
@@ -165,15 +175,15 @@ export default function SelectImage(props: Props) {
     // { initImages = (props.activities && props.activities.length >0)? merge(props.activities ?? [], testActivities) as unknown as IDayActivity[] : [] }
     return (
         <div>
-            <Button variant="outlined" onClick={handleClickOpen}>
+            <Button  onClick={handleClickOpen}>
                 Add images
             </Button>
             <BootstrapDialog
-                onClose={handleClose}
+                onClose={()=>handleClose (false)}
                 aria-labelledby="customized-dialog-title"
                 open={open}
             >
-                <BootstrapDialogTitle id="customized-dialog-title" onClose={handleClose} images={null}>
+                <BootstrapDialogTitle id="customized-dialog-title" onClose={()=>handleClose(false)} images={null}>
                     Select images
                 </BootstrapDialogTitle>
                 <DialogContent dividers>
@@ -266,7 +276,7 @@ export default function SelectImage(props: Props) {
                     <Button autoFocus onClick={handleCancel}>
                         Cancel
                     </Button>
-                    <Button autoFocus onClick={handleClose}>
+                    <Button autoFocus onClick={() =>handleClose(true)}>
                         Save changes
                     </Button>
                 </DialogActions>

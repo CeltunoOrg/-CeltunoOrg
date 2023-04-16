@@ -78,12 +78,14 @@ export default function ActivityEditor(props: Props) {
 
     };
     const handleClose = (save: boolean) => {
+        if (save) {
 
-        console.log("Saved")
-        if (myDay.Id > 0)
-            updateMyDay(myDay.Id);
-        else console.log("CLOSING -ID was NULL - no update")
-        props.editCallback(myDay)
+            console.log("Saved")
+            if (myDay.Id > 0)
+                updateMyDay(myDay.Id);
+            else console.log("CLOSING -ID was NULL - no update")
+            props.editCallback(myDay)
+        }
         setOpen(false);
     };
     const [topId, setTopId] = React.useState<number>(0);
@@ -111,8 +113,8 @@ export default function ActivityEditor(props: Props) {
     }, []);
 
     const tmpData: Array<IMyDay> = new Array<IMyDay>;
-    
-    function getHighest() {        
+
+    function getHighest() {
         const calculateHighest = () => {
             if (tmpData.length > 0) {
 
@@ -135,7 +137,7 @@ export default function ActivityEditor(props: Props) {
                     console.log("Snapshot found, mapping PLANNER data:");
                     snapshot.forEach(function (childSnapshot) {
                         const key = childSnapshot.key;
-                        if(!key)
+                        if (!key)
                             return
                         const values = childSnapshot.val()
                         let childData: IMyDay = {
@@ -146,7 +148,7 @@ export default function ActivityEditor(props: Props) {
                         }
                         childData.Id = Number.parseInt(key);
                         tmpData.push(childData);
-                    })                  
+                    })
                     getHighest()
                     console.log(`DB items found: ${tmpData.length} Top Id: ${topId}`);
                 }
@@ -189,7 +191,7 @@ export default function ActivityEditor(props: Props) {
                         day = childData;
                     }
                     handleDay(day)
-                })                
+                })
             })
         }
     }
@@ -199,12 +201,12 @@ export default function ActivityEditor(props: Props) {
     }
 
     let tmpPreset: IPreset[] = []
-    
+
     const setThePresets = () => {
         setPresets(tmpPreset)
     }
-    
-    
+
+
     const getPresetDbData = () => {
         PresetDataService.getDbAllDays("presets").then((data) => {
             useTheOnValue(data, (snapshot) => {
@@ -212,7 +214,7 @@ export default function ActivityEditor(props: Props) {
                     console.log("Snapshot found, mapping PRESET data:");
                     snapshot.forEach(function (childSnapshot) {
                         const key = childSnapshot.key;
-                        if(!key)
+                        if (!key)
                             return
                         let childData = childSnapshot.val() as IPreset;
                         childData.Id = Number.parseInt(key);
@@ -349,8 +351,10 @@ export default function ActivityEditor(props: Props) {
             // delete tmpday.Activities[activityIndex]
             // tmpday.Activities.[activityIndex]
             // tmpday.Activities.splice(activityIndex,1)
+            if (tmpday.Description === undefined)
+                tmpday.Description = ""
             handleDay(tmpday)
-            PresetDataService.updateMyDayItemDb(tmpday.Id, myDay)
+            PresetDataService.updateMyDayItemDb(tmpday.Id, tmpday)
             getOneDay(tmpday.Id)
         }
 
@@ -362,7 +366,7 @@ export default function ActivityEditor(props: Props) {
                 {(myDay.Activities && myDay.Activities.length > 0) ? "Edit activity" : "Add activity"}
             </Button>
             <BootstrapDialog
-                onClose={handleClose}
+                onClose={()=>handleClose(false)}
                 aria-labelledby="customized-dialog-title"
                 open={open}
             >
@@ -431,23 +435,35 @@ export default function ActivityEditor(props: Props) {
                 </DialogContent>
                 <DialogActions>
                     <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
-                        <InputLabel id="demo-simple-select-standard-label">From presets</InputLabel>
+                        <InputLabel id="demo-simple-select-standard-label">Select template</InputLabel>
                         <Select
                             labelId="demo-simple-select-standard-label"
                             id="presetSelector"
-                            value={``}
+                            value={`999`}
                             onChange={e => setActivitiesFromPreset(e.target.value)}
                             label="Preset"
+
+
                         >
-                            <MenuItem value="" key={999}>
+                            <MenuItem value={`999`} key={`999`} selected={true}>
                                 <em>None</em>
                             </MenuItem>
-                            {presets.map((preset, index) => (
-                                <MenuItem key={index} value={index}>{preset.Name}</MenuItem>
-                            ))}
+                            {presets.map(function (preset, index) {
+
+                                if (preset && preset.Id > 0) {
+
+                                    return <MenuItem key={index} value={index}>{preset.Name}</MenuItem>
+
+                                }
+                            }
+                            )}
+
+
+
+                            {/* )} */}
                         </Select>
                     </FormControl>
-                    {props.dayArrayLength > 0 ?
+                    {presets.length > 0 ?
                         <SelectImage selectCallback={selectCallback} activities={myDay.Activities} images={["image10.png", "image11.png", "image5.png", "image6.png", "image10.png", "image11.png", "image5.png", "image6.png", "image7.png", "image8.png"]} />
                         :
                         ""
