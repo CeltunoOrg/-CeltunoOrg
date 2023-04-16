@@ -178,11 +178,11 @@ const Activity = (Props: Props) => {
             {setTheDays}
             <div className='appMainContainer'>
                 <div className='maingridContainer '>
-                    <h4>Activities</h4>
+                    <h2>Activities</h2>
                     <div style={{display: 'flex',flexDirection: 'row'}}>
 
                     {/* {activities.length <= 0 ? */}
-                    <Button variant='outlined' onClick={() => { getDayDbData("planner") }}><i class="fa fa-refresh" aria-hidden="true"></i></Button>
+                    <Button variant='outlined' onClick={() => { getDayDbData("planner") }}><i className="fa fa-refresh" aria-hidden="true"></i></Button>
                     <ActivityEditor editCallback={editCallback} myDay={day} dayArrayLength={topId} />
 
                     </div>
@@ -190,7 +190,7 @@ const Activity = (Props: Props) => {
                         {
                             days?.map((dayItem, index) => (
                                 <div className='preset-grid-item'>
-                                    <p key={dayItem.Name + index.toString()}>{dayItem.Name}</p>
+                                    {/* <p key={dayItem.Name + index.toString()}>{dayItem.Name}</p> */}
                                     <div className="presetDayListContainer ">
                                         {dayItem.Activities ?
                                             //    preset?.Activities.map((activity, index) =>

@@ -358,7 +358,7 @@ export default function ActivityEditor(props: Props) {
     return (
         <div>
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
-            <Button variant="outlined" onClick={handleClickOpen}>
+            <Button className='classes.button' variant="outlined" onClick={handleClickOpen}>
                 {(myDay.Activities && myDay.Activities.length > 0) ? "Edit activity" : "Add activity"}
             </Button>
             <BootstrapDialog

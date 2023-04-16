@@ -79,6 +79,7 @@ button {
 }
 
 .maingridContainer {
+  min-height: 100%;
   grid-area: main;
   grid-template-areas:
     'header main ';
@@ -126,8 +127,8 @@ button {
 
 .dayListContainer {
   border-radius: 25px;
-  padding: 1% 5% 1% 5%;
-  min-width: 90%;
+  /* padding: 1% 5% 1% 5%; */
+  min-width: 100%;
   align-items: center;
   flex-direction: column;
   display: flex;
@@ -138,7 +139,7 @@ button {
   .dayListContainer {
     border-radius: 25px;
     padding: 1% 5% 1% 5%;
-    min-width: 90%;
+    min-width: 100%;
     align-items: center;
     display: flex;
     background-color: #858e8b31;
@@ -146,11 +147,14 @@ button {
 }
 
 .presetDayListContainer {
+  display: flex;
   border-radius: 15px;
   padding: 1% 5% 1% 5%;
-  min-width: 90%;
-  min-height: 50rem;
+  /* min-width: 90%; */
+  /* min-height:25rem; */
+  min-height:100%;
   align-items: center;
+  ;
   flex-direction: column;
   display: flex;
   background-color: #858e8b31;
@@ -163,6 +167,7 @@ button {
     min-width: 90%;
     align-items: center;
     display: flex;
+    min-height:max-content;
     background-color: #858e8b31;
   }
 }
@@ -185,6 +190,7 @@ button {
 
 .activityImageListcontainer {
   column-rule-color: aqua;
+  min-height: 100%;
 }
 
 .activityImageListcontainer>img {
@@ -214,19 +220,34 @@ button {
   max-width: auto;
   padding: .5501em;
   background: #7b7c7a00;
+  min-height: 100%;
 }
 
 .imagecontainer {
-  min-height: min-content;
+  /* min-height: min-content; */
 
   column-rule-color: aqua;
 }
 
 .preset-grid-container {
   border-radius: 5px;
-  display: inline-flex;
+  display: flex;
+  /* flex-direction:row; */
+  
+  min-height: 50%;
+  /* vertical-align: bottom */
+  /* top: 340px; */
+}
+div > Button {
+  font-size:xx-large;
+}
+@media only screen and (max-width:1000px)and (orientation: portrait) {
+  /* hide element on small screens */
+  div >Button {
+  font-size:xx-large;
 }
 
+}
 @media only screen and (max-width:1000px)and (orientation: portrait) {
   /* hide element on small screens */
 
@@ -246,18 +267,21 @@ button {
   }
 }
 .preset-grid-item {
-  background-color: rgba(255, 255, 255, 0.8);
+  /* display:inline-block; */
+  /* background-color: rgba(255, 255, 255, 0.8); */
   font-size: 15px;
-  grid-auto-rows: minmax(min-content, max-content);
+  /* grid-auto-rows:minmax(min-content, max-content); */
   text-align: center;
   justify-content: center;
   align-items: center;
-  display: grid;
+  /* display:inline-block; */
   min-width: 10rem;
-  min-height: 40rem;
-  max-height: max-content;
+  min-height: 10%;
+  /* max-height: 10%; */
   padding: 0.5%;
-  border-radius: 1%;
+  margin-bottom: 8rem;
+  /* border-radius: 1%; */
+  /* vertical-align: bottom; */
 }
 
 /* .grid-container {
@@ -672,3 +696,15 @@ li {
   padding: 1rem;
   border-radius: 1rem;
 }
+@media (max-width: 990px) {
+  button {
+    font-size: 58px;
+    font-size: xx-large!important;
+    
+    
+  };
+  h2{margin-left: 3rem; font-size: xx-large!important;}
+}
+/* }
+button {
+  } */
