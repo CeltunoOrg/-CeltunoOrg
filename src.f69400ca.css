@@ -41,6 +41,23 @@
   }
 } */
 
+@media only screen and (max-width:1000px)and (orientation: portrait) {
+  button {
+    font-size: 250% !important;
+    /* font-size: xx-large!important; */
+
+
+  }
+}
+
+h2 {
+  font-size: 1.8em !important;
+}
+@media only screen and (min-width:100px)and (orientation: portrait) {
+  h2 {
+    font-size: 2.5em!important;
+  };
+}
 
 .thetop {
   grid-area: header;
@@ -123,7 +140,7 @@ button {
   align-items: center;
   vertical-align: middle;
   min-height: 100%;
-  margin-left: 3rem;
+  margin-left: 2rem;
 }
 
 .dayListContainerRowImages>img {
@@ -142,7 +159,7 @@ button {
   background-color: #858e8b31;
 }
 
-@media only screen and (min-width: 600px) {
+/* @media only screen and (min-width: 600px) {
   .dayListContainer {
     border-radius: 25px;
     padding: 1% 5% 1% 5%;
@@ -151,12 +168,12 @@ button {
     display: flex;
     background-color: #858e8b31;
   }
-}
+} */
 
 .presetDayListContainer {
   display: flex;
   border-radius: 15px;
-  padding: 1% 5% 1% 5%;
+  /* padding: 1% 5% 1% 5%; */
   /* min-width: 90%; */
   /* min-height:25rem; */
   min-height: 100%;
@@ -167,7 +184,7 @@ button {
   background-color: #858e8b31;
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 992px) {
   .presetDayListContainer {
     border-radius: 15px;
     padding: 1% 3% 1% 3%;
@@ -199,6 +216,7 @@ button {
 .activityImageListcontainer {
   column-rule-color: aqua;
   min-height: 100%;
+  min-width: min-content;
 }
 
 .activityImageListcontainer>img {
@@ -211,7 +229,7 @@ button {
   column-rule-color: aqua;
 }
 
-@media only screen and (min-width: 600px) {
+@media only screen and (min-width: 992px) {
   .activityImageListcontainer>img {
     min-height: 100%;
     max-width: 55%;
@@ -226,7 +244,7 @@ button {
 .activityDayItem {
   border-radius: 25px;
   max-width: auto;
-  padding: .5501em;
+  padding-top: .5501em;
   background: #7b7c7a00;
   min-height: 100%;
 }
@@ -289,7 +307,7 @@ div>Button {
   justify-content: center;
   align-items: center;
   /* display:inline-block; */
-  min-width: 10rem;
+  min-width: 5rem;
   min-height: 10%;
   /* max-height: 10%; */
   padding: 0.3%;
@@ -426,7 +444,7 @@ div>Button {
   scroll-behavior: auto;
 }
 
-@media only screen and (min-width: 600px) {
+@media only screen and (min-width: 992px) {
   .updateDay {
     align-content: center;
     direction: column;
@@ -608,7 +626,7 @@ div>Button {
   }
 }
 
-@media only screen and (min-width: 600px) {
+@media only screen and (min-width: 992px) {
   .imagecontainer>img {
     max-width: 65%;
     min-width: 35%;
@@ -713,26 +731,8 @@ li {
   border-radius: 1rem;
 }
 
-@media only screen and (min-width:100px)and (orientation: portrait) {
-  button {
-    font-size: 48px !important;
-    /* font-size: xx-large!important; */
 
 
-  }
-}
-
-@media (orientation: portrait) {
-  h2 {
-    font-size: 1em;
-  };
-}
-
-h2 {
-  font-size: 1.8em !important;
-}
-
-;
 /* }
 button {
   } */
