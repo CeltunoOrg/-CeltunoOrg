@@ -6,6 +6,10 @@ import PresetDataService from "../services/preset-firebase-service"
 import { useTheOnValue } from '../../firebase-planner';
 import { Button } from '@mui/material';
 import ActivityEditor from './editActivity';
+import RefreshIcon from '@mui/icons-material/Refresh';
+import DeleteIcon from '@mui/icons-material/Delete';
+import ArrowBackIcon from '@mui/icons-material/ArrowBackIosNewOutlined';
+
 
 interface Props {
     children?: React.ReactNode
@@ -166,7 +170,8 @@ const Activities = (Props: Props) => {
                     <div style={{ display: 'flex', flexDirection: 'row' }}>
 
                         {/* {activities.length <= 0 ? */}
-                        <Button variant='outlined' onClick={() => { getDayDbData("planner") }}><i className="fa fa-refresh" aria-hidden="true"></i></Button>
+                        <Button href='/#/'><ArrowBackIcon/></Button>
+                        <Button  onClick={() => { getDayDbData("planner") }}><RefreshIcon/></Button>
                         <ActivityEditor hideAll={false} editCallback={editCallback} myDay={day} dayArrayLength={topId} />
 
                     </div>
