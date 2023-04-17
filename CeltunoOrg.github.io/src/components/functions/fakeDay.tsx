@@ -1,4 +1,4 @@
-import { IDayActivity, IMyDay, IPreset } from "../types/day.type";
+import { IDayActivity, IMyDay, IPreset } from "../../types/day.type";
 
     
     const FakeDay = () => {
