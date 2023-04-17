@@ -13,12 +13,12 @@ div>Button {
 button {
   border-radius: 1.5rem;
 }
-@media only screen and (max-width:1000px)and (orientation: portrait) {
+@media only screen and (max-width:992px)and (orientation: portrait) {
   button {
     font-size: 250% !important;    
   }
 }
-@media only screen and (max-width:1000px)and (orientation: portrait) {
+@media only screen and (max-width:992px)and (orientation: portrait) {
   div>Button {
     font-size: xx-large;
   }
@@ -67,7 +67,7 @@ h2 {
   display: flex;
   min-height: 50%;
 }
-@media only screen and (max-width:1000px)and (orientation: portrait) {
+@media only screen and (max-width:992px)and (orientation: portrait) {
   /* hide element on small screens */
 
   .day-grid-container {
@@ -93,10 +93,35 @@ h2 {
   min-width: 5rem;
   min-height: 10%;
   padding: 0.3%;
-  margin-bottom: 2rem;
-  margin-top: 1rem;
+  /* margin-bottom: 2rem;
+  margin-top: 1rem; */
 }
 
+@media only screen and (max-width:992px) {
+  .day-grid-item {
+    display: inline-grid;
+    margin-bottom: 10%;
+  }
+}
+
+  .gridButtons {
+    display: flex;
+    flex-wrap: wrap;
+    /* flex-Direction: 'column'; */
+  }
+  
+  @media only screen and (max-width: 992px) {
+    .gridButtons {
+      align-items: center;
+      justify-content: center;
+      /* display: 'flex'; */
+      margin: 1rem;
+      /* flex-Direction: 'row'; */
+      /* padding-top: 1rem; */
+      /* margin-bottom: 1em; */
+
+    }
+  }
 .dayListContainer {
   display: flex;
   border-radius: 15px;
@@ -105,7 +130,6 @@ h2 {
   flex-direction: column;
   display: flex;
   background-color: #858e8b31;
-  margin-bottom: 20%;
 }
 
 @media only screen and (max-width: 992px) {
@@ -117,7 +141,7 @@ h2 {
     display: flex;
     min-height: max-content;
     background-color: #858e8b31;
-
+    min-height: 100%;
   }
 }
 
@@ -176,7 +200,7 @@ h2 {
 }
 
 .selectImageContainer>img {
-
+  
   max-width: 8rem;
   min-width: 3rem;
   min-height: 100%;
@@ -189,12 +213,12 @@ div>Button {
 button {
   border-radius: 1.5rem;
 }
-@media only screen and (max-width:1000px)and (orientation: portrait) {
+@media only screen and (max-width:992px)and (orientation: portrait) {
   button {
     font-size: 250% !important;    
   }
 }
-@media only screen and (max-width:1000px)and (orientation: portrait) {
+@media only screen and (max-width:992px)and (orientation: portrait) {
   div>Button {
     font-size: xx-large;
   }
@@ -306,7 +330,7 @@ code {
 button {
   border-radius: 1.5rem;
 }
-@media only screen and (max-width:1000px)and (orientation: portrait) {
+@media only screen and (max-width:992px)and (orientation: portrait) {
   button {
     font-size: 250% !important;    
   }
@@ -346,7 +370,7 @@ div>Button {
   font-size: xx-large;
 }
 
-@media only screen and (max-width:1000px)and (orientation: portrait) {
+@media only screen and (max-width:992px)and (orientation: portrait) {
 
   /* hide element on small screens */
   div>Button {
@@ -370,7 +394,7 @@ div>Button {
   display: flex;
   flex-direction: column;
   margin-top: 3rem;
-  max-width: 20%;
+  
   float: left;
 
 }
@@ -920,19 +944,20 @@ li {
 
 
 
-
-
 div>Button {
   font-size: xx-large;
 }
+
 button {
   border-radius: 1.5rem;
 }
+
 @media only screen and (max-width:992)and (orientation: portrait) {
   button {
-    font-size: 250% !important;    
+    font-size: 250% !important;
   }
 }
+
 @media only screen and (max-width:992)and (orientation: portrait) {
   div>Button {
     font-size: xx-large;
@@ -944,10 +969,13 @@ button {
 h2 {
   font-size: 1.8em !important;
 }
+
 @media only screen and (min-width:100px)and (orientation: portrait) {
   h2 {
-    font-size: 2.5em!important;
-  };
+    font-size: 2.5em !important;
+  }
+
+  ;
 }
 
 
@@ -974,6 +1002,7 @@ h2 {
   display: flex;
   min-height: 50%;
 }
+
 @media only screen and (max-width:992px)and (orientation: portrait) {
   /* hide element on small screens */
 
@@ -983,7 +1012,9 @@ h2 {
     grid-template-columns: 1fr;
   }
 }
+
 @media only screen and (max-width:992px)and (orientation: landscape) {
+
   /* hide element on small screens */
   .preset-grid-container {
     border-radius: 25px;
@@ -1000,52 +1031,66 @@ h2 {
   min-width: 5rem;
   min-height: 10%;
   padding: 0.3%;
-  margin-bottom: 2rem;
-  margin-top: 1rem;
+  /* margin-bottom: 1rem; */
+  /* margin-top: 1rem; */
+  /* margin-bottom: 20%;
+  margin-top: 10%; */
 }
 
-.presetListContainer {
-  display: flex;
-  border-radius: 15px;
-  min-height: 100%;
-  align-items: center;
-  flex-direction: column;
-  display: flex;
-  background-color: #858e8b31;
-  margin-bottom: 20%;
-}
-
-@media only screen and (max-width: 992px) {
-  .presetListContainer {
-    border-radius: 15px;
-    padding: 1% 3% 1% 3%;
-    min-width: 90%;
-    align-items: center;
-    display: flex;
-    min-height: max-content;
-    background-color: #858e8b31;
- margin-bottom: 20%;
+@media only screen and (max-width:992px) {
+  .preset-grid-item {
+    display: inline-grid;
   }
 }
 
+  .gridButtons {
+    display: flex;
+    flex-wrap: wrap;
+    /* margin: 1rem; */
+    
+  }
+  
+  @media only screen and (max-width: 992px) {
+    .gridButtons {
+      align-items: center;
+      justify-content: center;
+      margin: 1rem;
 
-.activityImageListcontainer {
-  column-rule-color: aqua;
-  min-height: 100%;
-  min-width: min-content;
-}
+    }
+  }
 
-.activityImageListcontainer>img {
-  min-height: 100%;
-  max-width: 55%;
-  padding: 1%;
-  justify-content: center;
-  align-items: center;
-  vertical-align: middle;
-  column-rule-color: aqua;
-}
+  .presetListContainer {
+    display: flex;
+    border-radius: 15px;
+    min-height: 100%;
+    align-items: center;
+    flex-direction: column;
+    display: flex;
+    background-color: #858e8b31;
 
-@media only screen and (min-width: 992px) {
+  }
+
+  @media only screen and (max-width: 992px) {
+    .presetListContainer {
+      border-radius: 15px;
+      padding: 1% 3% 1% 3%;
+      min-width: 90%;
+      align-items: center;
+      display: flex;
+      min-height: max-content;
+      background-color: #858e8b31;
+      /* margin-bottom: 20%; */
+      min-height: 100%;
+    }
+  }
+
+
+  .activityImageListcontainer {
+    column-rule-color: aqua;
+    min-height: 100%;
+    min-width: min-content;
+  }
+
   .activityImageListcontainer>img {
     min-height: 100%;
     max-width: 55%;
@@ -1055,35 +1100,44 @@ h2 {
     vertical-align: middle;
     column-rule-color: aqua;
   }
-}
 
-.activityPresetItem {
-  border-radius: 25px;
-  max-width: auto;
-  padding-top: .5501em;
-  background: #7b7c7a00;
-  min-height: 100%;
-}
+  @media only screen and (min-width: 992px) {
+    .activityImageListcontainer>img {
+      min-height: 100%;
+      max-width: 55%;
+      padding: 1%;
+      justify-content: center;
+      align-items: center;
+      vertical-align: middle;
+      column-rule-color: aqua;
+    }
+  }
 
-
-.selectImageBox {
-  display: flex;
-  flex-direction: column;
-}
-
-.selectImageContainer {
-  min-width: none;
-  min-height: 100%;
-  padding: 1rem;
-}
-
-.selectImageContainer>img {
-
-  max-width: 8rem;
-  min-width: 3rem;
-  min-height: 100%;
-}
+  .activityPresetItem {
+    border-radius: 25px;
+    max-width: auto;
+    padding-top: .5501em;
+    background: #7b7c7a00;
+    min-height: 100%;
+  }
 
 
+  .selectImageBox {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .selectImageContainer {
+    min-width: none;
+    min-height: 100%;
+    padding: 1rem;
+  }
+
+  .selectImageContainer>img {
+
+    max-width: 8rem;
+    min-width: 3rem;
+    min-height: 100%;
+  }
 
 /*# sourceMappingURL=/src.f69400ca.css.map */
