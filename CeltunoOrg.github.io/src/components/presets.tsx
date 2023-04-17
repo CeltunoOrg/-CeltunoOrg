@@ -149,12 +149,8 @@ const Presets = (Props: Props) => {
                                             ""
                                         }
                                     </div>
-
+                                    <div className='gridButtons'>
                                     <PresetEditor editCallback={editCallback} myPreset={presetItem} dayArrayLength={topId} />
-                                    {/* {dayItem.Name !== "string" && dayItem.Name ?
-                                        ""
-                                        : <Button onClick={() => { getAllData("presets"); setTheActivities() }}>Fetch</Button>
-                                    } */}
                                     {
 
                                         presetItem.Id !== null ?
@@ -164,6 +160,7 @@ const Presets = (Props: Props) => {
                                             :
                                             ""
                                     }
+                                    </div>
                                 </div>
                             ))
                         }

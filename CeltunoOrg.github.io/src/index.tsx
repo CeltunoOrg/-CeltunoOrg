@@ -1,6 +1,6 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
-import { BrowserRouter, useParams } from "react-router-dom"
+import { BrowserRouter, HashRouter, useParams } from "react-router-dom"
 import "bootstrap/dist/css/bootstrap.min.css";
 import Activities from "./components/activities";
 import './index.css';
@@ -8,6 +8,7 @@ import "../styles/App.css"
 // import '../styles/tmpstyle.module.css'
 import App from './App';
 import App3 from "./App3";
+import DeviceView from "./components/deviceView";
 // import App2 from './App2';
 
 
@@ -32,17 +33,22 @@ const AppChoice = (choice: number) => {
     else if (choice === 4) {
         return <Activities isOpen={false} />
     }
+    else if (choice === 5) {
+        return <DeviceView hideAll={true} />
+    }
     else {
         return <App />
     }
 }
 root.render(
     <div className="App ">
+<HashRouter>
 
-        <BrowserRouter>
+        {/* <BrowserRouter> */}
 
             {AppChoice(3)}
 
-        </BrowserRouter>
+        {/* </BrowserRouter> */}
+</HashRouter>
     </div>
 );

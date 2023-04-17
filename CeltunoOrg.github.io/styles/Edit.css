@@ -5,12 +5,12 @@ div>Button {
 button {
   border-radius: 1.5rem;
 }
-@media only screen and (max-width:1000px)and (orientation: portrait) {
+@media only screen and (max-width:992px)and (orientation: portrait) {
   button {
     font-size: 250% !important;    
   }
 }
-@media only screen and (max-width:1000px)and (orientation: portrait) {
+@media only screen and (max-width:992px)and (orientation: portrait) {
   div>Button {
     font-size: xx-large;
   }

@@ -144,8 +144,8 @@ const Activities = (Props: Props) => {
     //     return highestFilterByName
     // }
     const theHighest = () => {
-       console.log(`Activity-Highest: ${topId}`)
-     function getHighest() {
+        console.log(`Activity-Highest: ${topId}`)
+        function getHighest() {
             if (days.length > 0) {
 
                 let sortedDays = days.sort((a, b) => (a.Id > b.Id) ? -1 : 1);
@@ -163,11 +163,11 @@ const Activities = (Props: Props) => {
             <div className='appMainContainer'>
                 <div className='maingridContainer '>
                     <h2>Activities</h2>
-                    <div style={{display: 'flex',flexDirection: 'row'}}>
+                    <div style={{ display: 'flex', flexDirection: 'row' }}>
 
-                    {/* {activities.length <= 0 ? */}
-                    <Button variant='outlined' onClick={() => { getDayDbData("planner") }}><i className="fa fa-refresh" aria-hidden="true"></i></Button>
-                    <ActivityEditor hideAll={false} editCallback={editCallback} myDay={day} dayArrayLength={topId} />
+                        {/* {activities.length <= 0 ? */}
+                        <Button variant='outlined' onClick={() => { getDayDbData("planner") }}><i className="fa fa-refresh" aria-hidden="true"></i></Button>
+                        <ActivityEditor hideAll={false} editCallback={editCallback} myDay={day} dayArrayLength={topId} />
 
                     </div>
                     <div className="day-grid-container">
@@ -198,21 +198,19 @@ const Activities = (Props: Props) => {
                                             ""
                                         }
                                     </div>
+                                    <div className='gridButtons'>
+                                        <ActivityEditor hideAll={false} editCallback={editCallback} myDay={dayItem} dayArrayLength={topId} />
 
-                                    <ActivityEditor hideAll={false} editCallback={editCallback} myDay={dayItem} dayArrayLength={topId} />
-                                    {/* {dayItem.Name !== "string" && dayItem.Name ?
-                                        ""
-                                        : <Button onClick={() => { getAllData("planner"); setTheActivities() }}>Fetch</Button>
-                                    } */}
-                                    {
+                                        {
 
-                                        dayItem.Id !== null ?
-                                            <Button onClick={(() => removeDayItem(dayItem.Id))}>
-                                                <i className="fa fa-trash" aria-hidden="true"></i>
-                                            </Button>
-                                            :
-                                            ""
-                                    }
+                                            dayItem.Id !== null ?
+                                                <Button onClick={(() => removeDayItem(dayItem.Id))}>
+                                                    <i className="fa fa-trash" aria-hidden="true"></i>
+                                                </Button>
+                                                :
+                                                ""
+                                        }
+                                    </div>
                                 </div>
                             ))
                         }

@@ -33,7 +33,7 @@
 button {
   border-radius: 1.5rem;
 }
-@media only screen and (max-width:1000px)and (orientation: portrait) {
+@media only screen and (max-width:992px)and (orientation: portrait) {
   button {
     font-size: 250% !important;    
   }
@@ -73,7 +73,7 @@ div>Button {
   font-size: xx-large;
 }
 
-@media only screen and (max-width:1000px)and (orientation: portrait) {
+@media only screen and (max-width:992px)and (orientation: portrait) {
 
   /* hide element on small screens */
   div>Button {
@@ -97,7 +97,7 @@ div>Button {
   display: flex;
   flex-direction: column;
   margin-top: 3rem;
-  max-width: 20%;
+  
   float: left;
 
 }

@@ -26,7 +26,7 @@ const DeviceView = (props: Props) => {
     })
     const shallowClone = obj => Object.assign({}, obj);
 
-    const [hideAll, setHidden] = useState<boolean>(false);
+    const [hideAll, setHidden] = useState<boolean>(true);
 
     const [day, setDay] = useState<IMyDay>({
         Id: 0,
@@ -71,7 +71,7 @@ const DeviceView = (props: Props) => {
                 }
             })
         })
-        handleHidden()
+        // handleHidden()
         return tmpData
     }
 
