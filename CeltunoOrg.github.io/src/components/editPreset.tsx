@@ -11,6 +11,8 @@ import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
 import ExpandLessOutlined from '@mui/icons-material/ExpandLessOutlined'
 import ExpandMoreOutlined from '@mui/icons-material/ExpandMoreOutlined';
+import EditIcon from '@mui/icons-material/Edit';
+import AddIcon from '@mui/icons-material/Add';
 
 import "../../styles/Edit.css"
 
@@ -351,8 +353,8 @@ export default function PresetEditor(props: Props) {
     return (
         <div>
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
-            <Button className='classes.button' variant="outlined" onClick={handleClickOpen}>
-                {(myPreset.Activities && myPreset.Activities.length > 0) ? "Edit preset" : "Add preset"}
+            <Button className='classes.button'  onClick={handleClickOpen}>
+                {(myPreset.Activities && myPreset.Activities.length > 0) ? <EditIcon/> : <AddIcon/>}
             </Button>
             <BootstrapDialog
                 onClose={() => handleClose(false)}

@@ -5,6 +5,9 @@ import PresetEditor from './editPreset';
 import PresetDataService from "../services/preset-firebase-service"
 import { useTheOnValue } from '../../firebase-planner';
 import { Button } from '@mui/material';
+import RefreshIcon from '@mui/icons-material/Refresh';
+import DeleteIcon from '@mui/icons-material/Delete';
+
 
 interface Props {
     children?: React.ReactNode
@@ -118,7 +121,7 @@ const Presets = (Props: Props) => {
                     <div style={{display: 'flex',flexDirection: 'row'}}>
 
                     {/* {activities.length <= 0 ? */}
-                    <Button variant='outlined' onClick={() => { getPresetDbData("presets") }}><i className="fa fa-refresh" aria-hidden="true"></i></Button>
+                    <Button  onClick={() => { getPresetDbData("presets") }}><RefreshIcon/></Button>
                     <PresetEditor editCallback={editCallback} myPreset={preset} dayArrayLength={topId} />
 
                     </div>
@@ -126,13 +129,13 @@ const Presets = (Props: Props) => {
                         {
                             presets?.map((presetItem, presetIndex) => (
                                 <div className='preset-grid-item' key={presetItem.Name+presetIndex}>
-                                    <h3 >{presetItem.Name}</h3>
                                     <div className="presetListContainer ">
+                                    <h3 >{presetItem.Name}</h3>
                                         {presetItem.Activities ?
                                             presetItem?.Activities.map((activity, activityIndex) =>
                                             (
 
-                                                <div className="activityPresetItem" id={"preset" + activity.Id} onClick={() => { alert(activity.Id) }} key={activityIndex} style={{ order: (activity.Order), }}>
+                                                <div className="activityPresetItem" id={"preset" + activity.Id} key={activityIndex} style={{ order: (activity.Order), }}>
                                                     {/* <div className="grid-item"> */}
 
                                                     <div>
@@ -155,7 +158,7 @@ const Presets = (Props: Props) => {
 
                                         presetItem.Id !== null ?
                                             <Button onClick={(() => removPresetItem(presetItem.Id))}>
-                                                <i className="fa fa-trash" aria-hidden="true"></i>
+                                                <DeleteIcon/>
                                             </Button>
                                             :
                                             ""
