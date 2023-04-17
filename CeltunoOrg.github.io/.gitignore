@@ -8,6 +8,7 @@ scripts/flow/*/.flowconfig
 _SpecRunner.html
 __benchmarks__
 build/
+dist/
 CeltunoOrg.github.io/dist/
 remote-repo/
 coverage/
@@ -15,6 +16,7 @@ coverage/
 fixtures/dom/public/react-dom.js
 fixtures/dom/public/react.js
 test/the-files-to-test.generated.js
+components/Unused
 *.log*
 chrome-user-data
 *.sublime-project
@@ -25,6 +27,7 @@ chrome-user-data
 *.swp
 *.swo
 .cache
+__azurite_db_table__.json
 #.parcel-cache
 packages/react-devtools-core/dist
 packages/react-devtools-extensions/chrome/build
