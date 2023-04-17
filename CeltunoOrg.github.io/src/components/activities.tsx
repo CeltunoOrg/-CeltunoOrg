@@ -6,6 +6,9 @@ import PresetDataService from "../services/preset-firebase-service"
 import { useTheOnValue } from '../../firebase-planner';
 import { Button } from '@mui/material';
 import ActivityEditor from './editActivity';
+import RefreshIcon from '@mui/icons-material/Refresh';
+import DeleteIcon from '@mui/icons-material/Delete';
+
 
 interface Props {
     children?: React.ReactNode
@@ -166,7 +169,7 @@ const Activities = (Props: Props) => {
                     <div style={{ display: 'flex', flexDirection: 'row' }}>
 
                         {/* {activities.length <= 0 ? */}
-                        <Button variant='outlined' onClick={() => { getDayDbData("planner") }}><i className="fa fa-refresh" aria-hidden="true"></i></Button>
+                        <Button  onClick={() => { getDayDbData("planner") }}><RefreshIcon/></Button>
                         <ActivityEditor hideAll={false} editCallback={editCallback} myDay={day} dayArrayLength={topId} />
 
                     </div>
@@ -176,12 +179,13 @@ const Activities = (Props: Props) => {
                                 <div className='day-grid-item' key={dayItem.Name + dayIndex}>
                                     {/* <p key={dayItem.Name + index.toString()}>{dayItem.Name}</p> */}
                                     <div className="dayListContainer ">
+                                    <h3 >{dayItem.Name}</h3>
                                         {dayItem.Activities ?
                                             //    preset?.Activities.map((activity, index) =>
-                                            dayItem?.Activities.map((activity, aactivityIndex) =>
+                                            dayItem?.Activities.map((activity, activityIndex) =>
                                             (
 
-                                                <div className="activityDayItem" id={"day" + activity.Id} onClick={() => { alert(activity.Id) }} key={aactivityIndex} style={{ order: (activity.Order), }}>
+                                                <div className="activityDayItem" id={"day" + activity.Id}  key={activityIndex} style={{ order: (activity.Order), }}>
                                                     {/* <div className="grid-item"> */}
 
                                                     <div>
@@ -198,14 +202,14 @@ const Activities = (Props: Props) => {
                                             ""
                                         }
                                     </div>
-                                    <div className='gridButtons'>
+                                    <div className='gridActivityButtons'>
                                         <ActivityEditor hideAll={false} editCallback={editCallback} myDay={dayItem} dayArrayLength={topId} />
 
                                         {
 
                                             dayItem.Id !== null ?
                                                 <Button onClick={(() => removeDayItem(dayItem.Id))}>
-                                                    <i className="fa fa-trash" aria-hidden="true"></i>
+                                                    <DeleteIcon/>
                                                 </Button>
                                                 :
                                                 ""

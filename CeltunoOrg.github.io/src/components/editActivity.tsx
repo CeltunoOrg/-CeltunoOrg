@@ -11,6 +11,9 @@ import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
 import ExpandLessOutlined from '@mui/icons-material/ExpandLessOutlined'
 import ExpandMoreOutlined from '@mui/icons-material/ExpandMoreOutlined';
+import EditIcon from '@mui/icons-material/Edit';
+import AddIcon from '@mui/icons-material/Add';
+
 
 import "../../styles/Edit.css"
 
@@ -405,8 +408,8 @@ export default function ActivityEditor(props: Props) {
     return (
         <div>
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
-            <Button hidden={hidden} className='classes.button' variant="outlined" onClick={handleClickOpen}>
-                {(myDay.Activities && myDay.Activities.length > 0) ? "Edit activity" : "Add activity"}
+            <Button hidden={hidden} className='classes.button'  onClick={handleClickOpen}>
+                {(myDay.Activities && myDay.Activities.length > 0) ? <EditIcon/>  : <AddIcon/>}
             </Button>
             <BootstrapDialog
                 onClose={() => handleClose(false)}
