@@ -85,66 +85,83 @@ h2 {
   min-width: 5rem;
   min-height: 10%;
   padding: 0.3%;
-  /* margin-bottom: 1rem; */
-  /* margin-top: 1rem; */
-  /* margin-bottom: 20%;
-  margin-top: 10%; */
 }
 
-@media only screen and (max-width:992px) {
+@media only screen and (max-width:992px) and (orientation:portrait) {
   .preset-grid-item {
-    display: inline-grid;
+    margin-bottom: 5rem;
+    display: flex;
+    direction: column;
   }
 }
 
-  .gridButtons {
+.gridPresetButtons {
+  display: flex;
+  flex-wrap: wrap;
+
+}
+
+.gridActivityButtons>Button {
+  min-width: 1rem;
+}
+
+@media only screen and (max-width: 992px) {
+  .gridPresetButtons {
     display: flex;
     flex-wrap: wrap;
-    /* margin: 1rem; */
-    
-  }
-  
-  @media only screen and (max-width: 992px) {
-    .gridButtons {
-      align-items: center;
-      justify-content: center;
-      margin: 1rem;
-
-    }
-  }
-
-  .presetListContainer {
-    display: flex;
-    border-radius: 15px;
-    min-height: 100%;
     align-items: center;
-    flex-direction: column;
+    justify-content: center;
+    margin: 0px
+  }
+
+  .gridPresetuttons>Button {
+    min-width: 1rem;
+  }
+}
+
+.presetListContainer {
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100%;
+  background-color: #858e8b31;
+
+}
+
+@media only screen and (max-width: 992px) {
+  .presetListContainer {
+    border-radius: 15px;
     display: flex;
+    align-items: center;
     background-color: #858e8b31;
-
-  }
-
-  @media only screen and (max-width: 992px) {
-    .presetListContainer {
-      border-radius: 15px;
-      padding: 1% 3% 1% 3%;
-      min-width: 90%;
-      align-items: center;
-      display: flex;
-      min-height: max-content;
-      background-color: #858e8b31;
-      /* margin-bottom: 20%; */
-      min-height: 100%;
-    }
-  }
-
-
-  .activityImageListcontainer {
-    column-rule-color: aqua;
+    min-width: 90%;
     min-height: 100%;
-    min-width: min-content;
+    padding: 1% 3% 1% 3%;
+    margin: 1% 1% 1% 1%;
   }
+}
 
+
+.activityImageListcontainer {
+  column-rule-color: aqua;
+  min-height: 100%;
+  min-width: min-content;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.activityImageListcontainer>img {
+  min-height: 100%;
+  max-width: 55%;
+  padding: 1%;
+  justify-content: center;
+  align-items: center;
+  vertical-align: middle;
+  column-rule-color: aqua;
+}
+
+@media only screen and (min-width: 992px) {
   .activityImageListcontainer>img {
     min-height: 100%;
     max-width: 55%;
@@ -154,42 +171,30 @@ h2 {
     vertical-align: middle;
     column-rule-color: aqua;
   }
+}
 
-  @media only screen and (min-width: 992px) {
-    .activityImageListcontainer>img {
-      min-height: 100%;
-      max-width: 55%;
-      padding: 1%;
-      justify-content: center;
-      align-items: center;
-      vertical-align: middle;
-      column-rule-color: aqua;
-    }
-  }
+.activityPresetItem {
+  border-radius: 25px;
+  max-width: auto;
+  padding-top: .5501em;
+  background: #7b7c7a00;
+  min-height: 100%;
+}
 
-  .activityPresetItem {
-    border-radius: 25px;
-    max-width: auto;
-    padding-top: .5501em;
-    background: #7b7c7a00;
-    min-height: 100%;
-  }
+.selectImageBox {
+  display: flex;
+  flex-direction: column;
+}
 
+.selectImageContainer {
+  min-width: none;
+  min-height: 100%;
+  padding: 1rem;
+}
 
-  .selectImageBox {
-    display: flex;
-    flex-direction: column;
-  }
+.selectImageContainer>img {
 
-  .selectImageContainer {
-    min-width: none;
-    min-height: 100%;
-    padding: 1rem;
-  }
-
-  .selectImageContainer>img {
-
-    max-width: 8rem;
-    min-width: 3rem;
-    min-height: 100%;
-  }
+  max-width: 8rem;
+  min-width: 3rem;
+  min-height: 100%;
+}

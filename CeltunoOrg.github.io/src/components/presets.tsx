@@ -133,13 +133,13 @@ const Presets = (Props: Props) => {
                         {
                             presets?.map((presetItem, presetIndex) => (
                                 <div className='preset-grid-item' key={presetItem.Name+presetIndex}>
-                                    <h3 >{presetItem.Name}</h3>
                                     <div className="presetListContainer ">
+                                    <h3 >{presetItem.Name}</h3>
                                         {presetItem.Activities ?
                                             presetItem?.Activities.map((activity, activityIndex) =>
                                             (
 
-                                                <div className="activityPresetItem" id={"preset" + activity.Id} onClick={() => { alert(activity.Id) }} key={activityIndex} style={{ order: (activity.Order), }}>
+                                                <div className="activityPresetItem" id={"preset" + activity.Id} key={activityIndex} style={{ order: (activity.Order), }}>
                                                     {/* <div className="grid-item"> */}
 
                                                     <div>
@@ -162,7 +162,7 @@ const Presets = (Props: Props) => {
 
                                         presetItem.Id !== null ?
                                             <Button onClick={(() => removPresetItem(presetItem.Id))}>
-                                                <i className="fa fa-trash" aria-hidden="true"></i>
+                                                <DeleteIcon/>
                                             </Button>
                                             :
                                             ""

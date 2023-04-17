@@ -1,16 +1,17 @@
-
-
 div>Button {
   font-size: xx-large;
 }
+
 button {
   border-radius: 1.5rem;
 }
+
 @media only screen and (max-width:992px)and (orientation: portrait) {
   button {
-    font-size: 250% !important;    
+    font-size: 250% !important;
   }
 }
+
 @media only screen and (max-width:992px)and (orientation: portrait) {
   div>Button {
     font-size: xx-large;
@@ -22,10 +23,13 @@ button {
 h2 {
   font-size: 1.8em !important;
 }
+
 @media only screen and (min-width:100px)and (orientation: portrait) {
   h2 {
-    font-size: 2.5em!important;
-  };
+    font-size: 2.5em !important;
+  }
+
+  ;
 }
 
 .appMainContainer {
@@ -60,6 +64,7 @@ h2 {
   display: flex;
   min-height: 50%;
 }
+
 @media only screen and (max-width:992px)and (orientation: portrait) {
   /* hide element on small screens */
 
@@ -69,7 +74,9 @@ h2 {
     grid-template-columns: 1fr;
   }
 }
+
 @media only screen and (max-width:100px)and (orientation: landscape) {
+
   /* hide element on small screens */
   .day-grid-container {
     border-radius: 25px;
@@ -85,15 +92,14 @@ h2 {
   align-items: center;
   min-width: 5rem;
   min-height: 10%;
-  padding: 0.3%;
-  /* margin-bottom: 2rem;
-  margin-top: 1rem; */
+  padding: 0.2%;
 }
 
-@media only screen and (max-width:992px) {
+@media only screen and (max-width:992px) and (orientation:portrait) {
   .day-grid-item {
-    display: inline-grid;
-    margin-bottom: 10%;
+    margin-bottom: 5rem;
+    display: flex;
+    direction: column;
   }
 }
 
@@ -121,25 +127,25 @@ h2 {
 }
 
 .dayListContainer {
-  display: flex;
   border-radius: 15px;
-  min-height: 100%;
-  align-items: center;
-  flex-direction: column;
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100%;
   background-color: #858e8b31;
+  
 }
 
-@media only screen and (max-width: 992px) {
+@media only screen and (max-width: 992px) and (orientation: portrait) {
   .dayListContainer {
     border-radius: 15px;
-    padding: 1% 3% 1% 3%;
-    min-width: 90%;
-    align-items: center;
     display: flex;
-    min-height: max-content;
+    align-items: center;
     background-color: #858e8b31;
+    min-width: 90%;
     min-height: 100%;
+    padding: 1% 3% 1% 3%;
+    margin: 1% 1% 1% 1%;
   }
 }
 
@@ -180,6 +186,7 @@ h2 {
   padding-top: .5501em;
   background: #7b7c7a00;
   min-height: 100%;
+  
 }
 
 .selectImageBox {
@@ -194,7 +201,7 @@ h2 {
 }
 
 .selectImageContainer>img {
-  
+
   max-width: 8rem;
   min-width: 3rem;
   min-height: 100%;

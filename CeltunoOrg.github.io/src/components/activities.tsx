@@ -181,12 +181,13 @@ const Activities = (Props: Props) => {
                                 <div className='day-grid-item' key={dayItem.Name + dayIndex}>
                                     {/* <p key={dayItem.Name + index.toString()}>{dayItem.Name}</p> */}
                                     <div className="dayListContainer ">
+                                    <h3 >{dayItem.Name}</h3>
                                         {dayItem.Activities ?
                                             //    preset?.Activities.map((activity, index) =>
-                                            dayItem?.Activities.map((activity, aactivityIndex) =>
+                                            dayItem?.Activities.map((activity, activityIndex) =>
                                             (
 
-                                                <div className="activityDayItem" id={"day" + activity.Id} onClick={() => { alert(activity.Id) }} key={aactivityIndex} style={{ order: (activity.Order), }}>
+                                                <div className="activityDayItem" id={"day" + activity.Id}  key={activityIndex} style={{ order: (activity.Order), }}>
                                                     {/* <div className="grid-item"> */}
 
                                                     <div>
@@ -203,14 +204,14 @@ const Activities = (Props: Props) => {
                                             ""
                                         }
                                     </div>
-                                    <div className='gridButtons'>
+                                    <div className='gridActivityButtons'>
                                         <ActivityEditor hideAll={false} editCallback={editCallback} myDay={dayItem} dayArrayLength={topId} />
 
                                         {
 
                                             dayItem.Id !== null ?
                                                 <Button onClick={(() => removeDayItem(dayItem.Id))}>
-                                                    <i className="fa fa-trash" aria-hidden="true"></i>
+                                                    <DeleteIcon/>
                                                 </Button>
                                                 :
                                                 ""
