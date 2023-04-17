@@ -31,7 +31,7 @@ class PresetDataService {
   //     console.log("Get one by key: " + key)
   //     return  get(child(useTheRef(db), `/` + key));   
   // }
-  async getDbAllDays(path: string | null) {
+  async getAllItemsDB(path: string | null) {
     let databaseReference: DatabaseReference | null = null
     console.log("Connecting to db...");//Getting all from db");
     path ?
@@ -119,7 +119,7 @@ class PresetDataService {
       // console.log(theDay);
       // theDay.formiddag= "New formiddag"
       const updates = {};
-      updates['/preset/' + key] = thePreset
+      updates['/presets/' + key] = thePreset
       console.log("Add result: ")
       return update(useTheRef(db), updates)
     }
@@ -129,15 +129,18 @@ class PresetDataService {
     }
   }
   removePresetItemDb(key: number) {
-    const itemref = `/preset/${key}`
+    const itemref = `/presets/${key}`
 
     return remove(ref(db, itemref))
   }
   removePresetActivityItemDb(dayKey: number, activityKey: number) {
-    const itemref = `/preset/${dayKey}/${activityKey}`
-
-    remove(useTheRef(db, itemref)).then(() =>
-      console.log("DOne removing?")
+    const itemref = `/presets/${dayKey}/Activities/${activityKey}`
+    const updates = {};
+    updates[`/presets/${dayKey}/Activities/${activityKey}`] = null
+    console.log("Cleared activity: " + activityKey)
+    // return update(useTheRef(db), updates)
+    update(useTheRef(db), updates).then(() =>
+      console.log("Done removing?")
     ).catch((e) =>
       console.log(e)
     )
@@ -151,6 +154,7 @@ class PresetDataService {
       console.log(e)
     )
   }
+
   removeDayActivityItemDb(dayKey: number, activityKey: number, day: IMyDay) {
     const itemref = `/planner/${dayKey}/Activities/${activityKey}`
     const updates = {};

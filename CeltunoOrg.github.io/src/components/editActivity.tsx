@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 import Dialog from '@mui/material/Dialog';
@@ -8,6 +9,11 @@ import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
+import ExpandLessOutlined from '@mui/icons-material/ExpandLessOutlined'
+import ExpandMoreOutlined from '@mui/icons-material/ExpandMoreOutlined';
+
+import "../../styles/Edit.css"
+
 import PresetDataService from "../services/preset-firebase-service"
 import IDay, { IDayActivity, IImagePreset, IMyDay, IPreset, ISelectImage } from '../types/day.type';
 import { Divider, FormControl, ImageListItemBar, InputLabel, MenuItem, Select, TextField } from '@mui/material';
@@ -60,6 +66,7 @@ interface Props {
 
     myDay: IMyDay | null
     dayArrayLength: number
+    hideAll: boolean
     editCallback: (theEdited: IMyDay | null) => IMyDay | null//theSelected: ISelectImage []}
 
 }
@@ -74,20 +81,21 @@ export default function ActivityEditor(props: Props) {
         //     setTopId(props.dayArrayLength)
         getPresetDbData()
         if (topId <= 0)
-            getAll()
-
+        getAll()
+        
     };
     const handleClose = (save: boolean) => {
         if (save) {
-
+            
             console.log("Saved")
             if (myDay.Id > 0)
-                updateMyDay(myDay.Id);
+            updateMyDay(myDay.Id);
             else console.log("CLOSING -ID was NULL - no update")
             props.editCallback(myDay)
         }
         setOpen(false);
     };
+    const [hidden, setHidden] = React.useState<boolean>(false);
     const [topId, setTopId] = React.useState<number>(0);
     const [presets, setPresets] = React.useState<IPreset[]>([]);
     const [myDay, setMyDay] = React.useState<IMyDay>(
@@ -97,18 +105,24 @@ export default function ActivityEditor(props: Props) {
             Description: "",
             Activities: []
         }
-    );
-
-    useEffect(() => {
-
-        if (props.myDay && props.myDay !== myDay)
+        );
+        
+        const handleHiding=() =>{
+            if(props.hideAll)
+            setHidden(props.hideAll)
+        }
+        
+        useEffect(() => {
+            
+            if (props.myDay && props.myDay !== myDay)
             setMyDay(props.myDay)
-        if (presets.length <= 0)
+            if (presets.length <= 0)
+            handleHiding()
             getPresetDbData()
-
-        getAll()
-        // if (props.dayArrayLength > topId)
-        //     setTopId(props.dayArrayLength)
+            
+            getAll()
+            // if (props.dayArrayLength > topId)
+            //     setTopId(props.dayArrayLength)
 
     }, []);
 
@@ -131,7 +145,7 @@ export default function ActivityEditor(props: Props) {
     const getAll = () => {
 
 
-        PresetDataService.getDbAllDays("planner").then((data) => {
+        PresetDataService.getAllItemsDB("planner").then((data) => {
             useTheOnValue(data, (snapshot) => {
                 if (snapshot.exists()) {
                     console.log("Snapshot found, mapping PLANNER data:");
@@ -208,7 +222,7 @@ export default function ActivityEditor(props: Props) {
 
 
     const getPresetDbData = () => {
-        PresetDataService.getDbAllDays("presets").then((data) => {
+        PresetDataService.getAllItemsDB("presets").then((data) => {
             useTheOnValue(data, (snapshot) => {
                 if (snapshot.exists()) {
                     console.log("Snapshot found, mapping PRESET data:");
@@ -256,49 +270,78 @@ export default function ActivityEditor(props: Props) {
         updateMyDay(tmpActivity.Id)
     }
 
-    const moveUp = (index: number, id: number | null) => {
-        console.log(`Index: ${index}  - Id: ${id}`)
-        let activityDiv = document.getElementById(`act${index.toString()}`);
-        if (activityDiv && id !== null) {
-            const tmpActivity: IMyDay = { ...myDay }
-            if (tmpActivity.Id == 0)
-                tmpActivity.Id = props.dayArrayLength
-            if (tmpActivity.Activities.length > 0) {
-                const activity = tmpActivity?.Activities[id]
-                let activityIdNum = Number.parseInt(activity.Order ?? "0");
-                console.log(`Style: ${activity?.Order}`)
-                if (activityIdNum > 0)
-                    activityIdNum -= 1;
-                activityDiv.style.order = `${activityIdNum}`
-                activity.Order = activityIdNum ? activityIdNum.toString() : "0";
-                tmpActivity.Activities[index] = activity
-                setMyDay(tmpActivity)
-                // updateMyDay(id)
+    // const moveUp = (index: number, id: number | null) => {
+    //     console.log(`Index: ${index}  - Id: ${id}`)
+    //     let activityDiv = document.getElementById(`act${index.toString()}`);
+    //     if (activityDiv && id !== null) {
+    //         const tmpActivity: IMyDay = { ...myDay }
+    //         if (tmpActivity.Id == 0)
+    //             tmpActivity.Id = props.dayArrayLength
+    //         if (tmpActivity.Activities.length > 0) {
+    //             const activity = tmpActivity?.Activities[id]
+    //             let activityIdNum = Number.parseInt(activity.Order ?? "0");
+    //             console.log(`Style: ${activity?.Order}`)
+    //             if (activityIdNum > 0)
+    //                 activityIdNum -= 1;
+    //             activityDiv.style.order = `${activityIdNum}`
+    //             activity.Order = activityIdNum ? activityIdNum.toString() : "0";
+    //             tmpActivity.Activities[index] = activity
+    //             setMyDay(tmpActivity)
+    //             // updateMyDay(id)
 
-                console.log(`Style: ${activityDiv.style.order}`)
-            }
-        }
-    }
-    const moveDown = (index: number, id: number | null) => {
+    //             console.log(`Style: ${activityDiv.style.order}`)
+    //         }
+    //     }
+    // }
+    // const moveDown = (index: number, id: number | null) => {
+    //     console.log(`Index: ${index}  - Id: ${id}`)
+    //     let activityDiv = document.getElementById(`act${index.toString()}`);
+    //     if (activityDiv && id !== null) {
+    //         const tmpActivity: IMyDay = { ...myDay }
+    //         if (tmpActivity.Activities.length > 0) {
+    //             const activity = tmpActivity?.Activities[index]
+    //             let activityIdNum = Number.parseInt(activity.Order || "0");
+    //             console.log(`Style: ${activity?.Order}`)
+    //             // if (activityIdNum <= 0)
+    //             //     activityIdNum += 2;
+    //             // else
+    //             activityIdNum += 1;
+    //             activityDiv.style.order = `${activityIdNum}`
+    //             activity.Order = activityIdNum ? activityIdNum.toString() : "0";
+    //             tmpActivity.Activities[index] = activity
+    //             setMyDay(tmpActivity)
+    //             // updateMyDay(id)
+
+    //             console.log(`Style: ${activityDiv.style.order}`)
+    //         }
+    //     }
+
+    // }
+    const changeOrder = (moveUp: boolean, elementIdString: string, index: number, id: number | null) => {
         console.log(`Index: ${index}  - Id: ${id}`)
-        let activityDiv = document.getElementById(`act${index.toString()}`);
+        let activityDiv = document.getElementById(`${elementIdString}${index.toString()}`);
         if (activityDiv && id !== null) {
             const tmpActivity: IMyDay = { ...myDay }
             if (tmpActivity.Activities.length > 0) {
                 const activity = tmpActivity?.Activities[index]
-                let activityIdNum = Number.parseInt(activity.Order ?? "0");
-                console.log(`Style: ${activity?.Order}`)
-                // if (activityIdNum <= 0)
-                //     activityIdNum += 2;
-                // else
-                activityIdNum += 1;
+                let currentOrder = activity.Order
+                if (!currentOrder || currentOrder === undefined)
+                    currentOrder = "0"
+                let activityIdNum = Number.parseInt(currentOrder);
+                console.log(`Current order: ${currentOrder}`)
+                if (moveUp && activityIdNum > 0) {
+                    console.log("Moving up")
+                    activityIdNum -= 1;
+                }
+                else {
+                    console.log("Moving down")
+                    activityIdNum += 1;
+                }
                 activityDiv.style.order = `${activityIdNum}`
                 activity.Order = activityIdNum ? activityIdNum.toString() : "0";
                 tmpActivity.Activities[index] = activity
                 setMyDay(tmpActivity)
-                // updateMyDay(id)
-
-                console.log(`Style: ${activityDiv.style.order}`)
+                console.log(`New order: ${activityDiv.style.order}`)
             }
         }
 
@@ -362,11 +405,11 @@ export default function ActivityEditor(props: Props) {
     return (
         <div>
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
-            <Button className='classes.button' variant="outlined" onClick={handleClickOpen}>
+            <Button hidden={hidden} className='classes.button' variant="outlined" onClick={handleClickOpen}>
                 {(myDay.Activities && myDay.Activities.length > 0) ? "Edit activity" : "Add activity"}
             </Button>
             <BootstrapDialog
-                onClose={()=>handleClose(false)}
+                onClose={() => handleClose(false)}
                 aria-labelledby="customized-dialog-title"
                 open={open}
             >
@@ -399,10 +442,11 @@ export default function ActivityEditor(props: Props) {
                                         {
                                             myDay.Activities.map((activity, activityIndex) =>
                                             (
-                                                <div className="dayListContainerRow" id={"act" + activityIndex.toString()} key={activityIndex} style={{ order: (activity.Order), }}>
+                                                
+                                                <div className="listContainerRow" id={activity.Name + activityIndex.toString()} key={activityIndex} style={{ order: (activity.Order), }}>
                                                     <div
 
-                                                        className='dayListContainerRowImages  '
+                                                        className='listContainerRowImages  '
                                                     // onClick={() => { selectImage(activityIndex, activity.Id) }}
                                                     //     style={{
                                                     //         // backgroundColor: 'salmon',
@@ -412,13 +456,13 @@ export default function ActivityEditor(props: Props) {
                                                         <Divider component="li" sx={{ margin: '5%' }} variant='middle' />
                                                     </div>
                                                     <Divider component="li" orientation="vertical" flexItem />
-                                                    <div className='dayListContainerRowButtons'>
+                                                    <div className='listContainerRowButtons'>
                                                         {activity.Order !== "0" ?
-                                                            <Button onClick={() => moveUp(activityIndex, myDay.Id)}>Up</Button>
+                                                            <Button onClick={() => changeOrder(true,activity.Name, activityIndex, myDay.Id)}>{' '}<ExpandLessOutlined /></Button>
                                                             :
                                                             ""}
                                                         <br />
-                                                        <Button onClick={() => moveDown(activityIndex, myDay.Id)}>Down</Button>
+                                                        <Button onClick={() => changeOrder(false,activity.Name,activityIndex, myDay.Id)}>{' '}<ExpandMoreOutlined /></Button>
                                                         <br />
                                                         <Button onClick={() => removeActivity(activity.Id, activityIndex)}><i className="fa fa-trash" aria-hidden="true"></i></Button>
                                                     </div>

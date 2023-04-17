@@ -1,0 +1,74 @@
+
+div>Button {
+  font-size: xx-large;
+}
+button {
+  border-radius: 1.5rem;
+}
+@media only screen and (max-width:1000px)and (orientation: portrait) {
+  button {
+    font-size: 250% !important;    
+  }
+}
+@media only screen and (max-width:1000px)and (orientation: portrait) {
+  div>Button {
+    font-size: xx-large;
+  }
+}
+
+
+
+h2 {
+  font-size: 1.8em !important;
+}
+@media only screen and (min-width:100px)and (orientation: portrait) {
+  h2 {
+    font-size: 2.5em!important;
+  };
+}
+
+
+.updateBox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.listContainerRow {
+  border-radius: 25px;
+  max-width: 100%;
+  min-height: 14em;
+  align-items: center;
+  flex-direction: row;
+  display: flex;
+  flex-direction: row;
+  vertical-align: bottom;
+}
+
+.listContainerRowButtons {
+  border-radius: 25px;
+  flex-direction: column;
+  float: right;
+  align-items: center;
+  min-height: 100%;
+  max-width: 100%;
+  vertical-align: middle;
+}
+
+.listContainerRowImages {
+  min-height: 10rem;
+  padding: 2%;
+  max-width: 20rem;
+  justify-content: center;
+  align-items: center;
+  vertical-align: middle;
+  min-height: 100%;
+  margin-left: 2rem;
+}
+
+.listContainerRowImages>img {
+  max-width: 55%;
+  min-width: 3rem;
+  max-height: 100%;
+}

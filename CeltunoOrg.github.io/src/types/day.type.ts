@@ -36,7 +36,7 @@ export type ISelectImage = {
   Selected: boolean
 }
 export type IMyDay = {
-  Id: number |null
+  Id: number 
   Name: string
   Description: string
   // images: string[]

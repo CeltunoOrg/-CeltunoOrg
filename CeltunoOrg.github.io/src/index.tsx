@@ -2,7 +2,7 @@ import React from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, useParams } from "react-router-dom"
 import "bootstrap/dist/css/bootstrap.min.css";
-import Activity from "./components/activiy";
+import Activities from "./components/activities";
 import './index.css';
 import "../styles/App.css"
 // import '../styles/tmpstyle.module.css'
@@ -30,7 +30,7 @@ const AppChoice = (choice: number) => {
         return <App3 isOpen3={false} />
     }
     else if (choice === 4) {
-        return <Activity isOpen={false} />
+        return <Activities isOpen={false} />
     }
     else {
         return <App />

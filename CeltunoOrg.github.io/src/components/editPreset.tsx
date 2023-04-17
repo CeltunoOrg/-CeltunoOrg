@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 import Dialog from '@mui/material/Dialog';
@@ -8,9 +9,14 @@ import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
+import ExpandLessOutlined from '@mui/icons-material/ExpandLessOutlined'
+import ExpandMoreOutlined from '@mui/icons-material/ExpandMoreOutlined';
+
+import "../../styles/Edit.css"
+
 import PresetDataService from "../services/preset-firebase-service"
-import { IDayActivity, IImagePreset, IMyDay, IPreset , ISelectImage} from '../types/day.type';
-import { TextField } from '@mui/material';
+import IDay, { IDayActivity, IImagePreset, IMyDay, IPreset, ISelectImage } from '../types/day.type';
+import { Divider, FormControl, ImageListItemBar, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import SelectImage from './selectImage';
 import { useTheOnValue } from '../../firebase-planner';
 
@@ -25,9 +31,10 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 
 export interface DialogTitleProps {
     id: string;
-    images: Array<string> | null;
     children?: React.ReactNode;
     onClose: () => void;
+
+
 }
 
 function BootstrapDialogTitle(props: DialogTitleProps) {
@@ -56,7 +63,10 @@ function BootstrapDialogTitle(props: DialogTitleProps) {
 interface Props {
     children?: React.ReactNode
     // activities: IDayActivity[]
-    preset: IPreset
+
+    myPreset: IPreset | null
+    dayArrayLength: number
+    editCallback: (theEdited: IPreset | null) => IPreset | null//theSelected: ISelectImage []}
 
 }
 export default function PresetEditor(props: Props) {
@@ -64,178 +74,245 @@ export default function PresetEditor(props: Props) {
 
     const handleClickOpen = () => {
         setOpen(true);
+        if (props.myPreset && props.myPreset !== myPreset)
+            setMyPreset(props.myPreset)
+        // if (props.dayArrayLength > topId)
+        //     setTopId(props.dayArrayLength)
+        getPresetDbData()
+        if (topId <= 0)
+            getAll()
+
     };
-    const handleClose = () => {
-        
-        setPreset(preset)
-        updatePreset(preset.Id)
+    const handleClose = (save: boolean) => {
+        if (save) {
+
+            console.log("Saved")
+            if (myPreset.Id > 0)
+                updateMyPreset(myPreset.Id);
+            else console.log("CLOSING -ID was NULL - no update")
+            props.editCallback(myPreset)
+        }
         setOpen(false);
     };
-
-    const [preset, setPreset] = React.useState<IPreset>(
+    const [topId, setTopId] = React.useState<number>(0);
+    const [presets, setPresets] = React.useState<IPreset[]>([]);
+    const [myPreset, setMyPreset] = React.useState<IPreset>(
         {
             Id: 0,
-            Name: "string",
-            Description: "string",
+            Name: "",
+            Description: "",
             Activities: []
-
         }
     );
-    const [lastNum, setLastNum] = React.useState("");
-
-    const currentPreset = props.preset;
-
-    const addImage = (key: number, image: string) => {
-        // updateDay(key)
-        console.log("Adding image")
-        // currentPreset.Activities.image = image
-        PresetDataService.updatePresetItemDb(key, currentPreset)
-        console.log(currentPreset.Activities)
-
-    }
 
     useEffect(() => {
 
-        setPreset(currentPreset)
+        if (props.myPreset && props.myPreset !== myPreset)
+            setMyPreset(props.myPreset)
+        if (presets.length <= 0)
+            getPresetDbData()
 
-        // PresetDataService.getdbAll().then((data) => {
+        getAll()
+        // if (props.dayArrayLength > topId)
+        //     setTopId(props.dayArrayLength)
 
-        //     // useTheRef(db, '/');
-        //     useTheOnValue(data, (snapshot) => {
-        //         // const snapshotValue = snapshot.val();
-        //         // console.log(data.toJSON)
-        //         if (snapshot.exists()) {
-        //             console.log("Snapshot found, mapping data:");
-        //             snapshot.forEach(function (childSnapshot) {
-        //                 console.log(childSnapshot.val())
-        //                 const key = childSnapshot.key;
-        //                 const childData = childSnapshot.val() as IPreset;
-        //                 childData.Id = key ?? "";
-        //                 //   dayArray.push(childData);
-        //             })
-        //             console.log("DB items found:");
-        //             // console.log(dayArray.length)
-        //         }
-        //     })
-        // })
+    }, []);
 
+    const tmpData: Array<IPreset> = new Array<IPreset>;
 
+    function getHighest() {
+        const calculateHighest = () => {
+            if (tmpData.length > 0) {
 
-
-
-
-
-
-
-
-
-        // const fetchData = async () => {
-        //   await getAllDbEntries();      
-        // }      
-        // call the function
-        // fetchData().then(
-        // setKeyFromDate)
-        //   // make sure to catch any error
-        //  .catch(console.error);
+                let sortedDays = tmpData.sort((a, b) => (a.Id > b.Id) ? -1 : 1);
+                return sortedDays[0].Id + 1
+            }
+            else
+                return 1
+        }
+        const theHighest = calculateHighest()
+        setTopId(theHighest)
+        // console.log(`GETHIGHEST - Activity-Highest: ${topId}`)
     }
-        , []);
+    const getAll = () => {
 
-    const updatePreset = (id: number | null) => {
-        // const key = this.props.selectedDayId;
-        if (id === undefined || id === null) {
-            console.log("No id provided");
-            return
+
+        PresetDataService.getAllItemsDB("presets").then((data) => {
+            useTheOnValue(data, (snapshot) => {
+                if (snapshot.exists()) {
+                    console.log("Snapshot found, mapping PRESET data:");
+                    snapshot.forEach(function (childSnapshot) {
+                        const key = childSnapshot.key;
+                        if (!key)
+                            return
+                        const values = childSnapshot.val()
+                        let childData: IPreset = {
+                            Id: Number.parseInt(key),
+                            Name: values.Name ?? "",
+                            Description: values.Descritption ?? "",
+                            Activities: values.Activities
+                        }
+                        childData.Id = Number.parseInt(key);
+                        tmpData.push(childData);
+                    })
+                    getHighest()
+                    console.log(`DB items found: ${tmpData.length} Top Id: ${topId}`);
+                }
+            })
+        }).then(() => {
+            console.log("After all presets")
+            getHighest()
+        })
+        return tmpData
+    }
+
+    const updateMyPreset = (id: number | null) => {
+        const tmpPreset = myPreset
+        if (id === undefined || id === null || id === 0) {
+            console.log("No id provided, creating new...");
+            getAll()
+            id = topId
         }
         console.log("Updating preset");
-        PresetDataService.updatePresetItemDb(id, preset)
+        if (id === 0)
+            return
+        if (tmpPreset.Description == undefined)
+            tmpPreset.Description = ""
+        PresetDataService.updatePresetItemDb(id, myPreset)
+    }
+
+
+    const getOnePreset = (key: number) => {
+        let preset: IPreset;
+        if (key) {
+            PresetDataService.getDbOne("presets", key).then((data) => {
+                useTheOnValue(data, (snapshot) => {
+                    if (snapshot.exists()) {
+                        console.log("Snapshot found PRESET setting ONE:");
+                        let childData = snapshot.val() as IPreset;
+                        console.log(snapshot.val())
+                        if (childData.Description == undefined)
+                            childData.Description = ""
+                        childData.Id = key;
+                        preset = childData;
+                    }
+                    handlePreset(preset)
+                })
+            })
+        }
+    }
+
+    const handlePreset = (preset: IPreset) => {
+        setMyPreset(preset)
+    }
+
+    let tmpPreset: IPreset[] = []
+
+    const setThePresets = () => {
+        setPresets(tmpPreset)
+    }
+
+
+    const getPresetDbData = () => {
+        PresetDataService.getAllItemsDB("presets").then((data) => {
+            useTheOnValue(data, (snapshot) => {
+                if (snapshot.exists()) {
+                    console.log("Snapshot found, mapping PRESET data:");
+                    snapshot.forEach(function (childSnapshot) {
+                        const key = childSnapshot.key;
+                        if (!key)
+                            return
+                        let childData = childSnapshot.val() as IPreset;
+                        childData.Id = Number.parseInt(key);
+                        tmpPreset.push(childData);
+                    })
+                    if (tmpPreset.length !== presets.length)
+                        setThePresets()
+                    console.log(tmpPreset.length)
+                }
+            })
+        })
+        return tmpPreset
+    }
+
+
+    const setActivitiesFromPreset = (key: string) => {
+        const keyInt = Number.parseInt(key);
+
+        if (keyInt !== null && keyInt !== undefined) {
+            const tmpPreset = { ...presets[keyInt] }
+            const tmpMyPreset = { ...myPreset }
+            tmpMyPreset.Activities = tmpPreset.Activities
+            setMyPreset(tmpMyPreset)
+            updateMyPreset(tmpMyPreset.Id)
+        }
     }
 
     const updateName = (event) => {
-
         let name = event.target.value;
-        const tmpPreset = {...preset}        
-        tmpPreset.Name = name
-        setPreset(tmpPreset)
-        updatePreset(tmpPreset.Id)
+        const tmpActivity = { ...myPreset }
+        tmpActivity.Name = name
+        if (tmpActivity.Id === 0) {
+            getAll();
+            console.log("UPDATENAME - TOPAFTER GETALLL")
+            tmpActivity.Id = topId
+        }
+        setMyPreset(tmpActivity)
+        return null
+        updateMyPreset(tmpActivity.Id)
     }
 
-    const moveUp = (index: number, id: number) => {
+    
+    const changeOrder = (moveUp: boolean, elementIdString: string, index: number, id: number | null) => {
         console.log(`Index: ${index}  - Id: ${id}`)
-        let activityDiv = document.getElementById(`act${index.toString()}`);
-        if (activityDiv) {
-            const tmpPreset: IPreset = { ...preset }
-            if (tmpPreset.Activities.length > 0) {
-
-                const activity = tmpPreset?.Activities[index]
-                let activityIdNum = Number.parseInt(activity.Order ?? "0");
-                console.log(`Style: ${activity?.Order}`)
-                if (activityIdNum > 0)
+        let activityDiv = document.getElementById(`${elementIdString}${index.toString()}`);
+        if (activityDiv && id !== null) {
+            const tmpActivity: IPreset = { ...myPreset }
+            if (tmpActivity.Activities.length > 0) {
+                const activity = tmpActivity?.Activities[index]
+                let currentOrder = activity.Order
+                if (!currentOrder || currentOrder === undefined)
+                    currentOrder = "0"
+                let activityIdNum = Number.parseInt(currentOrder);
+                console.log(`Current order: ${currentOrder}`)
+                if (moveUp && activityIdNum > 0) {
+                    console.log("Moving up")
                     activityIdNum -= 1;
-                activityDiv.style.order = `${activityIdNum}`
-                activity.Order = activityIdNum ? activityIdNum.toString() :"0";
-                tmpPreset.Activities[index] = activity
-                setPreset(tmpPreset)
-                updatePreset(id)
-
-                console.log(`Style: ${activityDiv.style.order}`)
-                // setLastNum(activityDiv.style.order)
-            }
-        }
-    }
-    const moveDown = (index: number, id: number) => {
-
-        console.log(`Index: ${index}  - Id: ${id}`)
-        let activityDiv = document.getElementById(`act${index.toString()}`);
-        if (activityDiv) {
-            const tmpPreset: IPreset = { ...preset }
-            if (tmpPreset.Activities.length > 0) {
-                const activity = tmpPreset?.Activities[index]
-                let activityIdNum = Number.parseInt(activity.Order ?? "0");
-                console.log(`Style: ${activity?.Order}`)
-                if (activityIdNum <= 0)
-                    activityIdNum += 2;
-                else
+                }
+                else {
+                    console.log("Moving down")
                     activityIdNum += 1;
+                }
                 activityDiv.style.order = `${activityIdNum}`
-                activity.Order = activityIdNum ? activityIdNum.toString() :"0";
-                tmpPreset.Activities[index] = activity
-                setPreset(tmpPreset)
-                updatePreset(id)
-
-                console.log(`Style: ${activityDiv.style.order}`)
-                // setLastNum(activityDiv.style.order)
+                activity.Order = activityIdNum ? activityIdNum.toString() : "0";
+                tmpActivity.Activities[index] = activity
+                setMyPreset(tmpActivity)
+                console.log(`New order: ${activityDiv.style.order}`)
             }
         }
 
     }
 
-    const selectImage = (index: number, id: number) =>{
-        const tmpPreset: IPreset = { ...preset }
-        if (tmpPreset.Activities.length > 0) {
-            const activity = tmpPreset?.Activities[index]
-            activity.Selected = true
-            activity.Order = "0"
-            tmpPreset.Activities[index] = activity
-            setPreset(tmpPreset)
+    // const selectImage = (index: number, id: number) => {
+    //     const tmpMyPreset: IPreset = { ...myPreset }
+    //     if (tmpMyPreset.Activities.length > 0) {
+    //         let activity = tmpMyPreset?.Activities[index]
+    //         activity.Selected = true
+    //         activity.Order = "0"
+    //         tmpMyPreset.Activities[index] = activity
+    //         setMyPreset(tmpMyPreset)
+    //     }
+    //     updateMyPreset(id)
+    // }
 
-        }
-        updatePreset(id)
-
-    }
-    const selectCallback = (theSelected: Array<ISelectImage>) =>{
-
+    const selectCallback = (theSelected: Array<ISelectImage>) => {
         console.log(theSelected)
         let tmpActivities: IDayActivity[] = []
-        let tmpData : Array<ISelectImage> = [];
-        tmpData =Array.from({...theSelected});
-        Object.keys(theSelected).map((i)=>{
-        // let newArray = merge(theSelected,tmpData);
-        // tmpData = merge(tmpData,theSelected)
-        // for (let i = 0; i < tmpData.length; i++) {
-            
-            if(theSelected[i].Selected){
-                
-                let tmpActivity:IDayActivity = 
+        let tmpData: Array<ISelectImage> = [];
+        tmpData = Array.from({ ...theSelected });
+        Object.keys(theSelected).map((i) => {
+            if (theSelected[i].Selected) {
+                let tmpActivity: IDayActivity =
                 {
                     Id: Number.parseInt(i),
                     Name: theSelected[i].Image,
@@ -243,95 +320,139 @@ export default function PresetEditor(props: Props) {
                     Order: theSelected[i].toString(),
                     Selected: theSelected[i].Selected
                 }
-                
+
                 tmpActivities.push(tmpActivity)
             }
         })
-        let tmpPreset : IPreset = {...preset}
-        tmpPreset.Activities  = tmpActivities
-        setPreset(tmpPreset)
+        let tmpPreset: IPreset = { ...myPreset }
+        tmpPreset.Activities = tmpActivities
+        setMyPreset(tmpPreset)
         return theSelected
     }
-    function merge(arr1: unknown[], arr2: unknown[]) {
-        const newArr: unknown[] = [...arr1];
-        for (let i = 0; i < arr2.length; i++) {
-            const item = arr2[i];
-            if (newArr.includes(item)) continue;
-            newArr.push(item);
+
+    const removeActivity = (activityId: number, activityIndex: number) => {
+        let tmpPreset = { ...myPreset }
+        if (tmpPreset.Id && tmpPreset.Id !== null && activityId !== null) {
+            const index: number = tmpPreset.Activities.indexOf(tmpPreset.Activities[activityIndex], 0)
+            if (index > -1) {
+                tmpPreset.Activities.splice(index, 1);
+            }
+            // delete tmpday.Activities[activityIndex]
+            // tmpday.Activities.[activityIndex]
+            // tmpday.Activities.splice(activityIndex,1)
+            if (tmpPreset.Description === undefined)
+                tmpPreset.Description = ""
+            handlePreset(tmpPreset)
+            PresetDataService.updatePresetItemDb(tmpPreset.Id, tmpPreset)
+            getOnePreset(tmpPreset.Id)
         }
-        return newArr;
+
     }
     return (
         <div>
-            <Button variant="outlined" onClick={handleClickOpen}>
-                Edit preset
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+            <Button className='classes.button' variant="outlined" onClick={handleClickOpen}>
+                {(myPreset.Activities && myPreset.Activities.length > 0) ? "Edit preset" : "Add preset"}
             </Button>
             <BootstrapDialog
-                onClose={handleClose}
+                onClose={() => handleClose(false)}
                 aria-labelledby="customized-dialog-title"
                 open={open}
             >
-                <BootstrapDialogTitle id="customized-dialog-title" onClose={handleClose} images={null}>
-                    Edit preset
+                <BootstrapDialogTitle id="customized-dialog-title" onClose={() => handleClose(false)}>
+                    <Typography gutterBottom>
+                        Edit Preset
+                    </Typography>
                 </BootstrapDialogTitle>
                 <DialogContent dividers>
-                    {/* <Typography gutterBottom>
-                        Name - Image - Description
-                    </Typography> */}
-                    {preset.Activities ?
-                        <>
-
-
-                            {
-
-                                // props.preset?.map((preset, presetIndex) =>
-                                // (
+                    <>
+                        {
+                            <div className='padder'>
                                 <div>
-                                    <TextField 
-                                    id="standard-basic" 
-                                    label="Preset name" 
-                                    variant="standard" 
-                                    value={preset.Name} 
-                                    onChange={updateName } 
+                                    <TextField
+                                        id="standard-basic"
+                                        label="Preset name"
+                                        variant="standard"
+                                        value={myPreset.Name}
+                                        onChange={e => updateName(e)}
                                     />
-                                    {/* {currentPreset.Name} */}
+                                </div>
+
+                                <Divider component="li" sx={{ margin: '5%' }} variant='inset' />
+                                
+                                {myPreset.Activities ?
                                     <div className='updateBox' >
                                         {
-                                            preset.Activities.map((activity, activityIndex) =>
-                                            (
+                                            myPreset.Activities.map((activity, activityIndex) =>
+                                            (                                                
+                                                <div className="listContainerRow" id={activity.Name + activityIndex.toString()} key={activityIndex} style={{ order: (activity.Order), }}>                                                    
+                                                    <div
 
-                                                <div
-                                                    id={"act" + activityIndex.toString()} key={"act" + activityIndex} style={{ order: (activity.Order), }}
-                                                    className='editImageContainer'
-                                                    onClick={() => {selectImage(activityIndex, currentPreset.Id )}}
-                                                //     style={{
-                                                //         // backgroundColor: 'salmon',
-                                                // }}
-                                                >
-                                                    {/* <img src={`../images/image${index+4}.png`} /> */}
-                                                    <img src={`../images/${activity.Image}`} />
-
-                                                    <button onClick={() => moveUp(activityIndex, currentPreset.Id)}>Up</button>
-                                                    <button onClick={() => moveDown(activityIndex, currentPreset.Id)}>Down</button>
+                                                        className='listContainerRowImages  '
+                                                    // onClick={() => { selectImage(activityIndex, activity.Id) }}
+                                                    //     style={{
+                                                    //         // backgroundColor: 'salmon',
+                                                    // }}
+                                                    >
+                                                        <img src={`../images/${activity.Image}`} />
+                                                        <Divider component="li" sx={{ margin: '5%' }} variant='middle' />
+                                                    </div>
+                                                    <Divider component="li" orientation="vertical" flexItem />
+                                                    <div className='listContainerRowButtons'>
+                                                        {activity.Order !== "0" ?
+                                                            <Button onClick={() => changeOrder(true,activity.Name, activityIndex, myPreset.Id)}>{' '}<ExpandLessOutlined /></Button>
+                                                            :
+                                                            ""}
+                                                        <br />
+                                                        <Button onClick={() => changeOrder(false,activity.Name,activityIndex, myPreset.Id)}>{' '}<ExpandMoreOutlined /></Button>
+                                                        <br />
+                                                        <Button onClick={() => removeActivity(activity.Id, activityIndex)}><i className="fa fa-trash" aria-hidden="true"></i></Button>
+                                                    </div>
                                                 </div>
 
                                             )
                                             )}
                                     </div>
-                                </div>
-                            }
-                        </>
-
-                        :
-
-                        "No activities"
-
-                    }
+                                    : <p>{"No presets"}</p>
+                                }
+                            </div>
+                        }
+                    </>
                 </DialogContent>
                 <DialogActions>
-                    <SelectImage selectCallback = {selectCallback} activities={preset.Activities} images={["image10.png", "image11.png", "image5.png", "image6.png", "image10.png", "image11.png", "image5.png", "image6.png", "image7.png", "image8.png"]} />
-                    {/* <button onClick={() => { addImage(0, "image7.png") }}>Add image</button> */}
-                    <Button autoFocus onClick={handleClose}>
+                    <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+                        <InputLabel id="demo-simple-select-standard-label">Select template</InputLabel>
+                        <Select
+                            labelId="demo-simple-select-standard-label"
+                            id="presetSelector"
+                            value={`999`}
+                            onChange={e => setActivitiesFromPreset(e.target.value)}
+                            label="Preset"
+                        >
+                            <MenuItem value={`999`} key={`999`} selected={true}>
+                                <em>None</em>
+                            </MenuItem>
+                            {presets.map(function (preset, index) {
+
+                                if (preset && preset.Id > 0) {
+
+                                    return <MenuItem key={index} value={index}>{preset.Name}</MenuItem>
+
+                                }
+                            }
+                            )}
+
+
+
+                            {/* )} */}
+                        </Select>
+                    </FormControl>
+                    {presets.length > 0 ?
+                        <SelectImage selectCallback={selectCallback} activities={myPreset.Activities} images={["image10.png", "image11.png", "image5.png", "image6.png", "image10.png", "image11.png", "image5.png", "image6.png", "image7.png", "image8.png"]} />
+                        :
+                        ""
+                    }
+                    <Button autoFocus onClick={() => handleClose(true)}>
                         Save changes
                     </Button>
                 </DialogActions>

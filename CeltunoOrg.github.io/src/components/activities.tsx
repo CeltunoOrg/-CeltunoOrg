@@ -1,23 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { Routes, Route } from "react-router-dom";
-// import * as DayService from "./services/day-firebase-service"
-// import DaysList2 from "./components/day-list2.component";
-import "../../styles/App.css"
+import "../../styles/Activities.css"
 import { IDayActivity, IImagePreset, IMyDay, IPreset, IUser } from '../types/day.type';
 import CustomizedDialogs from './dialogTest';
-import PresetEditor from './editPreset';
 import PresetDataService from "../services/preset-firebase-service"
 import { useTheOnValue } from '../../firebase-planner';
 import { Button } from '@mui/material';
 import ActivityEditor from './editActivity';
-// type State = {
-//         isOpen: boolean
-// }
+
 interface Props {
     children?: React.ReactNode
     isOpen: boolean
 }
-const Activity = (Props: Props) => {
+const Activities = (Props: Props) => {
 
     useEffect(() => {
         // handleDay(testData[0])
@@ -52,16 +46,6 @@ const Activity = (Props: Props) => {
     const [days, setDays] = useState<Array<IMyDay>>(new Array<IMyDay>);
 
     const [topId, setTopId] = useState<number>(0);
-    const myPreset: IImagePreset[] =
-        [
-            {
-                Id: 1,
-                Name: "Preset",
-                // Description: "Description",
-                image: "image8.png",
-                Order: "0",
-                Selected: false
-            }];
 
     const handleOpenState = (isOpen) => {
         console.log("handleopen")
@@ -72,7 +56,7 @@ const Activity = (Props: Props) => {
 
     let tmpData: Array<IMyDay> = new Array<IMyDay>;
     const getDayDbData = (path: string | null) => {
-        PresetDataService.getDbAllDays(path).then((data) => {
+        PresetDataService.getAllItemsDB(path).then((data) => {
 
             // useTheRef(db, '/');
             useTheOnValue(data, (snapshot) => {
@@ -183,15 +167,15 @@ const Activity = (Props: Props) => {
 
                     {/* {activities.length <= 0 ? */}
                     <Button variant='outlined' onClick={() => { getDayDbData("planner") }}><i className="fa fa-refresh" aria-hidden="true"></i></Button>
-                    <ActivityEditor editCallback={editCallback} myDay={day} dayArrayLength={topId} />
+                    <ActivityEditor hideAll={false} editCallback={editCallback} myDay={day} dayArrayLength={topId} />
 
                     </div>
-                    <div className="preset-grid-container">
+                    <div className="day-grid-container">
                         {
-                            days?.map((dayItem, index) => (
-                                <div className='preset-grid-item'>
+                            days?.map((dayItem, dayIndex) => (
+                                <div className='day-grid-item' key={dayItem.Name + dayIndex}>
                                     {/* <p key={dayItem.Name + index.toString()}>{dayItem.Name}</p> */}
-                                    <div className="presetDayListContainer ">
+                                    <div className="dayListContainer ">
                                         {dayItem.Activities ?
                                             //    preset?.Activities.map((activity, index) =>
                                             dayItem?.Activities.map((activity, aactivityIndex) =>
@@ -215,7 +199,7 @@ const Activity = (Props: Props) => {
                                         }
                                     </div>
 
-                                    <ActivityEditor editCallback={editCallback} myDay={dayItem} dayArrayLength={topId} />
+                                    <ActivityEditor hideAll={false} editCallback={editCallback} myDay={dayItem} dayArrayLength={topId} />
                                     {/* {dayItem.Name !== "string" && dayItem.Name ?
                                         ""
                                         : <Button onClick={() => { getAllData("planner"); setTheActivities() }}>Fetch</Button>
@@ -241,4 +225,4 @@ const Activity = (Props: Props) => {
 }
 
 
-export default Activity
+export default Activities

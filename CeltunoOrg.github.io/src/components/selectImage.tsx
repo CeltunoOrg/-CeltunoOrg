@@ -9,11 +9,11 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
 import PresetDataService from "../services/preset-firebase-service"
-// import DayService from "../services/day-firebase-service"
 import { IDayActivity, IImagePreset, IMyDay, IPreset, ISelectImage } from '../types/day.type';
 import { FormControl, ImageList, ImageListItem, ImageListItemBar, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import DoneIcon from '@mui/icons-material/Done';
+import CheckBoxOutlineBlankOutlined  from '@mui/icons-material/CheckBoxOutlineBlankOutlined';
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
         padding: theme.spacing(2),
@@ -62,30 +62,21 @@ interface Props {
 }
 
 export default function SelectImage(props: Props) {
-    const [open, setOpen] = React.useState(false);
 
-    // const result = (arr1: IDayActivity[], arr2: IDayActivity[]) => {
-    //     return arr2.reduce(
-    //         (acc, item) => {
-    //             return acc.includes(item) ? acc : [...acc, item]
-    //         },
-    //         [...arr1]
-    //     )
-    // }
+    const [open, setOpen] = React.useState(false);
+    
     const handleClickOpen = () => {
         const ttt = result(props.activities,testActivities)
         setOpen(true);
     };
+    
     const handleClose = (save:boolean) => {
-        // selected.map((item) => (
-        //     props.images.push(item)
-        // ));
         if(save)
             props.selectCallback(selected)
         setOpen(false);
     };
+    
     const handleCancel = () => {
-
         setOpen(false);
     };
 
@@ -126,43 +117,12 @@ export default function SelectImage(props: Props) {
         return newArr;
     }
     useEffect(() => {
-        initImages = testActivities// merge(initImages ?? [], testActivities) as unknown as IDayActivity[];
+        initImages = testActivities
         setSelected(initImages)
-        //const mapImages = testImages;//map((image) => tmpImages.push(image))//{Image:  image,Selected; false }))
-        // const fetchData = async () => {
-        //   await getAllDbEntries();      
-        // }      
-        // call the function
-        // fetchData().then(
-        // setKeyFromDate)
-        //   // make sure to catch any error
-        //  .catch(console.error);
     }, []);
-
-    // const updatePreset = (id: string) => {
-    //     // const key = this.props.selectedDayId;
-    //     if (id === undefined || id === null || id === "") {
-    //         console.log("No id provided");
-    //         return
-    //     }
-    //     console.log("Updating preset");
-    //     PresetDataService.updateItemDb(id, preset)
-    // }
-
-
-    // const selectImage = (index: number, id: string) => {
-    //     const tmpPreset: IPreset = { ...preset }
-    //     if (tmpPreset.Activities.length > 0) {
-    //         const activity = tmpPreset?.Activities[index]
-    //         activity.Selected = true
-    //         tmpPreset.Activities[index] = activity
-    //         setPreset(tmpPreset)
-
-    //     }
-    //     updatePreset(id)
-
-    // }
+    
     initImages = initImages.length <= 0 ? testActivities : initImages// props.activities ?? [] : initImages 
+    
     const result = (arr1: IDayActivity[], arr2: IDayActivity[]) => {
         return arr2.reduce(
             (acc, item) => {
@@ -171,8 +131,7 @@ export default function SelectImage(props: Props) {
             [...arr1]
         )
     }
-    // {initImages = result( initImages,testActivities)}
-    // { initImages = (props.activities && props.activities.length >0)? merge(props.activities ?? [], testActivities) as unknown as IDayActivity[] : [] }
+    
     return (
         <div>
             <Button  onClick={handleClickOpen}>
@@ -191,9 +150,8 @@ export default function SelectImage(props: Props) {
                     {/* <Typography gutterBottom>
                         Name - Image - Description
                     </Typography> */}
-                    {(initImages && initImages.length > 0) ?
-
-                        //props.images ?
+                    {(initImages && initImages.length > 0) 
+                    ?
                         <>
                             {
                                 <div>
@@ -203,27 +161,26 @@ export default function SelectImage(props: Props) {
                                         <ImageList sx={{ width: 500, height: 650 }} cols={3} rowHeight={164}>
 
                                             {
-
-                                                //props.images.map((image, imgIndex) =>
                                                 initImages.map((selectActivity, imgIndex) =>
                                                 (
                                                     <ImageListItem key={selectActivity.Id + imgIndex}>
                                                         <ImageListItemBar
                                                             sx={{
-                                                                background:
-                                                                    'linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, ' +
-                                                                    'rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
+                                                                // background:
+                                                                //     // 'linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, ' +
+                                                                //     // 'rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
+                                                                //     'rgba(0,0,0,0) 100%)'
                                                             }}
                                                             title={""}
                                                             position="top"
                                                             actionIcon={
                                                                 <IconButton
                                                                     sx={{ color: 'white' }}
-                                                                    aria-label={`star ${""}`}
+                                                                    aria-label={`select ${""}`}
                                                                     onClick={() => imageClick(selectActivity.Image, imgIndex)}
                                                                 >
                                                                     {selectActivity.Selected ?
-                                                                        <DoneIcon /> : ""
+                                                                        <DoneIcon /> : <CheckBoxOutlineBlankOutlined/>
                                                                         //<StarBorderIcon/>
                                                                     }
                                                                 </IconButton>
@@ -244,32 +201,16 @@ export default function SelectImage(props: Props) {
                                                             />
                                                         </div>
                                                     </ImageListItem>
-
                                                 )
                                                 )}
                                         </ImageList>
                                     </div>
                                 </div>
-
                             }
                         </>
-
                         :
-
                         "No images"
-
-
-                        //       <div> </div>
-
-
-                        //   :
-                        //   {
-
-                        //   }
-
                     }
-
-
                 </DialogContent>
                 <DialogActions>
                     {/* <button onClick={() => { alert("adding") }}>Add image</button> */}
@@ -284,6 +225,7 @@ export default function SelectImage(props: Props) {
         </div>
     );
 }
+
 const testActivities: IDayActivity[] =
     [
         {

@@ -2,9 +2,9 @@ import { Box, Button, Fade, Typography } from '@mui/material';
 import Modal from '@mui/material/Modal';
 // import{makeStyles} from "@mui/styles"
 import React, { useState, useContext } from 'react';
-import { userData } from "../Context2"
+import { userData } from "./Context2"
 import Select, { MultiValue } from 'react-select'
-import IDay from '../types/day.type';
+import IDay from '../../types/day.type';
 
 
 
