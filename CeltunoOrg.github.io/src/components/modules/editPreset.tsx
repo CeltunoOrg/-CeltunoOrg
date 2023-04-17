@@ -65,7 +65,7 @@ interface Props {
     children?: React.ReactNode
     // activities: IDayActivity[]
 
-    myPreset: IPreset | null
+    propCurrentPreset: IPreset | null
     dayArrayLength: number
     editCallback: (theEdited: IPreset | null) => IPreset | null//theSelected: ISelectImage []}
 
@@ -76,8 +76,8 @@ export default function PresetEditor(props: Props) {
 
     const handleOpen = () => {
         setOpen(true);
-        if (props.myPreset && props.myPreset !== myPreset)
-            setMyPreset(props.myPreset)
+        if (props.propCurrentPreset && props.propCurrentPreset !== currentPreset)
+            setMyPreset(props.propCurrentPreset)
         // if (props.dayArrayLength > topId)
         //     setTopId(props.dayArrayLength)
         const returnData = PresetManager.FetchAllPresets()
@@ -90,16 +90,16 @@ export default function PresetEditor(props: Props) {
     const handleClose = (save: boolean) => {
         if (save) {
             console.log("Saved")
-            if (myPreset.Id > 0)
-                updateMyPreset(myPreset.Id);
+            if (currentPreset.Id > 0)
+                updateMyPreset(currentPreset.Id);
             else console.log("CLOSING -ID was NULL - no update")
-            props.editCallback(myPreset)
+            props.editCallback(currentPreset)
         }
         setOpen(false);
     };
     const [topId, setTopId] = React.useState<number>(0);
     const [presets, setPresets] = React.useState<IPreset[]>([]);
-    const [myPreset, setMyPreset] = React.useState<IPreset>(
+    const [currentPreset, setMyPreset] = React.useState<IPreset>(
         {
             Id: 0,
             Name: "",
@@ -110,8 +110,8 @@ export default function PresetEditor(props: Props) {
 
     useEffect(() => {
 
-        if (props.myPreset && props.myPreset !== myPreset)
-            setMyPreset(props.myPreset)
+        if (props.propCurrentPreset && props.propCurrentPreset !== currentPreset)
+            setMyPreset(props.propCurrentPreset)
 
         const result = PresetManager.FetchAllPresets()
         handleTopId(result.topId)
@@ -138,7 +138,7 @@ export default function PresetEditor(props: Props) {
 
 
     const updateMyPreset = (id: number | null) => {
-        const tmpPreset = myPreset
+        const tmpPreset = currentPreset
         if (id === undefined || id === null || id === 0) {
             console.log("No id provided, creating new...");
             const returnResult = PresetManager.FetchAllPresets()
@@ -160,7 +160,7 @@ export default function PresetEditor(props: Props) {
     }
 
     const removePresetActivity = (activityId:number, activityIndex: number) =>{
-        PresetManager.RemovePresetActivity(activityId,activityIndex, myPreset)
+        PresetManager.RemovePresetActivity(activityId,activityIndex, currentPreset)
     }
 
 
@@ -192,7 +192,7 @@ export default function PresetEditor(props: Props) {
 
         if (keyInt !== null && keyInt !== undefined) {
             const tmpPreset = { ...presets[keyInt] }
-            const tmpMyPreset = { ...myPreset }
+            const tmpMyPreset = { ...currentPreset }
             tmpMyPreset.Activities = tmpPreset.Activities
             setMyPreset(tmpMyPreset)
             updateMyPreset(tmpMyPreset.Id)
@@ -201,7 +201,7 @@ export default function PresetEditor(props: Props) {
 
     const updateName = (event) => {
         let name = event.target.value;
-        const tmpActivity = { ...myPreset }
+        const tmpActivity = { ...currentPreset }
         tmpActivity.Name = name
         if (tmpActivity.Id === 0) {
             const result = PresetManager.FetchAllPresets()
@@ -219,7 +219,7 @@ export default function PresetEditor(props: Props) {
         console.log(`Index: ${index}  - Id: ${id}`)
         let activityDiv = document.getElementById(`${elementIdString}${index.toString()}`);
         if (activityDiv && id !== null) {
-            const tmpActivity: IPreset = { ...myPreset }
+            const tmpActivity: IPreset = { ...currentPreset }
             if (tmpActivity.Activities.length > 0) {
                 const activity = tmpActivity?.Activities[index]
                 let currentOrder = activity.Order
@@ -276,7 +276,7 @@ export default function PresetEditor(props: Props) {
                 tmpActivities.push(tmpActivity)
             }
         })
-        let tmpPreset: IPreset = { ...myPreset }
+        let tmpPreset: IPreset = { ...currentPreset }
         tmpPreset.Activities = tmpActivities
         setMyPreset(tmpPreset)
         return theSelected
@@ -304,7 +304,7 @@ export default function PresetEditor(props: Props) {
         <div>
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
             <Button className='classes.button' variant="outlined" onClick={handleOpen}>
-                {(myPreset.Activities && myPreset.Activities.length > 0) ? "Edit preset" : "Add preset"}
+                {(currentPreset.Activities && currentPreset.Activities.length > 0) ? "Edit preset" : "Add preset"}
             </Button>
             <BootstrapDialog
                 onClose={() => handleClose(false)}
@@ -325,17 +325,17 @@ export default function PresetEditor(props: Props) {
                                         id="standard-basic"
                                         label="Preset name"
                                         variant="standard"
-                                        value={myPreset.Name}
+                                        value={currentPreset.Name}
                                         onChange={e => updateName(e)}
                                     />
                                 </div>
 
                                 <Divider component="li" sx={{ margin: '5%' }} variant='inset' />
 
-                                {myPreset.Activities ?
+                                {currentPreset.Activities ?
                                     <div className='updateBox' >
                                         {
-                                            myPreset.Activities.map((activity, activityIndex) =>
+                                            currentPreset.Activities.map((activity, activityIndex) =>
                                             (
                                                 <div className="listContainerRow" id={activity.Name + activityIndex.toString()} key={activityIndex} style={{ order: (activity.Order), }}>
                                                     <div
@@ -352,11 +352,11 @@ export default function PresetEditor(props: Props) {
                                                     <Divider component="li" orientation="vertical" flexItem />
                                                     <div className='listContainerRowButtons'>
                                                         {activity.Order !== "0" ?
-                                                            <Button onClick={() => changeOrder(true, activity.Name, activityIndex, myPreset.Id)}>{' '}<ExpandLessOutlined /></Button>
+                                                            <Button onClick={() => changeOrder(true, activity.Name, activityIndex, currentPreset.Id)}>{' '}<ExpandLessOutlined /></Button>
                                                             :
                                                             ""}
                                                         <br />
-                                                        <Button onClick={() => changeOrder(false, activity.Name, activityIndex, myPreset.Id)}>{' '}<ExpandMoreOutlined /></Button>
+                                                        <Button onClick={() => changeOrder(false, activity.Name, activityIndex, currentPreset.Id)}>{' '}<ExpandMoreOutlined /></Button>
                                                         <br />
                                                         <Button onClick={() => removePresetActivity(activity.Id, activityIndex)}><i className="fa fa-trash" aria-hidden="true"></i></Button>
                                                     </div>
@@ -400,7 +400,7 @@ export default function PresetEditor(props: Props) {
                         </Select>
                     </FormControl>
                     {presets.length > 0 ?
-                        <SelectImage selectCallback={selectCallback} activities={myPreset.Activities} images={["image10.png", "image11.png", "image5.png", "image6.png", "image10.png", "image11.png", "image5.png", "image6.png", "image7.png", "image8.png"]} />
+                        <SelectImage selectCallback={selectCallback} activities={currentPreset.Activities} images={["image10.png", "image11.png", "image5.png", "image6.png", "image10.png", "image11.png", "image5.png", "image6.png", "image7.png", "image8.png"]} />
                         :
                         ""
                     }

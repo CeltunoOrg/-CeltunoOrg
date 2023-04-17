@@ -126,7 +126,7 @@ const Presets = (Props: Props) => {
                     <Button href='/#/'><ArrowBackIcon/></Button>
                         
                     <Button  onClick={() => { getPresetDbData("presets") }}><RefreshIcon/></Button>
-                    <PresetEditor editCallback={editCallback} myPreset={preset} dayArrayLength={topId} />
+                    <PresetEditor editCallback={editCallback} propCurrentPreset={preset} dayArrayLength={topId} />
 
                     </div>
                     <div className="preset-grid-container">
@@ -157,7 +157,7 @@ const Presets = (Props: Props) => {
                                         }
                                     </div>
                                     <div className='gridButtons'>
-                                    <PresetEditor editCallback={editCallback} myPreset={presetItem} dayArrayLength={topId} />
+                                    <PresetEditor editCallback={editCallback} propCurrentPreset={presetItem} dayArrayLength={topId} />
                                     {
 
                                         presetItem.Id !== null ?
