@@ -8,8 +8,8 @@ import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
-import PresetDataService from "../services/preset-firebase-service"
-import { IDayActivity, IImagePreset, IMyDay, IPreset, ISelectImage } from '../types/day.type';
+import PresetDataService from "../../services/preset-firebase-service"
+import { IDayActivity, IImagePreset, IMyDay, IPreset, ISelectImage } from '../../types/day.type';
 import { FormControl, ImageList, ImageListItem, ImageListItemBar, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import DoneIcon from '@mui/icons-material/Done';

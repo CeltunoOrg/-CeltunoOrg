@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import "../../styles/Activities.css"
 import { IDayActivity, IImagePreset, IMyDay, IPreset, IUser } from '../types/day.type';
-import CustomizedDialogs from './dialogTest';
+import CustomizedDialogs from './modules/dialogTest';
 import PresetDataService from "../services/preset-firebase-service"
 import { useTheOnValue } from '../../firebase-planner';
 import { Button } from '@mui/material';
-import ActivityEditor from './editActivity';
+import ActivityEditor from './modules/editActivity';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ArrowBackIcon from '@mui/icons-material/ArrowBackIosNewOutlined';

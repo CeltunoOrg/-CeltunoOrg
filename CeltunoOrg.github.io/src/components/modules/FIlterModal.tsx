@@ -4,7 +4,7 @@ import Modal from '@mui/material/Modal';
 import React, { useState, useContext } from 'react';
 
 import Select, { MultiValue } from 'react-select'
-import IDay from '../types/day.type';
+import IDay from '../../types/day.type';
 import styled from '@emotion/styled';
 declare module '@mui/material/styles' {
     interface Palette {

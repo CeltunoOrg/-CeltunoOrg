@@ -108,29 +108,24 @@ class PresetDataService {
       return e
     }
   }
-  async updatePresetItemDb(key: number, thePreset: IPreset | null) {
+  async updatePresetItemDb(key: number, alteredPreset: IPreset | null) {
     try {
 
-      if (thePreset === null) {
+      if (alteredPreset === null) {
         console.log("No preset data");
         return null
       }
-      // console.log("Update pre: ");
-      // console.log(theDay);
-      // theDay.formiddag= "New formiddag"
       const updates = {};
-      updates['/presets/' + key] = thePreset
-      console.log("Add result: ")
+      updates['/presets/' + key] = alteredPreset
+      console.log("Updating preset...")
       return update(useTheRef(db), updates)
     }
     catch (error) {
-      console.error("Error adding document: ", error);
-      // return e
+      console.error("Error updating preset: ", error);
     }
   }
   removePresetItemDb(key: number) {
     const itemref = `/presets/${key}`
-
     return remove(ref(db, itemref))
   }
   removePresetActivityItemDb(dayKey: number, activityKey: number) {

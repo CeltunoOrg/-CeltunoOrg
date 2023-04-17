@@ -11,14 +11,15 @@ import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
 import ExpandLessOutlined from '@mui/icons-material/ExpandLessOutlined'
 import ExpandMoreOutlined from '@mui/icons-material/ExpandMoreOutlined';
+import * as PresetManager from '../functions/presetDataManager'
 
-import "../../styles/Edit.css"
+import "../../../styles/Edit.css"
 
-import PresetDataService from "../services/preset-firebase-service"
-import IDay, { IDayActivity, IImagePreset, IMyDay, IPreset, ISelectImage } from '../types/day.type';
+import PresetDataService from "../../services/preset-firebase-service"
+import IDay, { IDayActivity, IImagePreset, IMyDay, IPreset, ISelectImage } from '../../types/day.type';
 import { Divider, FormControl, ImageListItemBar, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import SelectImage from './selectImage';
-import { useTheOnValue } from '../../firebase-planner';
+import { useTheOnValue } from '../../../firebase-planner';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
@@ -69,23 +70,25 @@ interface Props {
     editCallback: (theEdited: IPreset | null) => IPreset | null//theSelected: ISelectImage []}
 
 }
+let tmpData: Array<IPreset> = new Array<IPreset>;
 export default function PresetEditor(props: Props) {
     const [open, setOpen] = React.useState(false);
 
-    const handleClickOpen = () => {
+    const handleOpen = () => {
         setOpen(true);
         if (props.myPreset && props.myPreset !== myPreset)
             setMyPreset(props.myPreset)
         // if (props.dayArrayLength > topId)
         //     setTopId(props.dayArrayLength)
-        getPresetDbData()
-        if (topId <= 0)
-            getAll()
+        const returnData = PresetManager.FetchAllPresets()
+        tmpData = returnData.presets
+        if (topId < returnData.topId)
+            setTopId(returnData.topId)
 
     };
+
     const handleClose = (save: boolean) => {
         if (save) {
-
             console.log("Saved")
             if (myPreset.Id > 0)
                 updateMyPreset(myPreset.Id);
@@ -109,131 +112,79 @@ export default function PresetEditor(props: Props) {
 
         if (props.myPreset && props.myPreset !== myPreset)
             setMyPreset(props.myPreset)
+
+        const result = PresetManager.FetchAllPresets()
+        handleTopId(result.topId)
+
         if (presets.length <= 0)
-            getPresetDbData()
-
-        getAll()
-        // if (props.dayArrayLength > topId)
-        //     setTopId(props.dayArrayLength)
-
+            handlePresets(result.presets)
+        
     }, []);
 
-    const tmpData: Array<IPreset> = new Array<IPreset>;
-
-    function getHighest() {
-        const calculateHighest = () => {
-            if (tmpData.length > 0) {
-
-                let sortedDays = tmpData.sort((a, b) => (a.Id > b.Id) ? -1 : 1);
-                return sortedDays[0].Id + 1
-            }
-            else
-                return 1
-        }
-        const theHighest = calculateHighest()
-        setTopId(theHighest)
-        // console.log(`GETHIGHEST - Activity-Highest: ${topId}`)
-    }
-    const getAll = () => {
-
-
-        PresetDataService.getAllItemsDB("presets").then((data) => {
-            useTheOnValue(data, (snapshot) => {
-                if (snapshot.exists()) {
-                    console.log("Snapshot found, mapping PRESET data:");
-                    snapshot.forEach(function (childSnapshot) {
-                        const key = childSnapshot.key;
-                        if (!key)
-                            return
-                        const values = childSnapshot.val()
-                        let childData: IPreset = {
-                            Id: Number.parseInt(key),
-                            Name: values.Name ?? "",
-                            Description: values.Descritption ?? "",
-                            Activities: values.Activities
-                        }
-                        childData.Id = Number.parseInt(key);
-                        tmpData.push(childData);
-                    })
-                    getHighest()
-                    console.log(`DB items found: ${tmpData.length} Top Id: ${topId}`);
-                }
-            })
-        }).then(() => {
-            console.log("After all presets")
-            getHighest()
-        })
-        return tmpData
+    const handleTopId=(newId: number) => {
+         if(topId < newId)
+            setTopId(newId)
     }
 
-    const updateMyPreset = (id: number | null) => {
-        const tmpPreset = myPreset
-        if (id === undefined || id === null || id === 0) {
-            console.log("No id provided, creating new...");
-            getAll()
-            id = topId
-        }
-        console.log("Updating preset");
-        if (id === 0)
-            return
-        if (tmpPreset.Description == undefined)
-            tmpPreset.Description = ""
-        PresetDataService.updatePresetItemDb(id, myPreset)
-    }
-
-
-    const getOnePreset = (key: number) => {
-        let preset: IPreset;
-        if (key) {
-            PresetDataService.getDbOne("presets", key).then((data) => {
-                useTheOnValue(data, (snapshot) => {
-                    if (snapshot.exists()) {
-                        console.log("Snapshot found PRESET setting ONE:");
-                        let childData = snapshot.val() as IPreset;
-                        console.log(snapshot.val())
-                        if (childData.Description == undefined)
-                            childData.Description = ""
-                        childData.Id = key;
-                        preset = childData;
-                    }
-                    handlePreset(preset)
-                })
-            })
-        }
-    }
 
     const handlePreset = (preset: IPreset) => {
         setMyPreset(preset)
     }
 
-    let tmpPreset: IPreset[] = []
 
-    const setThePresets = () => {
-        setPresets(tmpPreset)
+    const handlePresets = (newPresets: IPreset[]) => {
+        setPresets(newPresets)
     }
 
 
-    const getPresetDbData = () => {
-        PresetDataService.getAllItemsDB("presets").then((data) => {
-            useTheOnValue(data, (snapshot) => {
-                if (snapshot.exists()) {
-                    console.log("Snapshot found, mapping PRESET data:");
-                    snapshot.forEach(function (childSnapshot) {
-                        const key = childSnapshot.key;
-                        if (!key)
-                            return
-                        let childData = childSnapshot.val() as IPreset;
-                        childData.Id = Number.parseInt(key);
-                        tmpPreset.push(childData);
-                    })
-                    if (tmpPreset.length !== presets.length)
-                        setThePresets()
-                    console.log(tmpPreset.length)
-                }
-            })
-        })
-        return tmpPreset
+    const updateMyPreset = (id: number | null) => {
+        const tmpPreset = myPreset
+        if (id === undefined || id === null || id === 0) {
+            console.log("No id provided, creating new...");
+            const returnResult = PresetManager.FetchAllPresets()
+            if (topId < returnResult.topId)
+                setTopId(returnResult.topId)
+            id = topId
+        }
+        if (id === 0)
+            return
+        console.log("Updating preset");
+        if (tmpPreset.Description == undefined)
+            tmpPreset.Description = ""
+        
+        PresetManager.UpdatePreset(id,tmpPreset)
+        const fetchedPreset = PresetManager.FetchOnePreset(id) as IPreset
+        if(fetchedPreset) 
+            handlePreset(fetchedPreset)       
+        
     }
+
+    const removePresetActivity = (activityId:number, activityIndex: number) =>{
+        PresetManager.RemovePresetActivity(activityId,activityIndex, myPreset)
+    }
+
+
+    // const getPresetDbData = () => {
+    //     PresetDataService.getAllItemsDB("presets").then((data) => {
+    //         useTheOnValue(data, (snapshot) => {
+    //             if (snapshot.exists()) {
+    //                 console.log("Snapshot found, mapping PRESET data:");
+    //                 snapshot.forEach(function (childSnapshot) {
+    //                     const key = childSnapshot.key;
+    //                     if (!key)
+    //                         return
+    //                     let childData = childSnapshot.val() as IPreset;
+    //                     childData.Id = Number.parseInt(key);
+    //                     tmpPreset.push(childData);
+    //                 })
+    //                 if (tmpPreset.length !== presets.length)
+    //                     setThePresets()
+    //                 console.log(tmpPreset.length)
+    //             }
+    //         })
+    //     })
+    //     return tmpPreset
+    // }
 
 
     const setActivitiesFromPreset = (key: string) => {
@@ -253,16 +204,17 @@ export default function PresetEditor(props: Props) {
         const tmpActivity = { ...myPreset }
         tmpActivity.Name = name
         if (tmpActivity.Id === 0) {
-            getAll();
+            const result = PresetManager.FetchAllPresets()
             console.log("UPDATENAME - TOPAFTER GETALLL")
+            handleTopId(result.topId)
             tmpActivity.Id = topId
         }
         setMyPreset(tmpActivity)
-        return null
-        updateMyPreset(tmpActivity.Id)
+        return 
+        // updateMyPreset(tmpActivity.Id)
     }
 
-    
+
     const changeOrder = (moveUp: boolean, elementIdString: string, index: number, id: number | null) => {
         console.log(`Index: ${index}  - Id: ${id}`)
         let activityDiv = document.getElementById(`${elementIdString}${index.toString()}`);
@@ -330,28 +282,28 @@ export default function PresetEditor(props: Props) {
         return theSelected
     }
 
-    const removeActivity = (activityId: number, activityIndex: number) => {
-        let tmpPreset = { ...myPreset }
-        if (tmpPreset.Id && tmpPreset.Id !== null && activityId !== null) {
-            const index: number = tmpPreset.Activities.indexOf(tmpPreset.Activities[activityIndex], 0)
-            if (index > -1) {
-                tmpPreset.Activities.splice(index, 1);
-            }
-            // delete tmpday.Activities[activityIndex]
-            // tmpday.Activities.[activityIndex]
-            // tmpday.Activities.splice(activityIndex,1)
-            if (tmpPreset.Description === undefined)
-                tmpPreset.Description = ""
-            handlePreset(tmpPreset)
-            PresetDataService.updatePresetItemDb(tmpPreset.Id, tmpPreset)
-            getOnePreset(tmpPreset.Id)
-        }
+    // const removeActivity = (activityId: number, activityIndex: number) => {
+    //     let tmpPreset = { ...myPreset }
+    //     if (tmpPreset.Id && tmpPreset.Id !== null && activityId !== null) {
+    //         const index: number = tmpPreset.Activities.indexOf(tmpPreset.Activities[activityIndex], 0)
+    //         if (index > -1) {
+    //             tmpPreset.Activities.splice(index, 1);
+    //         }
+    //         // delete tmpday.Activities[activityIndex]
+    //         // tmpday.Activities.[activityIndex]
+    //         // tmpday.Activities.splice(activityIndex,1)
+    //         if (tmpPreset.Description === undefined)
+    //             tmpPreset.Description = ""
+    //         handlePreset(tmpPreset)
+    //         PresetDataService.updatePresetItemDb(tmpPreset.Id, tmpPreset)
+    //         getOnePreset(tmpPreset.Id)
+    //     }
 
-    }
+    // }
     return (
         <div>
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
-            <Button className='classes.button' variant="outlined" onClick={handleClickOpen}>
+            <Button className='classes.button' variant="outlined" onClick={handleOpen}>
                 {(myPreset.Activities && myPreset.Activities.length > 0) ? "Edit preset" : "Add preset"}
             </Button>
             <BootstrapDialog
@@ -379,13 +331,13 @@ export default function PresetEditor(props: Props) {
                                 </div>
 
                                 <Divider component="li" sx={{ margin: '5%' }} variant='inset' />
-                                
+
                                 {myPreset.Activities ?
                                     <div className='updateBox' >
                                         {
                                             myPreset.Activities.map((activity, activityIndex) =>
-                                            (                                                
-                                                <div className="listContainerRow" id={activity.Name + activityIndex.toString()} key={activityIndex} style={{ order: (activity.Order), }}>                                                    
+                                            (
+                                                <div className="listContainerRow" id={activity.Name + activityIndex.toString()} key={activityIndex} style={{ order: (activity.Order), }}>
                                                     <div
 
                                                         className='listContainerRowImages  '
@@ -400,13 +352,13 @@ export default function PresetEditor(props: Props) {
                                                     <Divider component="li" orientation="vertical" flexItem />
                                                     <div className='listContainerRowButtons'>
                                                         {activity.Order !== "0" ?
-                                                            <Button onClick={() => changeOrder(true,activity.Name, activityIndex, myPreset.Id)}>{' '}<ExpandLessOutlined /></Button>
+                                                            <Button onClick={() => changeOrder(true, activity.Name, activityIndex, myPreset.Id)}>{' '}<ExpandLessOutlined /></Button>
                                                             :
                                                             ""}
                                                         <br />
-                                                        <Button onClick={() => changeOrder(false,activity.Name,activityIndex, myPreset.Id)}>{' '}<ExpandMoreOutlined /></Button>
+                                                        <Button onClick={() => changeOrder(false, activity.Name, activityIndex, myPreset.Id)}>{' '}<ExpandMoreOutlined /></Button>
                                                         <br />
-                                                        <Button onClick={() => removeActivity(activity.Id, activityIndex)}><i className="fa fa-trash" aria-hidden="true"></i></Button>
+                                                        <Button onClick={() => removePresetActivity(activity.Id, activityIndex)}><i className="fa fa-trash" aria-hidden="true"></i></Button>
                                                     </div>
                                                 </div>
 

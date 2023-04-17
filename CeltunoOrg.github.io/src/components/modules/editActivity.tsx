@@ -12,13 +12,13 @@ import Typography from '@mui/material/Typography';
 import ExpandLessOutlined from '@mui/icons-material/ExpandLessOutlined'
 import ExpandMoreOutlined from '@mui/icons-material/ExpandMoreOutlined';
 
-import "../../styles/Edit.css"
+import "../../../styles/Edit.css"
 
-import PresetDataService from "../services/preset-firebase-service"
-import IDay, { IDayActivity, IImagePreset, IMyDay, IPreset, ISelectImage } from '../types/day.type';
+import PresetDataService from "../../services/preset-firebase-service"
+import IDay, { IDayActivity, IImagePreset, IMyDay, IPreset, ISelectImage } from '../../types/day.type';
 import { Divider, FormControl, ImageListItemBar, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import SelectImage from './selectImage';
-import { useTheOnValue } from '../../firebase-planner';
+import { useTheOnValue } from '../../../firebase-planner';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
