@@ -1,11 +1,11 @@
-import { Button, Fade, ButtonProps, createTheme, ThemeProvider } from '@mui/material';
+import { Button, Fade} from '@mui/material';
 import Modal from '@mui/material/Modal';
 // import{makeStyles} from "@mui/styles"
-import React, { useState, useContext } from 'react';
+import React from 'react';
 
 import Select, { MultiValue } from 'react-select'
 import IDay from '../../types/day.type';
-import styled from '@emotion/styled';
+// import styled from '@emotion/styled';
 declare module '@mui/material/styles' {
     interface Palette {
      neutral: Palette['primary'];
@@ -56,13 +56,13 @@ export default class SetFilter extends React.Component<Props, State>{
     openModal = () => this.setState({ isOpen: true });
     closeModal = () => this.setState({ isOpen: false });
     
-    changeContext = () => {
-        this.setState(state => ({
+    // changeContext = () => {
+    //     this.setState(state => ({
 
-        }))
-        //)
-        // console.log(userData.user.userName)
-    }
+    //     }))
+    //     //)
+    //     // console.log(userData.user.userName)
+    // }
     componentDidMount() {
         console.log("#filteModal#")
         return 
@@ -77,7 +77,7 @@ export default class SetFilter extends React.Component<Props, State>{
         })
         
         const evenMoreArrays :IDay[] = [];
-        theChoices.forEach(function (value, label){
+        theChoices.forEach(function (value){
             console.log(value.label);
             console.log(value.value);
             const nameMatch = theDays2.find(item => item.name == value.label ); 
@@ -134,7 +134,7 @@ export default class SetFilter extends React.Component<Props, State>{
 
                 {/* <CustomButton variant='contained' className=' m-3 btn btn-sm btn-success Button'  hidden={this.props.daysFromParent.length === 0} onClick={this.openModal}>Open filters</CustomButton> */}
                 <div className=''>
-                <button className=' m-3 btn btn-sm btn-success Button'  hidden={this.props.daysFromParent.length === 0} onClick={this.openModal}>Open filters</button>
+                <Button className=' m-3 btn btn-sm btn-success Button'  hidden={this.props.daysFromParent.length === 0} onClick={this.openModal}>Open filters</Button>
                 </div>
                 {/* </ThemeProvider> */}
                 <Modal 

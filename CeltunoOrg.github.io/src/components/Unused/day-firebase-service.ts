@@ -1,7 +1,7 @@
-import IDay from "../types/day.type";
+import IDay, { IMyDay } from "../../types/day.type";
 // import {fb, db} from "../../firebase"
 import { getDatabase, onValue, set, update, get, push, orderByKey, orderByChild, child } from "firebase/database";
-import { db as fireDb, firestore, useTheOnValue, useTheRef } from "../../firebase"
+import { db as fireDb, firestore, useTheOnValue, useTheRef } from "../../../firebase"
 // import { collection, getDocs, addDoc } from "firebase/firestore";
 
 // import React, { Suspense, useEffect, useState } from "react";
@@ -17,8 +17,8 @@ class DayDataService {
     console.log(db)
     return db;
   }
-  async getOnedb(key: string) {
-    const dayDbRef = useTheRef(db, '/myDay/' + key);
+  async getOnedb(id: number) {
+    const dayDbRef = useTheRef(db, '/myDay/' + id);
     onValue(dayDbRef, (snapshot) => {
       const data = snapshot.toJSON();//.val();
       console.log("DataDB: ");
@@ -37,42 +37,22 @@ class DayDataService {
   }
 
 
-  async getdbAll() {
-
-    console.log("Connecting to db...");//Getting all from db");
-    const databaseReference = useTheRef(db, '/'); // orderByChild('name'));     
+  async getAllItemsDB() {
+    console.log("Connecting to db...");
+    const databaseReference = useTheRef(db, '/');   
     return databaseReference;
   }
 
-  //  async getdbAll-OLD() {
-  //   console.log("Getting all from db");
-  //   const data = query(ref(db, 'myDay/'), orderByKey()); // orderByChild('name'));
-  //   var result;
-  //   var allDays = new Array<IDay>
-  //   get(data).then((snapshot) => {
-  //     result = snapshot.toJSON()
-  //     console.log("AllDataDB: ");
-  //     snapshot.forEach((child ) => {
-  //       allDays.push(child.val() as IDay)
-  //       console.log(allDays[0].name)
-  //         // child.key, child.val());
-  //     })
-  //     return result //as IDay[]
-  //   })
-  // }
 
-  async updateItemDb(key: string, theDay: IDay | null) {
+  async updateDayItemDb(id: number, theDay: IMyDay | null) {
     try {
 
       if (theDay === null) {
         console.log("No day data");
         return null
       }
-      // console.log("Update pre: ");
-      // console.log(theDay);
-      // theDay.formiddag= "New formiddag"
       const updates = {};
-      updates['/' + key] = theDay
+      updates['/' + id] = theDay
       console.log("Add result: ")
       return update(useTheRef(db), updates)
     }
@@ -93,14 +73,6 @@ class DayDataService {
       console.log(day)
       if (day === null)
         return null
-      // day = 
-      // {
-      //   name: "dbName",
-      //   formiddag: "dbform",
-      //   ettermiddag: "dbetterm",
-      //   natt: "dbnatt",
-      //   submitted: false
-      // } as IDay;
       const result = push(useTheRef(db, '/'), day)
         .then(() => {
           console.log("Item added success");

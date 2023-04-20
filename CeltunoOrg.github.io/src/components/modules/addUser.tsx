@@ -18,10 +18,11 @@ import AddIcon from '@mui/icons-material/Add';
 import "../../../styles/Edit.css"
 
 // import PresetDataService from "../../services/preset-firebase-service"
-import { IDayActivity, IPreset, ISelectImage } from '../../types/day.type';
+import { IDayActivity, IPreset, ISelectImage, IUser } from '../../types/day.type';
 import { Divider, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import SelectImage from './selectImage';
 import { isNullOrUndefined } from '../functions/common';
+import UserDataManager from '../functions/userDataManager';
 // import { useTheOnValue } from '../../../firebase-planner';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -44,8 +45,8 @@ export interface DialogTitleProps {
 interface Props {
     children?: React.ReactNode
 
-    propCurrentPreset: IPreset | null
-    editCallback: (theEdited: IPreset | null) => IPreset | null
+    propCurrentUser: IUser | null
+    addUserCallback: (newUser: IUser | null) => IUser | null
 
 }
 
@@ -73,182 +74,187 @@ function BootstrapDialogTitle(props: DialogTitleProps) {
     );
 }
 
-export default function PresetEditor(props: Props) {
+export default function AddUser(props: Props) {
     const [open, setOpen] = React.useState(false);
 
     const handleOpen = () => {
         setOpen(true);
-        if (props.propCurrentPreset && props.propCurrentPreset !== myPreset)
-            setMyPreset(props.propCurrentPreset)
+        if (props.propCurrentUser && props.propCurrentUser !== user)
+            setUser(props.propCurrentUser)
         // if (props.dayArrayLength > topId)
         //     setTopId(props.dayArrayLength)
-        const returnData = PresetDataManager.FetchAllPresets()
-        if (topId < returnData.topId)
-            setTopId(returnData.topId)
-
+        if (topId <= 0) {
+            const returnData = UserDataManager.FetchAllUserData()
+            if (topId < returnData.topId)
+                setTopId(returnData.topId)
+        }
     };
 
     const handleClose = (save: boolean) => {
         if (save) {
             console.log("Saved")
-            if (myPreset.Id > 0)
-                updateMyPreset(myPreset.Id);
+            if (user.Id >= 0)
+                updateUser(user.Id);
             // else console.log("CLOSING -ID was NULL - no update")
-            props.editCallback(myPreset)
+            props.addUserCallback(user)
         }
         setOpen(false);
     };
     const [topId, setTopId] = React.useState<number>(0);
-    const [presets, setPresets] = React.useState<IPreset[]>([]);
-    const [myPreset, setMyPreset] = React.useState<IPreset>(
+    // const [user, setPresets] = React.useState<IPreset[]>([]);
+    const [user, setUser] = React.useState<IUser>(
         {
             Id: 0,
             Name: "",
-            Description: "",
-            Activities: []
+            Days: [],
+            Presets: [],
+            LastDay: null,
+            Config: {
+                title: "",
+                titleSize: "",
+                color1: "",
+                color2: "",
+                background: "",
+                role: ""
+            }
         }
     );
 
     useEffect(() => {
 
-        if (props.propCurrentPreset && props.propCurrentPreset.Id !== myPreset.Id)
-            setMyPreset(props.propCurrentPreset)
-        if (topId === 0 || presets.length <= 0)
-            getAllPresets();
+        if (props.propCurrentUser && props.propCurrentUser.Id !== user.Id)
+            setUser(props.propCurrentUser)
+        // if (topId === 0  user.length <= 0)
+        const returnData = UserDataManager.FetchAllUserData()
+        if (topId < returnData.topId)
+            setTopId(returnData.topId)
+        // getAllPresets();
         // if (topId > 0)
         // handleTopId(result.topId)
-        console.log(`Effect - TopId: ${topId}`)
+        // console.log(`Effect - TopId: ${topId}`)
 
         // if (presets.length <= 0)
         //     handlePresets(result.presets)
 
     }, []);
 
-    let tmpMyPreset: IPreset | null = null;
+    let tmpMyUser: IUser | null = null;
 
-    const handleTopId = (newId: number) => {
-        if (topId < newId)
-            setTopId(newId)
-    }
+    // const handleTopId = (newId: number) => {
+    //     if (topId < newId)
+    //         setTopId(newId)
+    // }
 
 
-    const handlePreset = (preset: IPreset) => {
-        console.log(`Handling preset - ${preset.Name} `)
-        console.log(preset.Activities)
-        setMyPreset(preset)
+    const handleUser = (newUser: IUser) => {
+        console.log(`Handling user - ${newUser.Name} `)
+        console.log(newUser)
+        setUser(newUser)
         console.log("After:")
-        console.log(myPreset.Activities)
+        console.log(user)
     }
 
 
-    const handlePresets = (newPresets: IPreset[]) => {
-        setPresets(newPresets)
-    }
+    // const handlePresets = (newUser: IUser) => {
+    //     setUser(newUser)
+    // }
 
     const getAllPresets = () => {
-        const returnData = PresetDataManager.FetchAllPresets()
-        if (returnData.presets)
-            handlePresets(returnData.presets)
-        if (topId && topId !== 0)
-            handleTopId(returnData.topId)
+        const returnData = UserDataManager.FetchAllUserData()
+        // if (returnData.Users)
+        // handleUser(returnData.Users)
+        // if (topId && topId !== 0)
+        //     handleTopId(returnData.topId)
 
     }
 
-    const updateMyPreset = (id: number | null) => {
-        tmpMyPreset = { ...myPreset }
+    const updateUser = (id: number | null) => {
+        const tmpMyUser1 = { ...user }
         if (id === undefined || id === null || id === 0) {
             console.log("No id provided, creating new...");
-            const returnResult = PresetDataManager.FetchAllPresets()
-            if (topId < returnResult.topId)
+            const returnResult = UserDataManager.FetchAllUserData()            
                 setTopId(returnResult.topId)
             id = topId
         }
+        console.log("Updating user");
         if (id === 0)
             return
-        console.log("Updating preset");
-        if (isNullOrUndefined(tmpMyPreset.Description))
-            tmpMyPreset.Description = ""
-        if (isNullOrUndefined(tmpMyPreset.Activities))
-            tmpMyPreset.Activities = []
-        handlePreset(tmpMyPreset)
-        PresetDataManager.UpdatePreset(id, tmpMyPreset)
-        const fetchedPreset = PresetDataManager.FetchOnePreset(id) as IPreset
-        if (fetchedPreset)
-            handlePreset(tmpMyPreset)
+        UserDataManager.UpdateUser(id, tmpMyUser1)
+        setUser(tmpMyUser1)
 
     }
 
-    const removePresetActivity = (activityId: number, activityIndex: number) => {
-        const tmpPreset ={...myPreset}
-        const index: number = tmpPreset.Activities.indexOf(tmpPreset.Activities[activityIndex], 0)
-        if (index > -1) {
-            tmpPreset.Activities.splice(index, 1);
-        }
-        PresetDataManager.RemovePresetActivity(activityId, activityIndex, tmpPreset)
-        handlePreset(tmpPreset)
-    }
+    // const removePresetActivity = (activityId: number, activityIndex: number) => {
+    //     const tmpPreset ={...myPreset}
+    //     const index: number = tmpPreset.Activities.indexOf(tmpPreset.Activities[activityIndex], 0)
+    //     if (index > -1) {
+    //         tmpPreset.Activities.splice(index, 1);
+    //     }
+    //     PresetDataManager.RemovePresetActivity(activityId, activityIndex, tmpPreset)
+    //     handlePreset(tmpPreset)
+    // }
 
-    const setActivitiesFromPreset = (key: string) => {
-        const keyInt = Number.parseInt(key);
-        
-        tmpMyPreset = { ...myPreset }
-        if (tmpMyPreset)
-            if (keyInt !== null && keyInt !== undefined) {
-                const newPreset = { ...presets[keyInt] }
-                tmpMyPreset.Activities = newPreset.Activities
-                handlePreset(tmpMyPreset)
-                // updateMyPreset(tmpMyPreset.Id)
-            }
-    }
+    // const setActivitiesFromPreset = (key: string) => {
+    //     const keyInt = Number.parseInt(key);
+
+    //     tmpMyPreset = { ...myPreset }
+    //     if (tmpMyPreset)
+    //         if (keyInt !== null && keyInt !== undefined) {
+    //             const newPreset = { ...user[keyInt] }
+    //             tmpMyPreset.Activities = newPreset.Activities
+    //             handlePreset(tmpMyPreset)
+    //             // updateMyPreset(tmpMyPreset.Id)
+    //         }
+    // }
 
     const updateName = (event) => {
         const name = event.target.value;
-        tmpMyPreset = { ...myPreset }
-        tmpMyPreset.Name = name
+        tmpMyUser = { ...user }
+        tmpMyUser.Name = name
         // const returnData = PresetManager.FetchAllPresets();
-        if (tmpMyPreset.Id === 0) {
+        if (tmpMyUser.Id === 0) {
             console.log("UPDATENAME - TOPAFTER GETALLL")
-            tmpMyPreset.Id = topId
+            // tmpMyUser.Id = topId
         }
         // setTopId(returnData.topId)
-        setMyPreset(tmpMyPreset)
+        setUser(tmpMyUser)
         return null
         // updateMyDay  (tmpActivity.Id)
     }
 
-    const changeOrder = (moveUp: boolean, elementIdString: string, index: number, id: number | null) => {
-        console.log(`Index: ${index}  - Id: ${id}`)
-        const activityDiv = document.getElementById(`${elementIdString}${index.toString()}`);
-        if (activityDiv && id !== null) {
-            tmpMyPreset = { ...myPreset }
-            if (tmpMyPreset.Activities.length > 0) {
-                const activity = tmpMyPreset?.Activities[index]
-                let currentOrder = activity.Order
-                if (!currentOrder || currentOrder === undefined)
-                    currentOrder = "0"
-                let activityIdNum = Number.parseInt(currentOrder);
-                console.log(`Current order: ${currentOrder}`)
-                if (moveUp && activityIdNum > 0) {
-                    console.log("Moving up")
-                    activityIdNum -= 1;
-                }
-                else {
-                    console.log("Moving down")
-                    activityIdNum += 1;
-                }
-                activityDiv.style.order = `${activityIdNum}`
-                activity.Order = activityIdNum ? activityIdNum.toString() : "0";
-                tmpMyPreset.Activities[index] = activity
-                setMyPreset(tmpMyPreset)
-                console.log(`New order: ${activityDiv.style.order}`)
-            }
-        }
+    // const changeOrder = (moveUp: boolean, elementIdString: string, index: number, id: number | null) => {
+    //     console.log(`Index: ${index}  - Id: ${id}`)
+    //     const activityDiv = document.getElementById(`${elementIdString}${index.toString()}`);
+    //     if (activityDiv && id !== null) {
+    //         tmpMyPreset = { ...myPreset }
+    //         if (tmpMyPreset.Activities.length > 0) {
+    //             const activity = tmpMyPreset?.Activities[index]
+    //             let currentOrder = activity.Order
+    //             if (!currentOrder || currentOrder === undefined)
+    //                 currentOrder = "0"
+    //             let activityIdNum = Number.parseInt(currentOrder);
+    //             console.log(`Current order: ${currentOrder}`)
+    //             if (moveUp && activityIdNum > 0) {
+    //                 console.log("Moving up")
+    //                 activityIdNum -= 1;
+    //             }
+    //             else {
+    //                 console.log("Moving down")
+    //                 activityIdNum += 1;
+    //             }
+    //             activityDiv.style.order = `${activityIdNum}`
+    //             activity.Order = activityIdNum ? activityIdNum.toString() : "0";
+    //             tmpMyPreset.Activities[index] = activity
+    //             setMyPreset(tmpMyPreset)
+    //             console.log(`New order: ${activityDiv.style.order}`)
+    //         }
+    //     }
 
-    }
+    // }
 
     const selectCallback = (theSelected: Array<ISelectImage>) => {
         console.log(theSelected)
-        const newPresetActivities: IDayActivity[] = []
+        const newUserItems: IDayActivity[] = []
 
         Object.keys(theSelected).map((i) => {
             if (theSelected[i].Selected) {
@@ -261,21 +267,21 @@ export default function PresetEditor(props: Props) {
                     Selected: theSelected[i].Selected
                 }
 
-                newPresetActivities.push(tmpActivity)
+                newUserItems.push(tmpActivity)
             }
         })
-        tmpMyPreset = { ...myPreset }
-        tmpMyPreset.Activities = newPresetActivities
-        setMyPreset(tmpMyPreset)
+        tmpMyUser = { ...user }
+        // tmpMyUser.Activities = newPresetActivities
+        setUser(tmpMyUser)
         return theSelected
     }
 
     return (
         <div>
-            
+
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
             <Button className='classes.button' onClick={handleOpen}>
-                {(myPreset.Activities && myPreset.Activities.length > 0) ? <EditIcon /> : <AddIcon />}
+                {(user && user.Days.length > 0) ? <EditIcon /> : <AddIcon />}
             </Button>
             <BootstrapDialog
                 onClose={() => handleClose(false)}
@@ -284,7 +290,7 @@ export default function PresetEditor(props: Props) {
             >
                 <BootstrapDialogTitle id="customized-dialog-title" onClose={() => handleClose(false)}>
                     <Typography gutterBottom>
-                        Edit Preset
+                        Add  User
                     </Typography>
                 </BootstrapDialogTitle>
                 <DialogContent dividers>
@@ -294,64 +300,66 @@ export default function PresetEditor(props: Props) {
                                 <div>
                                     <TextField
                                         id="standard-basic"
-                                        label="Preset name"
+                                        label="User name"
                                         variant="standard"
-                                        value={myPreset.Name}
+                                        value={user.Name}
                                         onChange={e => updateName(e)}
                                     />
                                 </div>
 
                                 <Divider component="li" sx={{ margin: '5%' }} variant='inset' />
 
-                                {myPreset.Activities ?
+                                {user.Days ?
                                     <div className='updateBox' >
                                         {
-                                            myPreset.Activities.map((activity, activityIndex) =>
+                                            user.Days.map((day, activityIndex) =>
                                             (
-                                                <div className="listContainerRow" id={activity.Name + activityIndex.toString()} key={activityIndex} style={{ order: (activity.Order), }}>
+                                                <div className="listContainerRow" id={day.Name + activityIndex.toString()} key={activityIndex} style={{ order: "0", }}>
                                                     <div
 
                                                         className='listContainerRowImages  '
                                                     >
-                                                        <img src={`../images/${activity.Image}`} />
+                                                        No data
+                                                        {/* <img src={`../images/${activity.Image}`} /> */}
                                                         <Divider component="li" sx={{ margin: '5%' }} variant='middle' />
                                                     </div>
                                                     <Divider component="li" orientation="vertical" flexItem />
-                                                    <div className='listContainerRowButtons'>
+                                                    {/* <div className='listContainerRowButtons'>
                                                         {activity.Order !== "0" ?
-                                                            <Button onClick={() => changeOrder(true, activity.Name, activityIndex, myPreset.Id)}>{' '}<ExpandLessOutlined /></Button>
+                                                            <Button onClick={() => changeOrder(true, activity.Name, activityIndex, user.Id)}>{' '}<ExpandLessOutlined /></Button>
                                                             :
                                                             ""}
                                                         <br />
-                                                        <Button onClick={() => changeOrder(false, activity.Name, activityIndex, myPreset.Id)}>{' '}<ExpandMoreOutlined /></Button>
+                                                        <Button onClick={() => changeOrder(false, activity.Name, activityIndex, user.Id)}>{' '}<ExpandMoreOutlined /></Button>
                                                         <br />
                                                         <Button onClick={() => removePresetActivity(activity.Id, activityIndex)}><i className="fa fa-trash" aria-hidden="true"></i></Button>
-                                                    </div>
+                                                    </div> */}
                                                 </div>
 
                                             )
                                             )}
                                     </div>
-                                    : <p>{"No presets"}</p>
+                                    : <p>{"No Users"}</p>
                                 }
                             </div>
+
                         }
                     </>
                 </DialogContent>
                 <DialogActions>
-                    <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+                    {/* <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
                         <InputLabel id="demo-simple-select-standard-label">Select template</InputLabel>
                         <Select
                             labelId="demo-simple-select-standard-label"
                             id="presetSelector"
                             value={`999`}
-                            onChange={e => setActivitiesFromPreset(e.target.value)}
+                            // onChange={e => setActivitiesFromPreset(e.target.value)}
                             label="Preset"
                         >
                             <MenuItem value={`999`} key={`999`} selected={true}>
                                 <em>None</em>
                             </MenuItem>
-                            {presets.map(function (preset, index) {
+                            {user.Days.map(function (preset, index) {
 
                                 if (preset && preset.Id > 0) {
 
@@ -361,12 +369,12 @@ export default function PresetEditor(props: Props) {
                             }
                             )}
                         </Select>
-                    </FormControl>
-                    {presets.length > 0 ?
-                        <SelectImage selectCallback={selectCallback} activities={myPreset.Activities} images={["image10.png", "image11.png", "image5.png", "image6.png", "image10.png", "image11.png", "image5.png", "image6.png", "image7.png", "image8.png"]} />
+                    </FormControl> */}
+                    {/* {user.Days.length > 0 ?
+                        <SelectImage selectCallback={selectCallback} activities={user.Days} images={["image10.png", "image11.png", "image5.png", "image6.png", "image10.png", "image11.png", "image5.png", "image6.png", "image7.png", "image8.png"]} />
                         :
                         ""
-                    }
+                    } */}
                     <Button autoFocus onClick={() => handleClose(true)}>
                         Save changes
                     </Button>

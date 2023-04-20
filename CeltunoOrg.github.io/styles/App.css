@@ -93,6 +93,16 @@ div>Button {
   min-height: 10%;
   max-height: 95%;
 }
+/* .editButtons {
+  display: flex;
+  flex-direction: column;
+  /* margin-top: 3rem; */
+  /* flex-wrap: wrap;
+  float: left;  
+} */
+/* .editButtons>* {
+  flex: 1 1 40px;
+} */ */
 .dashboardBox {
   display: flex;
   flex-direction: column;

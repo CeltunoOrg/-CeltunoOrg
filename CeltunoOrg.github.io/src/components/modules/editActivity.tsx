@@ -17,8 +17,8 @@ import AddIcon from '@mui/icons-material/Add';
 
 import "../../../styles/Edit.css"
 
-import PresetDataService from "../../services/preset-firebase-service"
-import IDay, { IDayActivity, IImagePreset, IMyDay, IPreset, ISelectImage } from '../../types/day.type';
+import PlannerDataService from "../../services/planner-firebase-service"
+import IDay, { DataType, IDayActivity, IImagePreset, IMyDay, IPreset, ISelectImage } from '../../types/day.type';
 import { Divider, FormControl, ImageListItemBar, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import SelectImage from './selectImage';
 import { useTheOnValue } from '../../../firebase-planner';
@@ -37,6 +37,16 @@ export interface DialogTitleProps {
     children?: React.ReactNode;
     onClose: () => void;
 
+
+}
+
+interface Props {
+    children?: React.ReactNode
+    // activities: IDayActivity[]
+    isOpen: boolean
+    propMyDay: IMyDay | null
+    hideAll: boolean
+    editCallback: (theEdited: IMyDay | null) => IMyDay | null//theSelected: ISelectImage []}
 
 }
 
@@ -63,36 +73,26 @@ function BootstrapDialogTitle(props: DialogTitleProps) {
         </DialogTitle>
     );
 }
-interface Props {
-    children?: React.ReactNode
-    // activities: IDayActivity[]
 
-    myDay: IMyDay | null
-    dayArrayLength: number
-    hideAll: boolean
-    editCallback: (theEdited: IMyDay | null) => IMyDay | null//theSelected: ISelectImage []}
-
-}
 export default function ActivityEditor(props: Props) {
     const [open, setOpen] = React.useState(false);
-
-    const handleClickOpen = () => {
+    // const {    isOpen, propMyDay, hideAll} = props
+    const handleOpen = () => {
         setOpen(true);
-        if (props.myDay && props.myDay !== myDay)
-            setMyDay(props.myDay)
+        if (props.propMyDay && props.propMyDay !== myDay)
+            setMyDay(props.propMyDay)
         // if (props.dayArrayLength > topId)
         //     setTopId(props.dayArrayLength)
-        getPresetDbData()
+        // getPresetDbData()
         if (topId <= 0)
-        getAll()
-        
+            getAll()
+
     };
     const handleClose = (save: boolean) => {
         if (save) {
-            
             console.log("Saved")
             if (myDay.Id > 0)
-            updateMyDay(myDay.Id);
+                updateMyDay(myDay.Id);
             else console.log("CLOSING -ID was NULL - no update")
             props.editCallback(myDay)
         }
@@ -108,24 +108,24 @@ export default function ActivityEditor(props: Props) {
             Description: "",
             Activities: []
         }
-        );
-        
-        const handleHiding=() =>{
-            if(props.hideAll)
+    );
+
+    const handleHiding = () => {
+        if (props.hideAll)
             setHidden(props.hideAll)
-        }
-        
-        useEffect(() => {
-            
-            if (props.myDay && props.myDay !== myDay)
-            setMyDay(props.myDay)
-            if (presets.length <= 0)
+    }
+
+    useEffect(() => {
+
+        if (props.propMyDay && props.propMyDay !== myDay)
+            setMyDay(props.propMyDay)
+        if (presets.length <= 0)
             handleHiding()
-            getPresetDbData()
-            
-            getAll()
-            // if (props.dayArrayLength > topId)
-            //     setTopId(props.dayArrayLength)
+        getPresetDbData()
+
+        getAll()
+        // if (props.dayArrayLength > topId)
+        //     setTopId(props.dayArrayLength)
 
     }, []);
 
@@ -135,7 +135,7 @@ export default function ActivityEditor(props: Props) {
         const calculateHighest = () => {
             if (tmpData.length > 0) {
 
-                let sortedDays = tmpData.sort((a, b) => (a.Id > b.Id) ? -1 : 1);
+                const sortedDays = tmpData.sort((a, b) => (a.Id > b.Id) ? -1 : 1);
                 return sortedDays[0].Id + 1
             }
             else
@@ -146,9 +146,7 @@ export default function ActivityEditor(props: Props) {
         // console.log(`GETHIGHEST - Activity-Highest: ${topId}`)
     }
     const getAll = () => {
-
-
-        PresetDataService.getAllItemsDB("planner").then((data) => {
+        PlannerDataService.GetAllItemsDB(DataType.Planner).then((data) => {
             useTheOnValue(data, (snapshot) => {
                 if (snapshot.exists()) {
                     console.log("Snapshot found, mapping PLANNER data:");
@@ -157,7 +155,7 @@ export default function ActivityEditor(props: Props) {
                         if (!key)
                             return
                         const values = childSnapshot.val()
-                        let childData: IMyDay = {
+                        const childData: IMyDay = {
                             Id: Number.parseInt(key),
                             Name: values.Name ?? "",
                             Description: values.Descritption ?? "",
@@ -189,18 +187,19 @@ export default function ActivityEditor(props: Props) {
             return
         if (tmpDay.Description == undefined)
             tmpDay.Description = ""
-        PresetDataService.updateMyDayItemDb(id, myDay)
+        PlannerDataService.UpdateMyDayItemDb(id, myDay)
+        setMyDay(tmpDay)
     }
 
 
     const getOneDay = (key: number) => {
         let day: IMyDay;
         if (key) {
-            PresetDataService.getDbOne("planner", key).then((data) => {
+            PlannerDataService.GetDbOne(DataType.Planner, key).then((data) => {
                 useTheOnValue(data, (snapshot) => {
                     if (snapshot.exists()) {
                         console.log("Snapshot found PLANNER setting ONE:");
-                        let childData = snapshot.val() as IMyDay;
+                        const childData = snapshot.val() as IMyDay;
                         console.log(snapshot.val())
                         if (childData.Description == undefined)
                             childData.Description = ""
@@ -217,7 +216,7 @@ export default function ActivityEditor(props: Props) {
         setMyDay(day)
     }
 
-    let tmpPreset: IPreset[] = []
+    const tmpPreset: IPreset[] = []
 
     const setThePresets = () => {
         setPresets(tmpPreset)
@@ -225,7 +224,7 @@ export default function ActivityEditor(props: Props) {
 
 
     const getPresetDbData = () => {
-        PresetDataService.getAllItemsDB("presets").then((data) => {
+        PlannerDataService.GetAllItemsDB(DataType.Presets).then((data) => {
             useTheOnValue(data, (snapshot) => {
                 if (snapshot.exists()) {
                     console.log("Snapshot found, mapping PRESET data:");
@@ -233,7 +232,7 @@ export default function ActivityEditor(props: Props) {
                         const key = childSnapshot.key;
                         if (!key)
                             return
-                        let childData = childSnapshot.val() as IPreset;
+                        const childData = childSnapshot.val() as IPreset;
                         childData.Id = Number.parseInt(key);
                         tmpPreset.push(childData);
                     })
@@ -255,12 +254,12 @@ export default function ActivityEditor(props: Props) {
             const tmpDay = { ...myDay }
             tmpDay.Activities = tmpPreset.Activities
             setMyDay(tmpDay)
-            updateMyDay(tmpDay.Id)
+            // updateMyDay(tmpDay.Id)
         }
     }
 
     const updateName = (event) => {
-        let name = event.target.value;
+        const name = event.target.value;
         const tmpActivity = { ...myDay }
         tmpActivity.Name = name
         if (tmpActivity.Id === 0) {
@@ -270,59 +269,12 @@ export default function ActivityEditor(props: Props) {
         }
         setMyDay(tmpActivity)
         return null
-        updateMyDay(tmpActivity.Id)
+        // updateMyDay(tmpActivity.Id)
     }
 
-    // const moveUp = (index: number, id: number | null) => {
-    //     console.log(`Index: ${index}  - Id: ${id}`)
-    //     let activityDiv = document.getElementById(`act${index.toString()}`);
-    //     if (activityDiv && id !== null) {
-    //         const tmpActivity: IMyDay = { ...myDay }
-    //         if (tmpActivity.Id == 0)
-    //             tmpActivity.Id = props.dayArrayLength
-    //         if (tmpActivity.Activities.length > 0) {
-    //             const activity = tmpActivity?.Activities[id]
-    //             let activityIdNum = Number.parseInt(activity.Order ?? "0");
-    //             console.log(`Style: ${activity?.Order}`)
-    //             if (activityIdNum > 0)
-    //                 activityIdNum -= 1;
-    //             activityDiv.style.order = `${activityIdNum}`
-    //             activity.Order = activityIdNum ? activityIdNum.toString() : "0";
-    //             tmpActivity.Activities[index] = activity
-    //             setMyDay(tmpActivity)
-    //             // updateMyDay(id)
-
-    //             console.log(`Style: ${activityDiv.style.order}`)
-    //         }
-    //     }
-    // }
-    // const moveDown = (index: number, id: number | null) => {
-    //     console.log(`Index: ${index}  - Id: ${id}`)
-    //     let activityDiv = document.getElementById(`act${index.toString()}`);
-    //     if (activityDiv && id !== null) {
-    //         const tmpActivity: IMyDay = { ...myDay }
-    //         if (tmpActivity.Activities.length > 0) {
-    //             const activity = tmpActivity?.Activities[index]
-    //             let activityIdNum = Number.parseInt(activity.Order || "0");
-    //             console.log(`Style: ${activity?.Order}`)
-    //             // if (activityIdNum <= 0)
-    //             //     activityIdNum += 2;
-    //             // else
-    //             activityIdNum += 1;
-    //             activityDiv.style.order = `${activityIdNum}`
-    //             activity.Order = activityIdNum ? activityIdNum.toString() : "0";
-    //             tmpActivity.Activities[index] = activity
-    //             setMyDay(tmpActivity)
-    //             // updateMyDay(id)
-
-    //             console.log(`Style: ${activityDiv.style.order}`)
-    //         }
-    //     }
-
-    // }
     const changeOrder = (moveUp: boolean, elementIdString: string, index: number, id: number | null) => {
         console.log(`Index: ${index}  - Id: ${id}`)
-        let activityDiv = document.getElementById(`${elementIdString}${index.toString()}`);
+        const activityDiv = document.getElementById(`${elementIdString}${index.toString()}`);
         if (activityDiv && id !== null) {
             const tmpActivity: IMyDay = { ...myDay }
             if (tmpActivity.Activities.length > 0) {
@@ -350,45 +302,33 @@ export default function ActivityEditor(props: Props) {
 
     }
 
-    const selectImage = (index: number, id: number) => {
-        const tmpActivity: IMyDay = { ...myDay }
-        if (tmpActivity.Activities.length > 0) {
-            const activity = tmpActivity?.Activities[index]
-            activity.Selected = true
-            activity.Order = "0"
-            tmpActivity.Activities[index] = activity
-            setMyDay(tmpActivity)
-        }
-        updateMyDay(id)
-    }
-
     const selectCallback = (theSelected: Array<ISelectImage>) => {
         console.log(theSelected)
-        let tmpActivities: IDayActivity[] = []
+        const tmpActivities: IDayActivity[] = []
         let tmpData: Array<ISelectImage> = [];
         tmpData = Array.from({ ...theSelected });
         Object.keys(theSelected).map((i) => {
             if (theSelected[i].Selected) {
-                let tmpActivity: IDayActivity =
+                const tmpActivity: IDayActivity =
                 {
                     Id: Number.parseInt(i),
                     Name: theSelected[i].Image,
                     Image: theSelected[i].Image,
-                    Order: theSelected[i].toString(),
+                    Order: theSelected[i].Order.toString(),
                     Selected: theSelected[i].Selected
                 }
 
                 tmpActivities.push(tmpActivity)
             }
         })
-        let tmpPreset: IMyDay = { ...myDay }
+        const tmpPreset: IMyDay = { ...myDay }
         tmpPreset.Activities = tmpActivities
         setMyDay(tmpPreset)
         return theSelected
     }
 
     const removeActivity = (activityId: number, activityIndex: number) => {
-        let tmpday = { ...myDay }
+        const tmpday = { ...myDay }
         if (tmpday.Id && tmpday.Id !== null && activityId !== null) {
             const index: number = tmpday.Activities.indexOf(tmpday.Activities[activityIndex], 0)
             if (index > -1) {
@@ -400,7 +340,7 @@ export default function ActivityEditor(props: Props) {
             if (tmpday.Description === undefined)
                 tmpday.Description = ""
             handleDay(tmpday)
-            PresetDataService.updateMyDayItemDb(tmpday.Id, tmpday)
+            PlannerDataService.UpdateMyDayItemDb(tmpday.Id, tmpday)
             getOneDay(tmpday.Id)
         }
 
@@ -408,8 +348,8 @@ export default function ActivityEditor(props: Props) {
     return (
         <div>
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
-            <Button hidden={hidden} className='classes.button'  onClick={handleClickOpen}>
-                {(myDay.Activities && myDay.Activities.length > 0) ? <EditIcon/>  : <AddIcon/>}
+            <Button hidden={hidden} className='classes.button' onClick={handleOpen}>
+                {(myDay.Activities && myDay.Activities.length > 0) ? <EditIcon /> : <AddIcon />}
             </Button>
             <BootstrapDialog
                 onClose={() => handleClose(false)}
@@ -445,7 +385,7 @@ export default function ActivityEditor(props: Props) {
                                         {
                                             myDay.Activities.map((activity, activityIndex) =>
                                             (
-                                                
+
                                                 <div className="listContainerRow" id={activity.Name + activityIndex.toString()} key={activityIndex} style={{ order: (activity.Order), }}>
                                                     <div
 
@@ -456,16 +396,16 @@ export default function ActivityEditor(props: Props) {
                                                     // }}
                                                     >
                                                         <img src={`../images/${activity.Image}`} />
-                                                        <Divider component="li" sx={{ margin: '5%' }} variant='middle' />
+                                                        {/* <Divider component="li" sx={{ margin: '5%' }} variant='middle' /> */}
                                                     </div>
-                                                    <Divider component="li" orientation="vertical" flexItem />
+                                                    {/* <Divider component="li" orientation="vertical" flexItem /> */}
                                                     <div className='listContainerRowButtons'>
                                                         {activity.Order !== "0" ?
-                                                            <Button onClick={() => changeOrder(true,activity.Name, activityIndex, myDay.Id)}>{' '}<ExpandLessOutlined /></Button>
+                                                            <Button onClick={() => changeOrder(true, activity.Name, activityIndex, myDay.Id)}>{' '}<ExpandLessOutlined /></Button>
                                                             :
                                                             ""}
                                                         <br />
-                                                        <Button onClick={() => changeOrder(false,activity.Name,activityIndex, myDay.Id)}>{' '}<ExpandMoreOutlined /></Button>
+                                                        <Button onClick={() => changeOrder(false, activity.Name, activityIndex, myDay.Id)}>{' '}<ExpandMoreOutlined /></Button>
                                                         <br />
                                                         <Button onClick={() => removeActivity(activity.Id, activityIndex)}><i className="fa fa-trash" aria-hidden="true"></i></Button>
                                                     </div>
@@ -481,7 +421,8 @@ export default function ActivityEditor(props: Props) {
                     </>
                 </DialogContent>
                 <DialogActions>
-                    <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+                    {/* <div className='editButtonsBox'></div> */}
+                    <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }} fullWidth={true} >
                         <InputLabel id="demo-simple-select-standard-label">Select template</InputLabel>
                         <Select
                             labelId="demo-simple-select-standard-label"
@@ -489,7 +430,7 @@ export default function ActivityEditor(props: Props) {
                             value={`999`}
                             onChange={e => setActivitiesFromPreset(e.target.value)}
                             label="Preset"
-
+                            
 
                         >
                             <MenuItem value={`999`} key={`999`} selected={true}>
@@ -509,18 +450,22 @@ export default function ActivityEditor(props: Props) {
 
                             {/* )} */}
                         </Select>
+
                     </FormControl>
-                    {presets.length > 0 ?
-                        <SelectImage selectCallback={selectCallback} activities={myDay.Activities} images={["image10.png", "image11.png", "image5.png", "image6.png", "image10.png", "image11.png", "image5.png", "image6.png", "image7.png", "image8.png"]} />
-                        :
-                        ""
-                    }
-                    <Button autoFocus onClick={() => handleClose(true)}>
-                        Save changes
-                    </Button>
-                </DialogActions>
-            </BootstrapDialog>
-        </div>
+                    <div className='editButtons'>
+                        {presets.length > 0 ?
+                            <SelectImage selectCallback={selectCallback} activities={myDay.Activities} images={["image10.png", "image11.png", "image5.png", "image6.png", "image10.png", "image11.png", "image5.png", "image6.png", "image7.png", "image8.png"]} />
+                            :
+                            ""
+                        }
+                        <Button autoFocus onClick={() => handleClose(true)}>
+                            Save changes
+                        </Button>
+                    </div>
+                {/* </div> */}
+            </DialogActions>
+        </BootstrapDialog>
+        </div >
     );
 
 

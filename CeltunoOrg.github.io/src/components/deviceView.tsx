@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import "../../styles/Activities.css"
-import { IDayActivity, IImagePreset, IMyDay, IPreset, IUser } from '../types/day.type';
+import { DataType, IDayActivity, IImagePreset, IMyDay, IPreset, IUser } from '../types/day.type';
 import CustomizedDialogs from './modules/dialogTest';
-import PresetDataService from "../services/preset-firebase-service"
+import PlannerDataService from "../services/planner-firebase-service"
 import { useTheOnValue } from '../../firebase-planner';
 import { Button } from '@mui/material';
 import ActivityEditor from './modules/editActivity';
@@ -19,12 +19,12 @@ const DeviceView = (props: Props) => {
         // handleDay(testData[0])
         // getAllData(null);
         if (days.length <= 0)
-            getDayDbData("planner")
+            getDayDbData()
 
 
 
     })
-    const shallowClone = obj => Object.assign({}, obj);
+    // const shallowClone = obj => Object.assign({}, obj);
 
     const [hideAll, setHidden] = useState<boolean>(true);
 
@@ -37,25 +37,25 @@ const DeviceView = (props: Props) => {
 
     const [days, setDays] = useState<Array<IMyDay>>(new Array<IMyDay>);
 
-    const [topId, setTopId] = useState<number>(0);
+    // const [topId, setTopId] = useState<number>(0);
 
-    const handleHidden = () => {
-        const newState = !hideAll
-        console.log(`From: ${hideAll} To: ${newState}`)
-        if (props.hideAll === true)
-            setHidden(props.hideAll)
-    }
+    // const handleHidden = () => {
+    //     const newState = !hideAll
+    //     console.log(`From: ${hideAll} To: ${newState}`)
+    //     if (props.hideAll === true)
+    //         setHidden(props.hideAll)
+    // }
 
-    let tmpData: Array<IMyDay> = new Array<IMyDay>;
-    const getDayDbData = (path: string | null) => {
-        PresetDataService.getAllItemsDB(path).then((data) => {
+    const tmpData: Array<IMyDay> = new Array<IMyDay>;
+    const getDayDbData = () => {
+        PlannerDataService.GetAllItemsDB(DataType.Planner).then((data) => {
             useTheOnValue(data, (snapshot) => {
                 if (snapshot.exists()) {
                     console.log("Snapshot found, mapping data:");
                     snapshot.forEach(function (childSnapshot) {
                         const key = childSnapshot.key;
                         const values = childSnapshot.val()
-                        let childData: IMyDay = {
+                        const childData: IMyDay = {
                             Id: Number.parseInt(key ?? "0") ?? "",
                             Name: values.Name,
                             Description: values.Descritption,
@@ -78,8 +78,8 @@ const DeviceView = (props: Props) => {
     const removeDayItem = (key: number | null) => {
         if (key === null)
             return
-        PresetDataService.removeDayItemDb(key)
-        getDayDbData("planner")
+        PlannerDataService.RemoveDayItemDb(key)
+        getDayDbData()
     }
 
     const setTheDays = (day: IMyDay | null) => {
@@ -88,17 +88,17 @@ const DeviceView = (props: Props) => {
         setDays(tmpData)
     }
 
-    const editCallback = (theSelected: IMyDay | null) => {
-        if (theSelected) {
+    // const editCallback = (theSelected: IMyDay | null) => {
+    //     if (theSelected) {
 
-            console.log(`Edit Callback: ${theSelected.Id}`)
-            if (theSelected.Id !== null) {
-                PresetDataService.updateMyDayItemDb(theSelected.Id, theSelected)
-                getDayDbData("planner")
-            }
-        }
-        return theSelected
-    }
+    //         console.log(`Edit Callback: ${theSelected.Id}`)
+    //         if (theSelected.Id !== null) {
+    //             PlannerDataService.updateMyDayItemDb(theSelected.Id, theSelected)
+    //             getDayDbData()
+    //         }
+    //     }
+    //     return theSelected
+    // }
 
 
     return (
@@ -106,11 +106,11 @@ const DeviceView = (props: Props) => {
             <div className='appMainContainerDevice'>
                 <div className='maingridContainer '>
                     {/* <h2>Device</h2> */}
-                    <div style={{ display: 'flex', flexDirection: 'row' }}>
-                        <Button hidden={hideAll} variant='outlined' onClick={() => { getDayDbData("planner") }}><i className="fa fa-refresh" aria-hidden="true"></i></Button>
-                        <ActivityEditor hideAll={true} editCallback={editCallback} myDay={day} dayArrayLength={topId} />
+                    {/* <div style={{ display: 'flex', flexDirection: 'row' }}>
+                        <Button hidden={hideAll} variant='outlined' onClick={() => { getDayDbData() }}><i className="fa fa-refresh" aria-hidden="true"></i></Button>
+                        <ActivityEditor hideAll={true} editCallback={editCallback} propMyDay={day} isOpen={false} />
 
-                    </div>
+                    </div> */}
                     <div className="day-grid-container">
                         {
                             days?.map((dayItem, dayIndex) => (
@@ -127,10 +127,10 @@ const DeviceView = (props: Props) => {
                                                 </div>
                                             ))
                                             :
-                                            ""
+                                            "No activities"
                                         }
                                     </div>
-                                    <ActivityEditor hideAll={hideAll} editCallback={editCallback} myDay={dayItem} dayArrayLength={topId} />
+                                    {/* <ActivityEditor hideAll={hideAll} editCallback={editCallback} propMyDay={dayItem} isOpen={false} />
                                     {
                                         dayItem.Id !== null ?
                                             <Button hidden={hideAll} onClick={(() => removeDayItem(dayItem.Id))}>
@@ -138,7 +138,7 @@ const DeviceView = (props: Props) => {
                                             </Button>
                                             :
                                             ""
-                                    }
+                                    } */}
                                 </div>
                             ))
                         }

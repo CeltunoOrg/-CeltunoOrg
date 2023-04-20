@@ -1,20 +1,24 @@
-import PresetDataService from "../../services/preset-firebase-service"
-import { useTheOnValue } from '../../../firebase-planner';
-import { IPreset } from "../../types/day.type";
 
+import { useTheOnValue } from '../../../firebase-planner';
+import { DataType, IPreset } from "../../types/day.type";
+import presetFirebaseService from "../../services/preset-firebase-service";
+
+
+let topId = 0
 export const FetchAllPresets = () => {
-    let topId = 0
+    // const[topId, setTopId] = useState<number>(0)
     const tmpData: Array<IPreset> = new Array<IPreset>
-    PresetDataService.getAllItemsDB("presets").then((data) => {
+    presetFirebaseService.GetAllItemsDB(DataType.Presets).then((data) => {
         useTheOnValue(data, (snapshot) => {
             if (snapshot.exists()) {
+                tmpData.length = 0;
                 console.log("Snapshot found, mapping PRESETS data:");
                 snapshot.forEach(function (childSnapshot) {
                     const key = childSnapshot.key;
                     if (!key)
                         return
                     const values = childSnapshot.val()
-                    let childData: IPreset = {
+                    const childData: IPreset = {
                         Id: Number.parseInt(key),
                         Name: values.Name ?? "",
                         Description: values.Descritption ?? "",
@@ -23,7 +27,10 @@ export const FetchAllPresets = () => {
                     childData.Id = Number.parseInt(key);
                     tmpData.push(childData);
                 })
-                topId = HighestPresetId(tmpData)
+
+                const tmpId = HighestPresetId(tmpData)
+                if (topId < tmpId)
+                    topId = tmpId
                 console.log(`DB items found: ${tmpData.length} Top Id: ${topId}`);
             }
         })
@@ -46,7 +53,7 @@ export const UpdatePreset = (id: number, preset: IPreset) => {
     if (preset.Description == undefined)
         preset.Description = ""
     console.log("Updating preset");
-    PresetDataService.updatePresetItemDb(id, preset).then(() =>
+    presetFirebaseService.UpdatePresetItemDb(id, preset).then(() =>
         console.log("Updated preset")
 
     ).catch((error) => {
@@ -56,7 +63,7 @@ export const UpdatePreset = (id: number, preset: IPreset) => {
 
 export const HighestPresetId = (data: Array<IPreset>) => {
     if (data.length > 0) {
-        let sortedDays = data.sort((a, b) => (a.Id > b.Id) ? -1 : 1);
+        const sortedDays = data.sort((a, b) => (a.Id > b.Id) ? -1 : 1);
         return sortedDays[0].Id + 1
     }
     else
@@ -65,22 +72,22 @@ export const HighestPresetId = (data: Array<IPreset>) => {
 }
 
 export const FetchOnePreset = (key: number) => {
-    let preset:IPreset  = {
+    let preset: IPreset = {
         Id: 0,
         Name: "",
         Description: "",
         Activities: []
     };// IPreset | null;    
     if (key) {
-        PresetDataService.getDbOne("presets", key).then((data) => {
+        presetFirebaseService.GetDbOne(DataType.Presets, key).then((data) => {
             useTheOnValue(data, (snapshot) => {
                 if (snapshot.exists()) {
                     console.log("Snapshot found PRESET setting ONE:");
-                    let childData = snapshot.val() as IPreset;
+                    const childData = snapshot.val() as IPreset;
                     if (childData.Description == undefined)
                         childData.Description = ""
                     childData.Id = key;
-                    preset =  childData;
+                    preset = childData;
                     // return preset
                 }
                 // else
@@ -88,16 +95,16 @@ export const FetchOnePreset = (key: number) => {
                 // handlePreset(preset)
             })
 
-        }).then(() =>{
+        }).then(() => {
 
             console.log("Fetched preset")
         }
-        
+
         ).catch((error) => {
             console.log(error)
         })
     }
-    return preset.Id === 0?  null: preset
+    return preset.Id === 0 ? null : preset
     // else
     //     return null
 }
@@ -110,24 +117,33 @@ export const RemovePresetActivity = (activityId: number, activityIndex: number, 
         }
         if (preset.Description === undefined)
             preset.Description = ""
-        PresetDataService.updatePresetItemDb(preset.Id, preset).then(() =>
-        console.log("Removed preset activity")
+        presetFirebaseService.UpdatePresetItemDb(preset.Id, preset).then(() =>
+            console.log("Removed preset activity")
 
-    ).catch((error) => {
-        console.log(error)
-    })
+        ).catch((error) => {
+            console.log(error)
+        })
     }
 }
 
 export const RemovePreset = (key: number) => {
-    PresetDataService.removePresetItemDb(key).then(() =>
+    presetFirebaseService.RemovePresetItemDb(key).then(() =>
         console.log("Removed preset")
 
     ).catch((error) => {
         console.log(error)
     })
 }
+const PresetDataManager = {
+    FetchAllPresets,
+    UpdatePreset,
+    FetchOnePreset,
+    RemovePresetActivity,
+    RemovePreset,
+    HighestPresetId
+}
 
+export default PresetDataManager
 // const getPresetDbData = () => {
 //     PresetDataService.getAllItemsDB("presets").then((data) => {
 //         useTheOnValue(data, (snapshot) => {

@@ -7,11 +7,8 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
-import Typography from '@mui/material/Typography';
-import PresetDataService from "../../services/preset-firebase-service"
-import { IDayActivity, IImagePreset, IMyDay, IPreset, ISelectImage } from '../../types/day.type';
-import { FormControl, ImageList, ImageListItem, ImageListItemBar, InputLabel, MenuItem, Select, TextField } from '@mui/material';
-import StarBorderIcon from '@mui/icons-material/StarBorder';
+import { IDayActivity, ISelectImage } from '../../types/day.type';
+import { ImageList, ImageListItem, ImageListItemBar } from '@mui/material';
 import DoneIcon from '@mui/icons-material/Done';
 import CheckBoxOutlineBlankOutlined  from '@mui/icons-material/CheckBoxOutlineBlankOutlined';
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -66,7 +63,6 @@ export default function SelectImage(props: Props) {
     const [open, setOpen] = React.useState(false);
     
     const handleClickOpen = () => {
-        const ttt = result(props.activities,testActivities)
         setOpen(true);
     };
     
@@ -80,24 +76,20 @@ export default function SelectImage(props: Props) {
         setOpen(false);
     };
 
-
+    const [order, setOrder] = React.useState<number>(0)
     const [selected, setSelected] = React.useState<IDayActivity[]>([]);
-    const [selectedBool, setSelectedBool] = React.useState<boolean>(false);
 
 
 
-    const getimages = () => {
-        let tmp: ISelectImage[] = []
-        tmp = { ...selected }
-        return tmp
-    }
     const imageClick = (image: string, index: number) => {
         if (image) {
             // let tmpImages: ISelectImage[]
-            initImages = { ...selected }
+            initActivities = { ...selected }
             // let tmpSelcted: string[] = []
-            initImages[index].Selected = initImages[index].Selected === true ? false : true;
-            setSelected(initImages)
+            initActivities[index].Selected = initActivities[index].Selected === true ? false : true;
+            setSelected(initActivities)
+            initActivities[index].Order = order.toString()
+            setOrder(order+1)
             // tmpSelcted =  { ...selected }
             // tmpSelcted.push(image)
             // setSelected(tmpSelcted)
@@ -105,32 +97,14 @@ export default function SelectImage(props: Props) {
             // let ttt = testData
         }
     }
-    let selectTest = false;
-    let initImages: IDayActivity[] = [];
-    function merge(arr1: unknown[], arr2: unknown[]) {
-        const newArr: unknown[] = [...arr1];
-        for (let i = 0; i < arr2.length; i++) {
-            const item = arr2[i];
-            if (newArr.includes(item)) continue;
-            newArr.push(item);
-        }
-        return newArr;
-    }
+    let initActivities: IDayActivity[] = [];
     useEffect(() => {
-        initImages = testActivities
-        setSelected(initImages)
+        initActivities = testActivities
+        setSelected(initActivities)
     }, []);
     
-    initImages = initImages.length <= 0 ? testActivities : initImages// props.activities ?? [] : initImages 
+    initActivities = initActivities.length <= 0 ? testActivities : initActivities// props.activities ?? [] : initImages 
     
-    const result = (arr1: IDayActivity[], arr2: IDayActivity[]) => {
-        return arr2.reduce(
-            (acc, item) => {
-                return acc.includes(item) ? acc : [...acc, item]
-            },
-            [...arr1]
-        )
-    }
     
     return (
         <div>
@@ -150,7 +124,7 @@ export default function SelectImage(props: Props) {
                     {/* <Typography gutterBottom>
                         Name - Image - Description
                     </Typography> */}
-                    {(initImages && initImages.length > 0) 
+                    {(initActivities && initActivities.length > 0) 
                     ?
                         <>
                             {
@@ -161,21 +135,22 @@ export default function SelectImage(props: Props) {
                                         <ImageList sx={{ width: 500, height: 650 }} cols={3} rowHeight={164}>
 
                                             {
-                                                initImages.map((selectActivity, imgIndex) =>
+                                                initActivities.map((selectActivity, imgIndex) =>
                                                 (
                                                     <ImageListItem key={selectActivity.Id + imgIndex}>
                                                         <ImageListItemBar
                                                             sx={{
-                                                                // background:
-                                                                //     // 'linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, ' +
-                                                                //     // 'rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
-                                                                //     'rgba(0,0,0,0) 100%)'
+                                                                background:
+                                                                'rgba(0,0,0,0)'
+                                                                //     'linear-gradient(to bottom, rgba(0,0,0,0.5) 10%, ' +
+                                                                //     'rgba(0,0,0,0.3) 50%, rgba(0,0,0,0) 80%)'
+
                                                             }}
                                                             title={""}
                                                             position="top"
                                                             actionIcon={
                                                                 <IconButton
-                                                                    sx={{ color: 'white' }}
+                                                                    sx={{ color: 'grey' }}
                                                                     aria-label={`select ${""}`}
                                                                     onClick={() => imageClick(selectActivity.Image, imgIndex)}
                                                                 >
@@ -279,95 +254,4 @@ const testActivities: IDayActivity[] =
         },
 
     ]
-const testImages: ISelectImage[] =
-    [
-        {
-            Image: "image5.png",
-            Selected: false
-        },
-        {
-            Image: "image6.png",
-            Selected: false
-        },
-        {
-            Image: "image7.png",
-            Selected: false
-        },
-        {
-            Image: "image8.png",
-            Selected: false
-        },
-        {
-            Image: "image9.png",
-            Selected: false
-        },
-        {
-            Image: "image10.png",
-            Selected: false
-        },
-        {
-            Image: "image11.png",
-            Selected: false
-        },
 
-    ]
-
-const testData: IMyDay[] =
-    [
-        {
-            Id: 1,
-            Name: "Preset",
-            Description: "Description",
-            Activities: [
-
-                {
-                    Id: 2,
-                    Name: "Preset",
-                    // Description: "Description",
-                    Image: "image6.png",
-                    Order: "0",
-                    Selected: false
-                },
-                {
-                    Id: 3,
-                    Name: "Preset",
-                    // Description: "Description",
-                    Image: "image7.png",
-                    Order: "0",
-                    Selected: false
-                },
-                {
-                    Id: 4,
-                    Name: "Preset",
-                    // Description: "Description",
-                    Image: "image8.png",
-                    Order: "0",
-                    Selected: false
-                }
-            ]
-        },
-        {
-            Id: 5,
-            Name: "Preset2",
-            Description: "Description2",
-            // images: ["image9.png"],
-            Activities: [
-                {
-                    Id: 6,
-                    Name: "Preset",
-                    // Description: "Description",
-                    Image: "image10.png",
-                    Order: "0",
-                    Selected: false
-                },
-                {
-                    Id: 7,
-                    Name: "Preset",
-                    // Description: "Description",
-                    Image: "image11.png",
-                    Order: "0",
-                    Selected: false
-                }
-            ]
-        }
-    ]

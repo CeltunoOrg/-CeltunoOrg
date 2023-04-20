@@ -6,7 +6,7 @@ import { logIn, logOut, signUp, anunLogIn } from "../../authProvider"
 import { db as fireDb, firestore, useTheOnValue, useTheRef } from "../../../firebase"
 import { getDatabase, onValue, set, orderByKey, orderByChild, query } from "firebase/database";
 import IDay from "../../types/day.type";
-import DayService from "../../services/day-firebase-service"
+import DayService from "./day-firebase-service"
 
 
 var theId = ""
@@ -162,7 +162,7 @@ export default class Day extends React.Component<Props, State> {
         console.log("Updating day");
         console.log("Current state: ")
         console.log(day)
-        DayService.updateItemDb(theId, day)
+        DayService.updateDayItemDb(theId, day)
         console.log("Day Updated?");
         this.getDay();
         MatchDayIdFromURI

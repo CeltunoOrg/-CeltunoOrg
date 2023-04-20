@@ -6,14 +6,14 @@ import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
-const steps = ['Select campaign settings', 'Create an ad group', 'Create an ad'];
+const steps = ['Select name', "Select preset", 'Add images', 'Save'];
 
 export default function Testing() {
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set<number>());
 
   const isStepOptional = (step: number) => {
-    return step === 1;
+    return step === 1 || step === 2;
   };
 
   const isStepSkipped = (step: number) => {
@@ -55,30 +55,36 @@ export default function Testing() {
   };
 
   return (
-    <Box sx={{ width: '100%' }}>
+  <Box sx={{ width: '100%' }}>
+
+        <Box sx={{  margin:'1%',width: '90%' }}>
+            Start adding...
+        </Box>
+    <Box sx={{ padding:'3%', width: '100%' }}>
       <Stepper activeStep={activeStep}>
         {steps.map((label, index) => {
-          const stepProps: { completed?: boolean } = {};
-          const labelProps: {
-            optional?: React.ReactNode;
-          } = {};
-          if (isStepOptional(index)) {
-            labelProps.optional = (
+            const stepProps: { completed?: boolean } = {};
+            const labelProps: {
+                optional?: React.ReactNode;
+            } = {};
+            if (isStepOptional(index)) {
+                labelProps.optional = (
               <Typography variant="caption">Optional</Typography>
-            );
-          }
-          if (isStepSkipped(index)) {
-            stepProps.completed = false;
+              );
+            }
+            if (isStepSkipped(index)) {
+                stepProps.completed = false;
           }
           return (
-            <Step key={label} {...stepProps}>
+              <Step key={label} {...stepProps}>
+
               <StepLabel {...labelProps}>{label}</StepLabel>
             </Step>
           );
         })}
       </Stepper>
       {activeStep === steps.length ? (
-        <React.Fragment>
+          <React.Fragment>
           <Typography sx={{ mt: 2, mb: 1 }}>
             All steps completed - you&apos;re finished
           </Typography>
@@ -88,7 +94,7 @@ export default function Testing() {
           </Box>
         </React.Fragment>
       ) : (
-        <React.Fragment>
+          <React.Fragment>
           <Typography sx={{ mt: 2, mb: 1 }}>Step {activeStep + 1}</Typography>
           <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
             <Button
@@ -96,12 +102,12 @@ export default function Testing() {
               disabled={activeStep === 0}
               onClick={handleBack}
               sx={{ mr: 1 }}
-            >
+              >
               Back
             </Button>
             <Box sx={{ flex: '1 1 auto' }} />
             {isStepOptional(activeStep) && (
-              <Button color="inherit" onClick={handleSkip} sx={{ mr: 1 }}>
+                <Button color="inherit" onClick={handleSkip} sx={{ mr: 1 }}>
                 Skip
               </Button>
             )}
@@ -112,5 +118,6 @@ export default function Testing() {
         </React.Fragment>
       )}
     </Box>
+      </Box>
   );
 }

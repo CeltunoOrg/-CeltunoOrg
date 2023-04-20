@@ -43,12 +43,26 @@ export type IMyDay = {
   Activities: IDayActivity[]
 }
 
+export enum  DataType {
+  Planner = "planner",
+  Presets = "presets",
+  User = "user"
+}
+
 export type IUser = {
-  // Id: number,
-  // Name: string,
-  // Week: IMyDay[] , 
+  Id: number,
+  Name: string,
+  Days: IMyDay[] , 
   Presets: IPreset[]
   LastDay: IMyDay | null
+  Config:{
+    title: string,
+    titleSize: string,
+    color1: string,
+    color2: string,
+    background: string,
+    role:string
+  }
   // LastActivity: IDayActivity
   // LastPreset: IPreset
 }

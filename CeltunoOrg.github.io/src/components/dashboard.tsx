@@ -43,6 +43,7 @@ class Dashboard extends Component<Props, State>{
                         <Button className={'sizeButton'} variant='outlined' href='/#/activities'> Activities </Button>
                         <Button className={'sizeButton'} variant='outlined' href='/#/presets'> Presets    </Button>
                         <Button className={'sizeButton'} variant='outlined' href='/#/deviceView'> Device view    </Button>
+                        <Button hidden={!this.props.userPreferences.hideAll} className={'sizeButton'} variant='outlined' href='/#/user'> User    </Button>
                         <Button className={'sizeButton'} variant='outlined' href='/#/test'> Testing    </Button>
                     <Divider component={"li"}/>
                     <a className={'sizeButton'} href='/#/activities'> Activities </a>

@@ -1,12 +1,12 @@
 import React from "react";
-import { createRoot } from "react-dom/client";
+import { Root, createRoot } from "react-dom/client";
 import { BrowserRouter, HashRouter, useParams } from "react-router-dom"
 import "bootstrap/dist/css/bootstrap.min.css";
 import Activities from "./components/activities";
 import './index.css';
 import "../styles/App.css"
 // import '../styles/tmpstyle.module.css'
-import App from './App';
+import App from './components/Unused/App';
 import App3 from "./App3";
 import DeviceView from "./components/deviceView";
 // import App2 from './App2';
@@ -19,36 +19,34 @@ import DeviceView from "./components/deviceView";
 //        Now showing post {ids}
 //      </div>;
 // }
+let root: Root
 const cont = document.getElementById('root');
-const root = createRoot(cont!);
+if (cont) {
 
+    root = createRoot(cont!);
 
-const AppChoice = (choice: number) => {
-    if (choice === 2) {
-        // return <App2 isOpen3={false} />
+    const AppChoice = (choice: number) => {
+
+        if (choice === 1) {
+            return <App3 isOpen3={false} />
+        }
+        else if (choice === 2) {
+            return <Activities />
+        }
+        else {
+            return <DeviceView hideAll={true} />
+        }
     }
-    else if (choice === 3) {
-        return <App3 isOpen3={false} />
-    }
-    else if (choice === 4) {
-        return <Activities isOpen={false} />
-    }
-    else if (choice === 5) {
-        return <DeviceView hideAll={true} />
-    }
-    else {
-        return <App />
-    }
+    root.render(
+        <div className="App ">
+            <HashRouter>
+
+                {/* <BrowserRouter> */}
+
+                {AppChoice(1)}
+
+                {/* </BrowserRouter> */}
+            </HashRouter>
+        </div>
+    );
 }
-root.render(
-    <div className="App ">
-<HashRouter>
-
-        {/* <BrowserRouter> */}
-
-            {AppChoice(3)}
-
-        {/* </BrowserRouter> */}
-</HashRouter>
-    </div>
-);

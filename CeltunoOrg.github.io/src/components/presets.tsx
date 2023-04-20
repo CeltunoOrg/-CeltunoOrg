@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import "../../styles/Presets.css"
-import { IDayActivity, IImagePreset, IMyDay, IPreset, IUser } from '../types/day.type';
+import { DataType, IMyDay, IPreset } from '../types/day.type';
 import PresetEditor from './modules/editPreset';
-import PresetDataService from "../services/preset-firebase-service"
-import { useTheOnValue } from '../../firebase-planner';
 import { Button } from '@mui/material';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ArrowBackIcon from '@mui/icons-material/ArrowBackIosNewOutlined';
+import PresetDataManager from './functions/presetDataManager';
+import userFirebaseService from '../services/user-firebase-service';
+import { useTheOnValue } from '../../firebase-planner';
+import presetFirebaseService from '../services/preset-firebase-service';
 
 
 
@@ -18,14 +20,14 @@ interface Props {
 const Presets = (Props: Props) => {
 
     useEffect(() => {
-        // handleDay(testData[0])
-        // getAllData(null);
-        getPresetDbData("presets")
+        if (!presets || presets.length <= 0)
+        
+        getPresetDbData()
     })
 
-    const [isOpen, setopen] = useState({
-        isOpen: false
-    });
+    // const [isOpen, setopen] = useState({
+    //     isOpen: false
+    // });
 
     const [preset, setPreset] = useState<IPreset>({
         Id: 0,
@@ -38,16 +40,22 @@ const Presets = (Props: Props) => {
 
     const [topId, setTopId] = useState<number>(0);
 
-    let tmpData: Array<IPreset> = new Array<IPreset>;
-    const getPresetDbData = (path: string | null) => {
-        PresetDataService.getAllItemsDB(path).then((data) => {
+    const tmpData: Array<IPreset> = new Array<IPreset>;
+    const getPresetDbData = () => {
+        // const returndata = PresetDataManager.FetchAllPresets()
+        // if (returndata && returndata.presets.length > 0)
+        //     tmpData = returndata.presets;
+        // setThePresets(null)
+        //                 setThePresets(null)
+        presetFirebaseService.GetAllItemsDB(DataType.Presets).then((data) => {
             useTheOnValue(data, (snapshot) => {
                 if (snapshot.exists()) {
+                    tmpData.length = 0
                     console.log("Snapshot found, mapping data:");
                     snapshot.forEach(function (childSnapshot) {
                         const key = childSnapshot.key;
                         const values = childSnapshot.val()
-                        let childData: IPreset = {
+                        const childData: IPreset = {
                             Id: Number.parseInt(key ?? "0") ?? "",
                             Name: values.Name,
                             Description: values.Descritption,
@@ -55,9 +63,9 @@ const Presets = (Props: Props) => {
                         }
                         childData.Id = Number.parseInt(key ?? "0") ?? "";
                         tmpData.push(childData);
+                        setThePresets(null)
                     })
                     if (tmpData.length !== presets.length)
-                        setThePresets(null)
                     console.log("DB items found:");
                     console.log(tmpData.length)
                 }
@@ -67,89 +75,72 @@ const Presets = (Props: Props) => {
         return tmpData
     }
 
-    const sortPresetsByKey = (array: IPreset[]) => {
-        return array.sort((a, b) => {
-            return a.Id >= b.Id
-                ? 1
-                : -1
-        })
-    }
+    // const sortPresetsByKey = (array: IPreset[]) => {
+    //     return array.sort((a, b) => {
+    //         return a.Id >= b.Id
+    //             ? 1
+    //             : -1
+    //     })
+    // }
 
-    const removPresetItem = (key: number | null) => {
+    const removePresetItem = (key: number | null) => {
         if (key === null)
             return
-        PresetDataService.removePresetItemDb(key)
-        getPresetDbData("preset")
+
+
+        PresetDataManager.RemovePreset(key)
+        getPresetDbData()
     }
+
     const setThePresets = (day: IMyDay | null) => {
         if (day)
             setPreset(day)
         setPresets(tmpData)
     }
 
-   
+
     const editCallback = (theSelected: IMyDay | null) => {
         if (theSelected) {
 
             console.log(`Edit Callback: ${theSelected.Id}`)
             if (theSelected.Id !== null) {
-                PresetDataService.updateMyDayItemDb(theSelected.Id, theSelected)
-                getPresetDbData("presets")
+                PresetDataManager.UpdatePreset(theSelected.Id, theSelected)
+                getPresetDbData()
+                setThePresets(null)
             }
         }
         return theSelected
     }
-   
-    const theHighest = () => {
-       console.log(`Activity-Highest: ${topId}`)
-     function getHighest() {
-            if (presets.length > 0) {
 
-                let sortedPresets = presets.sort((a, b) => (a.Id > b.Id) ? -1 : 1);
-                return sortedPresets[0].Id
-            }
-            else
-                return 0
-        }
-        setTopId(getHighest())
-        console.log(`Activity-Highest: ${topId}`)
-    }
     return (
-            // {setThePresets}
         <>
             <div className='appMainContainer'>
                 <div className='maingridContainer '>
-                    <h2>Presets</h2>
-                    <div style={{display: 'flex',flexDirection: 'row'}}>
+                    <div style={{ display: 'flex', flexDirection: 'row' }}>
+                        <Button href='/#/'><ArrowBackIcon /></Button>
 
-                    {/* {activities.length <= 0 ? */}
-                    <Button href='/#/'><ArrowBackIcon/></Button>
-                        
-                    <Button  onClick={() => { getPresetDbData("presets") }}><RefreshIcon/></Button>
-                    <PresetEditor editCallback={editCallback} propCurrentPreset={preset} dayArrayLength={topId} />
+                        <Button onClick={() => { getPresetDbData() }}><RefreshIcon /></Button>
 
+                        <PresetEditor editCallback={editCallback} propCurrentPreset={preset} />
+                    </div>
+                    <div className='presetTitle'>
+                        <h2>Presets</h2>
                     </div>
                     <div className="preset-grid-container">
                         {
                             presets?.map((presetItem, presetIndex) => (
-                                <div className='preset-grid-item' key={presetItem.Name+presetIndex}>
+                                <div className='preset-grid-item' key={presetItem.Name + presetIndex}>
                                     <div className="presetListContainer ">
-                                    <h3 >{presetItem.Name}</h3>
+                                        <h3 >{presetItem.Name}</h3>
                                         {presetItem.Activities ?
                                             presetItem?.Activities.map((activity, activityIndex) =>
                                             (
 
                                                 <div className="activityPresetItem" id={"preset" + activity.Id} key={activityIndex} style={{ order: (activity.Order), }}>
-                                                    {/* <div className="grid-item"> */}
 
-                                                    <div>
-                                                        {/* {`Order: ${activity.Order}`} */}
-                                                    </div>
                                                     <div className="activityImageListcontainer">
                                                         <img onError={e => { e.currentTarget.src = "images/error.png" }} src={"images/" + activity.Image} alt={activity.Name}></img>
                                                     </div>
-
-                                                    {/* </div> */}
                                                 </div>
                                             ))
                                             :
@@ -157,16 +148,16 @@ const Presets = (Props: Props) => {
                                         }
                                     </div>
                                     <div className='gridButtons'>
-                                    <PresetEditor editCallback={editCallback} propCurrentPreset={presetItem} dayArrayLength={topId} />
-                                    {
+                                        <PresetEditor editCallback={editCallback} propCurrentPreset={presetItem} />
+                                        {
 
-                                        presetItem.Id !== null ?
-                                            <Button onClick={(() => removPresetItem(presetItem.Id))}>
-                                                <DeleteIcon/>
-                                            </Button>
-                                            :
-                                            ""
-                                    }
+                                            presetItem.Id !== null ?
+                                                <Button onClick={(() => removePresetItem(presetItem.Id))}>
+                                                    <DeleteIcon />
+                                                </Button>
+                                                :
+                                                ""
+                                        }
                                     </div>
                                 </div>
                             ))
