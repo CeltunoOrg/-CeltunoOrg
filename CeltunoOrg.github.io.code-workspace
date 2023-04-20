@@ -2,6 +2,9 @@
 	"folders": [
 		{
 			"path": "CeltunoOrg.github.io"
+		},
+		{
+			"path": ".github"
 		}
 	],
 	"settings": {}
