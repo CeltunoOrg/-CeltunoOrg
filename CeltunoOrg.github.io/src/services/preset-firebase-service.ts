@@ -1,18 +1,19 @@
 import { DataType, IDay, IImagePreset, IMyDay, IPreset } from "../types/day.type";
 
 // import {fb, db} from "../../firebase"
-import { getDatabase, onValue, set, update, get, push, orderByKey, orderByChild, child, DatabaseReference, remove, ref } from "firebase/database";
-import { db as fireDb, firestore, useTheOnValue, useTheRef } from "../../firebase-planner"
+import { getDatabase, onValue, set, update, get, push, orderByKey, orderByChild, child, DatabaseReference, remove, ref, connectDatabaseEmulator } from "firebase/database";
+import {  db as fireDb, firestore, useTheOnValue, useTheRef } from "../../firebase-planner"
 // import { collection, getDocs, addDoc } from "firebase/firestore";
 
 // import React, { Suspense, useEffect, useState } from "react";
 
 // const initFirebase = fireDb;
-const db = getDatabase();
+const db =  fireDb;//getDatabase();
 
 class PresetDataService {
 
   async GetAllItemsDB(dataType: DataType) {
+
     let databaseReference: DatabaseReference | null = null
     console.log("Connecting to db...");
     dataType

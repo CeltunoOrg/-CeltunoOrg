@@ -11,7 +11,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
 import ExpandLessOutlined from '@mui/icons-material/ExpandLessOutlined'
 import ExpandMoreOutlined from '@mui/icons-material/ExpandMoreOutlined';
-import PresetDataManager from '../functions/presetDataManager'
+import PresetDataManager from '../../../../Old/functions/presetDataManager'
 import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
 
@@ -21,8 +21,8 @@ import "../../../styles/Edit.css"
 import { IDayActivity, IPreset, ISelectImage, IUser } from '../../types/day.type';
 import { Divider, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import SelectImage from './selectImage';
-import { isNullOrUndefined } from '../functions/common';
-import UserDataManager from '../functions/userDataManager';
+import { isNullOrUndefined } from '../../../../Old/functions/common';
+import UserDataManager from '../../../../Old/functions/userDataManager';
 // import { useTheOnValue } from '../../../firebase-planner';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({

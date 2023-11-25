@@ -6,11 +6,12 @@ import { Button } from '@mui/material';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ArrowBackIcon from '@mui/icons-material/ArrowBackIosNewOutlined';
-import UserDataManager, { HighestUserId } from './functions/userDataManager';
+
 import AddUser from './modules/addUser';
 import userFirebaseService from '../services/user-firebase-service';
 // import userFirebaseService from '../services/user-firebase-service';
 import { useTheOnValue } from '../../firebase-planner';
+import UserDataManager,{ HighestUserId } from './functions/userDataManager';
 
 
 interface Props {

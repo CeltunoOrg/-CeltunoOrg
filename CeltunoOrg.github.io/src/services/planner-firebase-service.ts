@@ -1,24 +1,25 @@
 import { DataType, IDay, IImagePreset, IMyDay, IPreset } from "../types/day.type";
 
 // import {fb, db} from "../../firebase"
-import { getDatabase, onValue, set, update, get, push, orderByKey, orderByChild, child, DatabaseReference, remove, ref } from "firebase/database";
+import { getDatabase, onValue, set, update, get, push, orderByKey, orderByChild, child, DatabaseReference, remove, ref, Database } from "firebase/database";
 import { db as fireDb, firestore, useTheOnValue, useTheRef } from "../../firebase-planner"
 // import { collection, getDocs, addDoc } from "firebase/firestore";
 
 // import React, { Suspense, useEffect, useState } from "react";
 
 // const initFirebase = fireDb;
+// const fireDbRef = fireDb();
 const db = getDatabase();
 
 class PlannerDataService {
 
-  async GetAllItemsDB(dataType: DataType) {
+  async GetAllItemsDB(dataType: DataType) {    
     let databaseReference: DatabaseReference | null = null
     console.log("Connecting to db...");
-    dataType
-      ? databaseReference = useTheRef(db, `/${dataType}`)
-      : databaseReference = useTheRef(db, '/planner')
-
+    // dataType
+    //   ? databaseReference = useTheRef(db, `/${dataType}`)
+    //   : databaseReference = useTheRef(db, '/planner')
+    databaseReference = useTheRef(db, `planner/`);
     return databaseReference;
   }
 

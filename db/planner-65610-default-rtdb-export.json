@@ -1,0 +1,588 @@
+{
+  "days": [
+    null,
+    {
+      "ettermiddag": "image11.png",
+      "formiddag": "image8.png",
+      "name": "Mandag",
+      "natt": "image7.png",
+      "submitted": false
+    },
+    {
+      "ettermiddag": "image6.png",
+      "formiddag": "image5.png",
+      "name": "Tirsdag",
+      "natt": "image9.png",
+      "submitted": false
+    },
+    {
+      "ettermiddag": "image6.png",
+      "formiddag": "image10.png",
+      "name": "Onsdag",
+      "natt": "image2.png",
+      "submitted": false
+    },
+    {
+      "ettermiddag": "image7.png",
+      "formiddag": "image11.png",
+      "name": "Torsdag",
+      "natt": "image1.png",
+      "submitted": false
+    },
+    {
+      "ettermiddag": "image2.png",
+      "formiddag": "image8.png",
+      "name": "Fredag",
+      "natt": "image9.png",
+      "submitted": false
+    },
+    {
+      "ettermiddag": "image5.png",
+      "formiddag": "image1.png",
+      "name": "Lørdag",
+      "natt": "image4.png",
+      "submitted": false
+    },
+    {
+      "ettermiddag": "image10.png",
+      "formiddag": "image4.png",
+      "name": "søndag",
+      "natt": "dbnatt1",
+      "submitted": false
+    }
+  ],
+  "gallery": [
+    null,
+    {
+      "Image": "string",
+      "Name": "string",
+      "Selected": false
+    }
+  ],
+  "planner": {
+    "6": {
+      "Activities": [
+        {
+          "Id": 3,
+          "Image": "image8.png",
+          "Name": "image8.png",
+          "Order": "1",
+          "Selected": true
+        },
+        {
+          "Id": 4,
+          "Image": "image9.png",
+          "Name": "image9.png",
+          "Order": "[object Object]",
+          "Selected": true
+        }
+      ],
+      "Description": "",
+      "Id": 6,
+      "Name": "Første dag"
+    },
+    "7": {
+      "Activities": [
+        {
+          "Id": 2,
+          "Image": "image7.png",
+          "Name": "image7.png",
+          "Order": "1",
+          "Selected": true
+        },
+        {
+          "Id": 3,
+          "Image": "image8.png",
+          "Name": "image8.png",
+          "Order": "[object Object]",
+          "Selected": true
+        }
+      ],
+      "Description": "",
+      "Id": 7,
+      "Name": "A1"
+    },
+    "9": {
+      "Activities": [
+        {
+          "Id": 1,
+          "Image": "image6.png",
+          "Name": "image6.png",
+          "Order": "[object Object]",
+          "Selected": true
+        },
+        {
+          "Id": 3,
+          "Image": "image8.png",
+          "Name": "image8.png",
+          "Order": "[object Object]",
+          "Selected": true
+        },
+        {
+          "Id": 5,
+          "Image": "image10.png",
+          "Name": "image10.png",
+          "Order": "[object Object]",
+          "Selected": true
+        }
+      ],
+      "Description": "",
+      "Id": 9,
+      "Name": "A2"
+    },
+    "10": {
+      "Activities": [
+        {
+          "Id": 2,
+          "Image": "image6.png",
+          "Name": "Preset",
+          "Order": "0",
+          "Selected": false
+        },
+        {
+          "Id": 3,
+          "Image": "image7.png",
+          "Name": "Preset",
+          "Order": "1",
+          "Selected": false
+        },
+        {
+          "Id": 4,
+          "Image": "image8.png",
+          "Name": "Preset",
+          "Order": "3",
+          "Selected": false
+        },
+        {
+          "Id": 6,
+          "Image": "image10.png",
+          "Name": "Preset",
+          "Order": "3",
+          "Selected": false
+        },
+        {
+          "Id": 7,
+          "Image": "image11.png",
+          "Name": "Preset",
+          "Order": "3",
+          "Selected": false
+        }
+      ],
+      "Description": "",
+      "Id": 10,
+      "Name": "En dag"
+    },
+    "11": {
+      "Activities": [
+        {
+          "Id": 1,
+          "Image": "image6.png",
+          "Name": "image6.png",
+          "Order": "1",
+          "Selected": true
+        },
+        {
+          "Id": 5,
+          "Image": "image10.png",
+          "Name": "image10.png",
+          "Order": "0",
+          "Selected": true
+        }
+      ],
+      "Description": "",
+      "Id": 11,
+      "Name": "Hverdag"
+    },
+    "13": {
+      "Activities": [
+        {
+          "Id": 1,
+          "Image": "image6.png",
+          "Name": "image6.png",
+          "Order": "1",
+          "Selected": true
+        },
+        {
+          "Id": 3,
+          "Image": "image8.png",
+          "Name": "image8.png",
+          "Order": "2",
+          "Selected": true
+        },
+        {
+          "Id": 4,
+          "Image": "image9.png",
+          "Name": "image9.png",
+          "Order": "2",
+          "Selected": true
+        },
+        {
+          "Id": 6,
+          "Image": "image11.png",
+          "Name": "image11.png",
+          "Order": "1",
+          "Selected": true
+        }
+      ],
+      "Description": "",
+      "Id": 13,
+      "Name": "En annen dag"
+    },
+    "14": {
+      "Activities": [
+        {
+          "Id": 6,
+          "Image": "image10.png",
+          "Name": "Preset",
+          "Order": "4",
+          "Selected": false
+        },
+        {
+          "Id": 7,
+          "Image": "image11.png",
+          "Name": "Preset",
+          "Order": "3",
+          "Selected": false
+        }
+      ],
+      "Description": "",
+      "Id": 14,
+      "Name": "Helgedag"
+    }
+  },
+  "presets": [
+    null,
+    {
+      "Activities": [
+        {
+          "Id": 2,
+          "Image": "image7.png",
+          "Name": "image7.png",
+          "Order": "1",
+          "Selected": true
+        },
+        {
+          "Id": 3,
+          "Image": "image8.png",
+          "Name": "image8.png",
+          "Order": "[object Object]",
+          "Selected": true
+        }
+      ],
+      "Description": "",
+      "Id": 1,
+      "Name": "PresetA1"
+    },
+    {
+      "Activities": [
+        {
+          "Id": 6,
+          "Image": "image10.png",
+          "Name": "Preset",
+          "Order": "4",
+          "Selected": false
+        },
+        {
+          "Id": 7,
+          "Image": "image11.png",
+          "Name": "Preset",
+          "Order": "3",
+          "Selected": false
+        }
+      ],
+      "Description": "",
+      "Id": 2,
+      "Name": "PresetA2"
+    },
+    {
+      "Activities": [
+        {
+          "Id": 2,
+          "Image": "image6.png",
+          "Name": "Preset",
+          "Order": "0",
+          "Selected": false
+        },
+        {
+          "Id": 3,
+          "Image": "image7.png",
+          "Name": "Preset",
+          "Order": "1",
+          "Selected": false
+        },
+        {
+          "Id": 4,
+          "Image": "image8.png",
+          "Name": "Preset",
+          "Order": "3",
+          "Selected": false
+        },
+        {
+          "Id": 6,
+          "Image": "image10.png",
+          "Name": "Preset",
+          "Order": "3",
+          "Selected": false
+        },
+        {
+          "Id": 7,
+          "Image": "image11.png",
+          "Name": "Preset",
+          "Order": "3",
+          "Selected": false
+        }
+      ],
+      "Description": "Description",
+      "Id": 3,
+      "Name": "PresetA3"
+    },
+    {
+      "Activities": [
+        {
+          "Id": 2,
+          "Image": "image6.png",
+          "Name": "Preset",
+          "Order": "0",
+          "Selected": false
+        },
+        {
+          "Id": 3,
+          "Image": "image7.png",
+          "Name": "Preset",
+          "Order": "1",
+          "Selected": false
+        },
+        {
+          "Id": 4,
+          "Image": "image8.png",
+          "Name": "Preset",
+          "Order": "3",
+          "Selected": false
+        },
+        {
+          "Id": 6,
+          "Image": "image10.png",
+          "Name": "Preset",
+          "Order": "3",
+          "Selected": false
+        },
+        {
+          "Id": 7,
+          "Image": "image11.png",
+          "Name": "Preset",
+          "Order": "3",
+          "Selected": false
+        }
+      ],
+      "Description": "",
+      "Id": 4,
+      "Name": "test1"
+    },
+    {
+      "Activities": [
+        {
+          "Id": 1,
+          "Image": "image6.png",
+          "Name": "image6.png",
+          "Order": "1",
+          "Selected": true
+        },
+        {
+          "Id": 2,
+          "Image": "image7.png",
+          "Name": "image7.png",
+          "Order": "2",
+          "Selected": true
+        },
+        {
+          "Id": 3,
+          "Image": "image8.png",
+          "Name": "image8.png",
+          "Order": "3",
+          "Selected": true
+        },
+        {
+          "Id": 4,
+          "Image": "image9.png",
+          "Name": "image9.png",
+          "Order": "4",
+          "Selected": true
+        },
+        {
+          "Id": 5,
+          "Image": "image10.png",
+          "Name": "image10.png",
+          "Order": "5",
+          "Selected": true
+        },
+        {
+          "Id": 6,
+          "Image": "image11.png",
+          "Name": "image11.png",
+          "Order": "6",
+          "Selected": true
+        }
+      ],
+      "Description": "",
+      "Id": 5,
+      "Name": "A2"
+    },
+    {
+      "Activities": [
+        {
+          "Id": 2,
+          "Image": "image7.png",
+          "Name": "image7.png",
+          "Order": "2",
+          "Selected": true
+        },
+        {
+          "Id": 3,
+          "Image": "image8.png",
+          "Name": "image8.png",
+          "Order": "3",
+          "Selected": true
+        },
+        {
+          "Id": 6,
+          "Image": "image11.png",
+          "Name": "image11.png",
+          "Order": "6",
+          "Selected": true
+        }
+      ],
+      "Description": "",
+      "Id": 6,
+      "Name": "A3"
+    },
+    null,
+    null,
+    null,
+    null,
+    null,
+    {
+      "Activities": [
+        {
+          "Id": 4,
+          "Image": "image8.png",
+          "Name": "Preset",
+          "Order": "3",
+          "Selected": false
+        },
+        {
+          "Id": 6,
+          "Image": "image10.png",
+          "Name": "Preset",
+          "Order": "3",
+          "Selected": false
+        },
+        {
+          "Id": 7,
+          "Image": "image11.png",
+          "Name": "Preset",
+          "Order": "3",
+          "Selected": false
+        }
+      ],
+      "Description": "",
+      "Id": 12,
+      "Name": "A4"
+    },
+    {
+      "Activities": [
+        {
+          "Id": 6,
+          "Image": "image10.png",
+          "Name": "Preset",
+          "Order": "4",
+          "Selected": false
+        },
+        {
+          "Id": 7,
+          "Image": "image11.png",
+          "Name": "Preset",
+          "Order": "3",
+          "Selected": false
+        }
+      ],
+      "Description": "",
+      "Id": 13,
+      "Name": "Helgedag"
+    }
+  ],
+  "user": [
+    null,
+    {
+      "Config": {
+        "background": "",
+        "color1": "",
+        "color2": "",
+        "role": "",
+        "title": "",
+        "titleSize": ""
+      },
+      "Id": 1,
+      "Name": "test"
+    },
+    {
+      "Config": {
+        "background": "",
+        "color1": "",
+        "color2": "",
+        "role": "",
+        "title": "",
+        "titleSize": ""
+      },
+      "Id": 2,
+      "Name": "A4"
+    },
+    {
+      "Config": {
+        "background": "",
+        "color1": "",
+        "color2": "",
+        "role": "",
+        "title": "",
+        "titleSize": ""
+      },
+      "Id": 3,
+      "Name": "t"
+    },
+    {
+      "Config": {
+        "background": "",
+        "color1": "",
+        "color2": "",
+        "role": "",
+        "title": "",
+        "titleSize": ""
+      },
+      "Id": 4,
+      "Name": "TestUser"
+    },
+    {
+      "Config": {
+        "background": "background",
+        "color1": "#FFFFFF",
+        "color2": "#FFFFFF",
+        "role": "",
+        "title": "My title",
+        "titleSize": "large"
+      },
+      "Id": 5,
+      "Name": "First user/device"
+    },
+    {
+      "Config": {
+        "background": "",
+        "color1": "",
+        "color2": "",
+        "role": "",
+        "title": "",
+        "titleSize": ""
+      },
+      "Id": 0,
+      "Name": "Newest user"
+    }
+  ]
+}

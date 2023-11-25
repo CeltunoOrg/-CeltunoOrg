@@ -5,12 +5,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Activities from "./components/activities";
 import './index.css';
 import "../styles/App.css"
-// import '../styles/tmpstyle.module.css'
-import App from './components/Unused/App';
 import App3 from "./App3";
 import DeviceView from "./components/deviceView";
-// import App2 from './App2';
-
 
 // function BlogPost() {
 // let { ids } = useParams();
@@ -39,6 +35,9 @@ if (cont) {
     }
     root.render(
         <div className="App ">
+             {/* <GoogleOAuthProvider clientId="386932037035-k8v833noqjk7m4***********.apps.googleusercontent.com"> */}
+{/* <React.StrictMode> */}
+
             <HashRouter>
 
                 {/* <BrowserRouter> */}
@@ -47,6 +46,8 @@ if (cont) {
 
                 {/* </BrowserRouter> */}
             </HashRouter>
+{/* </React.StrictMode> */}
+             {/* </GoogleOAuthProvider> */}
         </div>
     );
 }

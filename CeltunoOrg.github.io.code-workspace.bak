@@ -1,0 +1,24 @@
+{
+	"folders": [
+		{
+			"name": "🐱‍💻 Main"
+			"path": "."
+		},
+		{
+			"name": "📅 Planner"
+			"path": "CeltunoOrg.github.io"
+		},
+		{
+			"name": "👩‍💻 GitStuff"
+			"path": ".github"
+		},
+	],
+	"settings": {
+	"[typescriptreact]": {
+		
+		
+		}
+	
+	
+	}
+}

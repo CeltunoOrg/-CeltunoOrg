@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import "../../styles/Activities.css"
 import { DataType, IDayActivity, IImagePreset, IMyDay, IPreset, IUser } from '../types/day.type';
-import CustomizedDialogs from './modules/dialogTest';
+// import CustomizedDialogs from './modules/dialogTest';
 import PlannerDataService from "../services/planner-firebase-service"
 import { useTheOnValue } from '../../firebase-planner';
 import { Button } from '@mui/material';
@@ -9,6 +9,7 @@ import ActivityEditor from './modules/editActivity';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ArrowBackIcon from '@mui/icons-material/ArrowBackIosNewOutlined';
+// import { useAuthState } from 'react-firebase-hooks/auth';
 
 
 const Activities = () => {
@@ -33,7 +34,7 @@ const Activities = () => {
     const getDayDbData = () => {
         PlannerDataService.GetAllItemsDB(DataType.Planner).then((data) => {
             useTheOnValue(data, (snapshot) => {
-                if (snapshot.exists()) {
+                if (snapshot.exists()) {                    
                     tmpData.length = 0;
                     console.log("Snapshot found, mapping data:");
                     snapshot.forEach(function (childSnapshot) {
@@ -55,6 +56,13 @@ const Activities = () => {
                 }
             })
         })
+    .catch((error) => {
+        console.error(error);
+      });
+        // .catch((error) => {
+        //     console.log("Error fetching data: " + error);
+        //     // An error happened.
+        // });
 
         return tmpData
     }

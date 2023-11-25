@@ -1,7 +1,7 @@
 
-import { useTheOnValue } from '../../../firebase-planner';
-import { DataType, IUser } from "../../types/day.type";
-import userFirebaseService from '../../services/user-firebase-service';
+import { useTheOnValue } from '../../CeltunoOrg.github.io/firebase-planner';
+import { DataType, IUser } from "../../CeltunoOrg.github.io/src/types/day.type";
+import userFirebaseService from '../../CeltunoOrg.github.io/src/services/user-firebase-service';
 
 const tmpData: Array<IUser> = new Array<IUser>
 let topId = 0
