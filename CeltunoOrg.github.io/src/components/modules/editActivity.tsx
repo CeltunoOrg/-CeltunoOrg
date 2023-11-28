@@ -146,7 +146,7 @@ export default function ActivityEditor(props: Props) {
         // console.log(`GETHIGHEST - Activity-Highest: ${topId}`)
     }
     const getAll = () => {
-        PlannerDataService.GetAllItemsDB(DataType.Planner).then((data) => {
+        PlannerDataService.GetDBref(DataType.Planner).then((data) => {
             useTheOnValue(data, (snapshot) => {
                 if (snapshot.exists()) {
                     console.log("Snapshot found, mapping PLANNER data:");
@@ -224,7 +224,7 @@ export default function ActivityEditor(props: Props) {
 
 
     const getPresetDbData = () => {
-        PlannerDataService.GetAllItemsDB(DataType.Presets).then((data) => {
+        PlannerDataService.GetDBref(DataType.Presets).then((data) => {
             useTheOnValue(data, (snapshot) => {
                 if (snapshot.exists()) {
                     console.log("Snapshot found, mapping PRESET data:");

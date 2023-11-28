@@ -1,0 +1,24 @@
+version: '3'
+services:
+  planner:
+    container_name: planner
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - BUILD_CONTEXT=planner
+    ports:
+      - '3000:1234'
+
+# version:  "1.0"
+# services:
+#   planner-nginx-proxy:
+#     image: "nginx:alpine"
+#     container_name: planner-nginx-proxy
+#     ports:
+#       - ${PLANNER_PROXY_PORT}:8080
+#     # enviroment:
+#     #   - API_HOST=${API_HOST}
+# #   - WEBSITE_HOST=http://localhost:1234
+#     volumes:
+#       - ./nginx.conf.template:/etc/nginx/templates/default.conf.template

@@ -1,7 +1,7 @@
 import { DataType, IDay, IImagePreset, IMyDay, IPreset } from "../types/day.type";
 
 // import {fb, db} from "../../firebase"
-import { getDatabase, onValue, set, update, get, push, orderByKey, orderByChild, child, DatabaseReference, remove, ref, Database } from "firebase/database";
+import { getDatabase, onValue, set, update, get, push, orderByKey, orderByChild, child, DatabaseReference, remove, ref, Database, DataSnapshot } from "firebase/database";
 import { db as fireDb, firestore, useTheOnValue, useTheRef } from "../../firebase-planner"
 // import { collection, getDocs, addDoc } from "firebase/firestore";
 
@@ -13,23 +13,92 @@ const db = getDatabase();
 
 class PlannerDataService {
 
-  async GetAllItemsDB(dataType: DataType) {    
+  async GetDBref(dataType: DataType) {
     let databaseReference: DatabaseReference | null = null
     console.log("Connecting to db...");
     // dataType
-    //   ? databaseReference = useTheRef(db, `/${dataType}`)
+      databaseReference = await useTheRef(db, `/${dataType}`)
     //   : databaseReference = useTheRef(db, '/planner')
-    databaseReference = useTheRef(db, `planner/`);
+    // databaseReference = await useTheRef(db, `planner/`);
     return databaseReference;
   }
 
+  async GetDBAllIemsSnapshot(dataType: DataType) {
+    // let activityCount = 0;
+    // let presetCount = 0;
+    // let databaseReference: DatabaseReference | null = null
+    let dbActivitySnapshot: DataSnapshot | null | undefined;
+    let dbPresetSnapshot: DataSnapshot | null | undefined;
+    
+       await this.GetDBref(dataType).then(async (dbRef) => {
+        console.log("Connecting to db...");
+         await useTheOnValue(dbRef, (snapshot) => {
+          if (snapshot.exists()) {
+            // databaseReference = dbRef;
+            console.log("Snapshot found,"+ {dataType}+" data:");
+            switch (dataType) {
+              case DataType.Planner:
+                dbActivitySnapshot = snapshot;
+                // activityCount = snapshot.size;
+                break;
+              case DataType.Presets:
+                dbPresetSnapshot = snapshot;
+                // presetCount = snapshot.size;
+                break;
+              // case DataType.Planner:
+              //   break; 
+              default:
+                break;
+            }
+          }
+        });
+      }).catch((error) => {
+        console.error(error);        
+      });
+    return { dbActivitySnapshot,dbPresetSnapshot};
+  }
+  async GetDBSnapshotCount(dataType: DataType) {
+    let activityCount = 0;
+    let presetCount = 0;
+    // let databaseReference: DatabaseReference | null = null
+    // let dbActivitySnapshot: DataSnapshot | null | undefined;
+    // let dbPresetSnapshot: DataSnapshot | null | undefined;
+    
+       await this.GetDBref(dataType).then(async (dbRef) => {
+        console.log("Connecting to db...");
+         await useTheOnValue(dbRef, (snapshot) => {
+          if (snapshot.exists()) {
+            // databaseReference = dbRef;
+            console.log("Snapshot found,"+ {dataType}+" data:");
+            switch (dataType) {
+              case DataType.Planner:
+                // dbActivitySnapshot = snapshot;
+                activityCount = snapshot.size;
+                break;
+              case DataType.Presets:
+                // dbPresetSnapshot = snapshot;
+                presetCount = snapshot.size;
+                break;
+              // case DataType.Planner:
+              //   break; 
+              default:
+                break;
+            }
+          }
+        });
+      }).catch((error) => {
+        console.error(error);        
+      });
+      const returnData = dataType === DataType.Planner ?  activityCount : presetCount;
+    return returnData;
+  }
   async GetDbOne(dataType: DataType, key: number) {
     let databaseReference: DatabaseReference | null = null
     console.log("Connecting to db...");
     dataType ?
       databaseReference = useTheRef(db, `/${dataType}/${key}/`) // orderByChild('name'));     
       :
-      databaseReference = useTheRef(db, `/planner/${key}/`) 
+      databaseReference = useTheRef(db, `/planner/${key}/`)
     return databaseReference;
   }
 

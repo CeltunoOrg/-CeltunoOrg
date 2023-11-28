@@ -1,6 +1,6 @@
 import React from "react";
 import { Root, createRoot } from "react-dom/client";
-import { BrowserRouter, HashRouter, useParams } from "react-router-dom"
+import { HashRouter } from "react-router-dom"
 import "bootstrap/dist/css/bootstrap.min.css";
 import Activities from "./components/activities";
 import './index.css';

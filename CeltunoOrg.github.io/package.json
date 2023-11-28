@@ -26,17 +26,22 @@
     "build": "parcel build src/index.html "
   },
   "dependencies": {
+    "@babel/core": "^7.10.5",
+    "@babel/plugin-transform-class-properties": "",
+    "@babel/preset-env": "^7.10.4",
+    "@babel/preset-react": "^7.10.4",
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
-    "@material-ui/icons": "^4.11.3",
     "@mui/icons-material": "^5.11.16",
     "@mui/material": "^5.10.8",
     "@react-firebase/auth": "^0.2.10",
     "assemble": "~0.3.11",
     "bootstrap": "^5.2.1",
+    "date-fns": "^2.30.0",
     "firebase": "^9.10.0",
     "gh-pages": "^5.0.0",
     "grunt": "~0.4.0",
+    "parcel": "^2.10.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-firebase-hooks": "^5.1.1",
@@ -44,7 +49,9 @@
     "react-router-dom": "^6.20.0",
     "react-scripts": "^5.0.1",
     "react-select": "^5.4.0",
+    "react-social-login-buttons": "^3.9.1",
     "save-dev": "^0.0.1-security",
     "styles": "^0.2.1"
   }
 }
+

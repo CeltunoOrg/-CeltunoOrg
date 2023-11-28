@@ -32,7 +32,7 @@ const Activities = () => {
 
     const tmpData: Array<IMyDay> = new Array<IMyDay>;
     const getDayDbData = () => {
-        PlannerDataService.GetAllItemsDB(DataType.Planner).then((data) => {
+        PlannerDataService.GetDBref(DataType.Planner).then((data) => {
             useTheOnValue(data, (snapshot) => {
                 if (snapshot.exists()) {                    
                     tmpData.length = 0;

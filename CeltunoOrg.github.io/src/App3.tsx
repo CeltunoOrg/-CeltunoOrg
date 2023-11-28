@@ -84,7 +84,7 @@ interface Props {
 
             <div className='appMainContainer'>
                 {/* <GoogleLogin onSuccess={responseMessage} onError={()=>errorMessage} /> */}
-                <div className='maingridContainer '>
+                
                     <div>
                     {/* Menu</div> */}
                     <Routes>
@@ -103,7 +103,7 @@ interface Props {
 
                         {/* Auth */}
                     </div>
-                </div>
+
                 <div>
                     {/* <button onClick={toggle1}>Open Modal </button> */}
                 </div>

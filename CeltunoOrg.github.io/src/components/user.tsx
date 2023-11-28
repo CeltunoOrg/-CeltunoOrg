@@ -76,7 +76,7 @@ const User = (Props: Props) => {
         //         role: ''
         //     }
         // }
-        userFirebaseService.GetAllItemsDB(DataType.User).then((data) => {
+        userFirebaseService.GetDBRef(DataType.User).then((data) => {
             useTheOnValue(data, (snapshot) => {
                 if (snapshot.exists()) {
                     tmpData.length = 0

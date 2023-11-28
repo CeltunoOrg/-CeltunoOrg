@@ -7,6 +7,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
 type Props = {
+    children :any
     hideAll: boolean
     path: string
 }

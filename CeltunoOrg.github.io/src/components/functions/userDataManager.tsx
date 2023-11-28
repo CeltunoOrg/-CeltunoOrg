@@ -1,7 +1,7 @@
 
-import { useTheOnValue } from '../../CeltunoOrg.github.io/firebase-planner';
-import { DataType, IUser } from "../../CeltunoOrg.github.io/src/types/day.type";
-import userFirebaseService from '../../CeltunoOrg.github.io/src/services/user-firebase-service';
+import { useTheOnValue } from '../../../firebase-planner';
+import { DataType, IUser } from "../../../src/types/day.type";
+import userFirebaseService from '../../../src/services/user-firebase-service';
 
 const tmpData: Array<IUser> = new Array<IUser>
 let topId = 0
@@ -21,8 +21,8 @@ export const FetchAllUserData = () => {
     //         role: ''
     //     }
     // }
-    userFirebaseService.GetAllItemsDB(DataType.User).then((data) => {
-        useTheOnValue(data, (snapshot) => {
+    userFirebaseService.GetDBRef(DataType.User).then((dbRef) => {
+        useTheOnValue(dbRef, (snapshot) => {
             if (snapshot.exists()) {
                 tmpData.length = 0
                 console.log("Snapshot found, mapping USER data:");

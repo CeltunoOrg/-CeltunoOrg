@@ -5,7 +5,7 @@ import PlannerFirebaseService from "../../services/planner-firebase-service";
 export const FetchAllDays = () => {
     let topId = 0
     const tmpData: Array<IMyDay> = new Array<IMyDay>
-    PlannerFirebaseService.GetAllItemsDB(DataType.Planner).then((data) => {
+    PlannerFirebaseService.GetDBref(DataType.Planner).then((data) => {
         useTheOnValue(data, (snapshot) => {
             if (snapshot.exists()) {
                 console.log("Snapshot found, mapping PRESETS data:");

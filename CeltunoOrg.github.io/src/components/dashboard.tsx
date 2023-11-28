@@ -59,8 +59,6 @@ class Dashboard extends Component<Props, State>{
 
             <div className='appMainContainer'>
 
-                <div className='maingridContainer '>
-                    {/* <Button onClick={}>Open Modal </button> */}
                     <div className='dashboardBox'>
                         <Button className={'sizeButton'} variant='outlined' href='/#/activities'> Activities </Button>
                         <Button className={'sizeButton'} variant='outlined' href='/#/presets'> Presets    </Button>
@@ -73,7 +71,6 @@ class Dashboard extends Component<Props, State>{
                         <a className={'sizeButton'} href='/#/deviceView'> Device view    </a>
                     </div>
 
-                </div>
                 <div>
                     <button className={'sizeButton'} onClick={() => this.CheckAuth()}> Activities </button>
                 </div>

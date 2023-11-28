@@ -12,7 +12,7 @@ const db = getDatabase();
 
 class UserDataService {
 
-  async GetAllItemsDB(dataType: DataType) {
+  async GetDBRef(dataType: DataType) {
     let databaseReference: DatabaseReference | null = null
     console.log("Connecting to db...");
     dataType

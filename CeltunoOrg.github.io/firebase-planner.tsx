@@ -1,9 +1,9 @@
 import { config } from "./config-fb_planner";
 
-import  firebase ,{ initializeApp, setLogLevel, } from "firebase/app";
+import firebase, { initializeApp, setLogLevel, } from "firebase/app";
 import { connectDatabaseEmulator, getDatabase, onValue, ref } from "firebase/database";
-import { GoogleAuthProvider, getAuth, signInWithPopup, signOut } from "firebase/auth";
-import {  addDoc, collection, getDocs, getFirestore, where, query } from "firebase/firestore"
+import { GoogleAuthProvider, getAuth, signInAnonymously, signInWithPopup, signOut } from "firebase/auth";
+import { addDoc, collection, getDocs, getFirestore, where, query } from "firebase/firestore"
 
 // const firebaseConfig = {
 //     apiKey: "",
@@ -15,21 +15,22 @@ import {  addDoc, collection, getDocs, getFirestore, where, query } from "fireba
 //     appId: "1:572370352440:web:c316dd8592973a6d7da9cd"
 // };
 
-const app = ()=> {
+const app = () => {
     const apiKey = process.env.REACT_APP_APIKey ?? ""
     config.apiKey = apiKey;
-    setLogLevel('debug')
+    if (process.env.NODE_ENV === 'development')
+        setLogLevel('debug')
     const tmpApp = initializeApp(config);
     return tmpApp;
 }
 export const auth = getAuth(app());
-const getDb = () =>{
+const getDb = () => {
     const tmpDb = getDatabase(app());
-    if (location.hostname === "localhost"){// && process.env.NODE_ENV === 'development') {
+    if (location.hostname === "localhost" && process.env.NODE_ENV === 'development') {
         // Point to the RTDB emulator running on localhost.
         connectDatabaseEmulator(tmpDb, "127.0.0.1", 9000);
     }
-    
+
     return tmpDb
 }
 export const db = getDb()
@@ -48,7 +49,7 @@ export const SignOut = async () => {
 }
 
 export const googleProvider = new GoogleAuthProvider();
-export const signInWithGoogle = async () => {
+export const SignInWithGoogle = async () => {
     try {
         const res = await signInWithPopup(auth, googleProvider);
         const user = res.user;
@@ -62,10 +63,28 @@ export const signInWithGoogle = async () => {
                 email: user.email,
             });
         }
+        let result = -1;
+        if (user)
+            result = 1;
+        return result
     } catch (err: any) {
         console.error(err);
         alert(err.message);
     }
 };
+export const SignInAnonymously = async () => {
+    signInAnonymously(auth)
+        .then(() => {
+            // Signed in..
+        })
+        .catch((error) => {
+            // const errorCode = error.code;
+            // const errorMessage = error.message;
+            console.error(error);
+            alert(error.message);
+            // ...
+        });
+}
+
 export default app;
 
