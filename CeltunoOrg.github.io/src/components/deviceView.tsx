@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import "../../styles/Activities.css"
 import { DataType, IDayActivity, IImagePreset, IMyDay, IPreset, IUser } from '../types/day.type';
-import CustomizedDialogs from './modules/dialogTest';
+// import CustomizedDialogs from './modules/dialogTest';
 import PlannerDataService from "../services/planner-firebase-service"
 import { useTheOnValue } from '../../firebase-planner';
 import { Button } from '@mui/material';

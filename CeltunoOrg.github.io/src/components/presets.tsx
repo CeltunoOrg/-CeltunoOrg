@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import "../../styles/Presets.css"
 import { DataType, IMyDay, IPreset } from '../types/day.type';
 import PresetEditor from './modules/editPreset';
-import { Button } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ArrowBackIcon from '@mui/icons-material/ArrowBackIosNewOutlined';
@@ -12,7 +12,9 @@ import { useTheOnValue } from '../../firebase-planner';
 import presetFirebaseService from '../services/preset-firebase-service';
 import PresetDataManager from './functions/presetDataManager';
 
-
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '../../firebase-planner';
+import DashboardMenu from './modules/DashboardMenu';
 
 interface Props {
     children?: React.ReactNode
@@ -22,8 +24,8 @@ const Presets = (Props: Props) => {
 
     useEffect(() => {
         if (!presets || presets.length <= 0)
-        
-        getPresetDbData()
+
+            getPresetDbData()
     })
 
     // const [isOpen, setopen] = useState({
@@ -38,7 +40,7 @@ const Presets = (Props: Props) => {
     });
 
     const [presets, setPresets] = useState<Array<IPreset>>(new Array<IPreset>);
-
+    const [user, loading, error] = useAuthState(auth);
     const [topId, setTopId] = useState<number>(0);
 
     const tmpData: Array<IPreset> = new Array<IPreset>;
@@ -67,7 +69,7 @@ const Presets = (Props: Props) => {
                         setThePresets(null)
                     })
                     if (tmpData.length !== presets.length)
-                    console.log("DB items found:");
+                        console.log("DB items found:");
                     console.log(tmpData.length)
                 }
             })
@@ -115,18 +117,20 @@ const Presets = (Props: Props) => {
 
     return (
         <>
-            <div className='appMainContainer'>
-                <div className='maingridContainer '>
+            <DashboardMenu user={user} disableUserPage={true} testUser={false}>
+                <Box component="main" sx={{ flexGrow: 1, mt:8,p: 3 }}>
+                    {/* <div className='appMainContainer'>
+                <div className='maingridContainer '> */}
+                    <div className='presetTitle'>
+                    <Typography component="p" variant="h4">Presets</Typography>
+                    </div>
                     <div style={{ display: 'flex', flexDirection: 'row' }}>
                         <Button href='/#/'><ArrowBackIcon /></Button>
 
                         <Button onClick={() => { getPresetDbData() }}><RefreshIcon /></Button>
 
                         <PresetEditor editCallback={editCallback} propCurrentPreset={preset} />
-                    </div>
-                    <div className='presetTitle'>
-                        <h2>Presets</h2>
-                    </div>
+                    </div> 
                     <div className="preset-grid-container">
                         {
                             presets?.map((presetItem, presetIndex) => (
@@ -148,10 +152,9 @@ const Presets = (Props: Props) => {
                                             ""
                                         }
                                     </div>
-                                    <div className='gridButtons'>
+                                    <div className='gridActivityButtons'>
                                         <PresetEditor editCallback={editCallback} propCurrentPreset={presetItem} />
                                         {
-
                                             presetItem.Id !== null ?
                                                 <Button onClick={(() => removePresetItem(presetItem.Id))}>
                                                     <DeleteIcon />
@@ -164,9 +167,11 @@ const Presets = (Props: Props) => {
                             ))
                         }
                     </div>
-
+                    {/* 
                 </div>
-            </div>
+            </div> */}
+                </Box>
+            </DashboardMenu>
         </>
     );
 }

@@ -7,14 +7,14 @@ import Activities from './components/activities';
 import Presets from './components/presets';
 // import Dashboard from './components/dashboard';
 import DeviceView from './components/deviceView';
-import Testing from './components/stepper';
+// import Testing from './components/stepper';
 // import User from './components/user';
 // import { GoogleLogin } from '@react-oauth/google';
 // import { GoogleAuthProvider, User, getAuth, signInWithPopup } from 'firebase/auth';
 // import { useAuthState } from 'react-firebase-hooks/auth';
 // import { auth } from '../firebase-planner';
 import Dashboard2 from './components/dashboard2';
-import DataReaderTest from './components/dataReadTest';
+// import DataReaderTest from './components/dataReadTest';
 type State = {
     isOpen3: boolean
     appLoggedIn :boolean
@@ -95,8 +95,8 @@ interface Props {
                         <Route path={"/presets"} element={<Presets isOpen={false} />} />
                         <Route path={"/deviceView"} element={<DeviceView hideAll={true}  />} />
                         {/* <Route path={"/user"} element={<User isOpen={false}  />} /> */}
-                        <Route path={"/test"} element={<Testing  />} />
-                        <Route path={"/data"} element={<DataReaderTest  hideAll={false} />} />
+                        {/* <Route path={"/test"} element={<Testing  />} />
+                        <Route path={"/data"} element={<DataReaderTest  hideAll={false} />} /> */}
                     </Routes>
                     </div>
                     <div>

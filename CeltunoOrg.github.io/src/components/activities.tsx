@@ -4,11 +4,14 @@ import { DataType, IDayActivity, IImagePreset, IMyDay, IPreset, IUser } from '..
 // import CustomizedDialogs from './modules/dialogTest';
 import PlannerDataService from "../services/planner-firebase-service"
 import { useTheOnValue } from '../../firebase-planner';
-import { Button } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 import ActivityEditor from './modules/editActivity';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ArrowBackIcon from '@mui/icons-material/ArrowBackIosNewOutlined';
+import DashboardMenu from './modules/DashboardMenu';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '../../firebase-planner';
 // import { useAuthState } from 'react-firebase-hooks/auth';
 
 
@@ -28,13 +31,14 @@ const Activities = () => {
 
     const [days, setDays] = useState<Array<IMyDay>>(new Array<IMyDay>);
 
+    const [user, loading, error] = useAuthState(auth);
     const [topId, setTopId] = useState<number>(0);
 
     const tmpData: Array<IMyDay> = new Array<IMyDay>;
     const getDayDbData = () => {
         PlannerDataService.GetDBref(DataType.Planner).then((data) => {
             useTheOnValue(data, (snapshot) => {
-                if (snapshot.exists()) {                    
+                if (snapshot.exists()) {
                     tmpData.length = 0;
                     console.log("Snapshot found, mapping data:");
                     snapshot.forEach(function (childSnapshot) {
@@ -50,15 +54,15 @@ const Activities = () => {
                         tmpData.push(childData);
                     })
                     // if (tmpData.length !== days.length)
-                        setTheDays(null)
+                    setTheDays(null)
                     console.log("DB items found:");
                     console.log(tmpData.length)
                 }
             })
         })
-    .catch((error) => {
-        console.error(error);
-      });
+            .catch((error) => {
+                console.error(error);
+            });
         // .catch((error) => {
         //     console.log("Error fetching data: " + error);
         //     // An error happened.
@@ -93,15 +97,23 @@ const Activities = () => {
         return theSelected
     }
     const [editOpen, setEditOpen] = useState<boolean>(false);
-    const handleEditOpen = () =>{
+    const handleEditOpen = () => {
         setEditOpen(!editOpen)
         console.log(`EditOpen: ${editOpen}`)
     }
     return (
         <>
-            <div className='appMainContainer'>
-                <div className='maingridContainer '>
-                    <h2>Activities</h2>
+            <DashboardMenu user={user} disableUserPage={true} testUser={false} >
+
+                <Box component="main" sx={{ flexGrow: 1, mt: 8, p: 3 }}>
+                    {/* sx={{ p: '50px', display: "block" }}> */}
+
+                    {/* {props.children} */}
+                    {/* <div className='appMainContainer'>
+                        <div className='maingridContainer '> */}
+                    <div className='presetTitle'>
+                        <Typography component="p" variant="h4">Activities</Typography>
+                    </div>
                     <div style={{ display: 'flex', flexDirection: 'row' }}>
                         <Button href='/#/'><ArrowBackIcon /></Button>
                         <Button onClick={() => { getDayDbData() }}><RefreshIcon /></Button>
@@ -128,10 +140,9 @@ const Activities = () => {
                                         }
                                     </div>
                                     <div className='gridActivityButtons'>
-                                        <ActivityEditor hideAll={false} editCallback={editCallback} propMyDay={dayItem} isOpen= {editOpen}/>
+                                        <ActivityEditor hideAll={false} editCallback={editCallback} propMyDay={dayItem} isOpen={editOpen} />
                                         {
-                                            dayItem.Id !== null
-                                                ?
+                                            dayItem.Id !== null ?
                                                 <Button onClick={(() => removeDayItem(dayItem.Id))}>
                                                     <DeleteIcon />
                                                 </Button>
@@ -143,9 +154,11 @@ const Activities = () => {
                             ))
                         }
                     </div>
-
-                </div>
-            </div>
+                    {/* 
+                        </div>
+                    </div> */}
+                </Box>
+            </DashboardMenu>
         </>
     );
 }

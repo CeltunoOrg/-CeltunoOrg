@@ -1,40 +1,40 @@
-import * as React from 'react';
-import Checkbox from '@mui/material/Checkbox';
-import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
-import { orange } from '@mui/material/colors';
-import { TextField } from '@mui/material';
+// import * as React from 'react';
+// import Checkbox from '@mui/material/Checkbox';
+// import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
+// import { orange } from '@mui/material/colors';
+// import { TextField } from '@mui/material';
 
-declare module '@mui/material/styles' {
-    interface Theme {
-        status: {
-            danger: string;
-        };
-    }
-    // allow configuration using `createTheme`
-    interface ThemeOptions {
-        status?: {
-            danger?: string;
-        };
-    }
-}
+// declare module '@mui/material/styles' {
+//     interface Theme {
+//         status: {
+//             danger: string;
+//         };
+//     }
+//     // allow configuration using `createTheme`
+//     interface ThemeOptions {
+//         status?: {
+//             danger?: string;
+//         };
+//     }
+// }
 
-const CustomCheckbox = styled(TextField)(({ theme }) => ({
-    color: theme.status.danger,
-    '&.Mui-checked': {
-        color: theme.status.danger,
-    },
-}));
+// const CustomCheckbox = styled(TextField)(({ theme }) => ({
+//     color: theme.status.danger,
+//     '&.Mui-checked': {
+//         color: theme.status.danger,
+//     },
+// }));
 
-const theme = createTheme({
-    status: {
-        danger: orange[500],
-    },
-});
+// const theme = createTheme({
+//     status: {
+//         danger: orange[500],
+//     },
+// });
 
-export default function CustomStyles() {
-    return (
-        <ThemeProvider theme={theme}>
-            <CustomCheckbox defaultChecked />
-        </ThemeProvider>
-    );
-}
+// export default function CustomStyles() {
+//     return (
+//         <ThemeProvider theme={theme}>
+//             <CustomCheckbox defaultChecked />
+//         </ThemeProvider>
+//     );
+// }

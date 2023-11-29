@@ -7,11 +7,11 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
+import CloseIcon from '@mui/icons-material/Close';
+import PresetDataManager from '../functions/presetDataManager'
 import ExpandLessOutlined from '@mui/icons-material/ExpandLessOutlined'
 import ExpandMoreOutlined from '@mui/icons-material/ExpandMoreOutlined';
-import PresetDataManager from '../functions/presetDataManager'
 import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
 
@@ -271,8 +271,7 @@ export default function PresetEditor(props: Props) {
     }
 
     return (
-        <div>
-            
+        <div>            
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
             <Button className='classes.button' onClick={handleOpen}>
                 {(myPreset.Activities && myPreset.Activities.length > 0) ? <EditIcon /> : <AddIcon />}

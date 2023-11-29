@@ -62,8 +62,9 @@ const Dashboard2 = (props: Props) => {
 
 
         <>
-            <DashboardMenu user={user} disableUserPage={true} testUser={false} />
-            {/* <div className='dashboardBox'>
+            <DashboardMenu user={user} disableUserPage={true} testUser={false}>
+            <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+                    {/* 
 
                 {
                     user
@@ -86,22 +87,22 @@ const Dashboard2 = (props: Props) => {
                 }
                 <div style={{ float: 'right', margin: '10px' }}>
                     <InitLogin editCallback={loginCallback} /> */}
-            {/* {
+                    {/* {
                         user ?
                         <Button className={'login__btn login__google'} onClick={() => SignOut()}> Logout </Button>
                         :
                         <Button className={'login__btn login__google'} onClick={() => signInWithGoogle() }> Login </Button>
                     } */}
-            {/* </div> */}
-            {/* <Divider component={"li"} />
+                    {/* </div> */}
+                    {/* <Divider component={"li"} />
                 Backup links
                 <a className={'sizeButton'} href='/#/activities'> Activities </a>
                 <a className={'sizeButton'} href='/#/presets'> Presets    </a>
                 <a className={'sizeButton'} href='/#/deviceView'> Device view    </a> */}
-            {/* </div > */}
+                    {/* </div > */}
 
-            <Box>
-                <Box
+
+                    {/* <Box
                     component="main"
                     sx={{
                         backgroundColor: (theme) =>
@@ -110,54 +111,55 @@ const Dashboard2 = (props: Props) => {
                                 : theme.palette.grey[900],
                         flexGrow: 1,
                         //height: "100vh",
-                        overflow: "auto"
+                        overflow: "auto",
+                        p: 3
                     }}
-                >
-                    <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-                        <Grid container spacing={3}>
-                            {/* Chart */}
-                            <Grid item xs={12} md={8} lg={9}>
-                                <Paper
-                                    sx={{
-                                        p: 2,
-                                        display: "flex",
-                                        flexDirection: "column",
-                                        height: 240
-                                    }}
-                                >
-                                    <Calendar user={user} />
-                                    {/* {showTab(selectedTab)} */}
-                                </Paper>
-                            </Grid>
-                            {/* Recent Deposits */}
-                            <Grid item xs={12} md={4} lg={3}>
-                                <Paper
-                                    sx={{
-                                        p: 2,
-                                        display: "flex",
-                                        flexDirection: "column",
-                                        height: 240
-                                    }}
-                                >
-                                    <InfoPanel />
-                                </Paper>
-                            </Grid>
-                            {/* Recent Orders */}
+                > */}
+                    <Container maxWidth="lg" sx={{ mt:8, mb: 4 }}>
+                    <Grid container spacing={3}>
+                        {/* Chart */}
+                        <Grid item xs={12} md={8} lg={9}>
+                            <Paper
+                                sx={{
+                                    p: 2,
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    height: 240
+                                }}
+                            >
+                                <Calendar user={user} />
+                                {/* {showTab(selectedTab)} */}
+                            </Paper>
+                        </Grid>
+                        {/* Recent Deposits */}
+                        <Grid item xs={12} md={4} lg={3}>
+                            <Paper
+                                sx={{
+                                    p: 2,
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    height: 240
+                                }}
+                            >
+                                <InfoPanel />
+                            </Paper>
+                        </Grid>
+                        {/* Recent Orders */}
 
-                            {/*
+                        {/*
               <Grid item xs={12}>
               <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
               <Orders /> 
               </Paper>
               </Grid>
             */}
-                        </Grid>
+                    </Grid>
 
                     </Container>
+                    {/* </Box> */}
                 </Box>
 
-            </Box>
-
+            </DashboardMenu>
         </>
 
 

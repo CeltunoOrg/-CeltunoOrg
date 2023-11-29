@@ -8,11 +8,11 @@ import IconButton from '@mui/material/IconButton';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
-import CloseIcon from '@mui/icons-material/Close';
-import SettingsIcon from '@mui/icons-material/Settings';
-import LogoutIcon from '@mui/icons-material/Logout';
-import LoginIcon from '@mui/icons-material/Login';
-import { Avatar, Box, Divider, List, ListItemIcon, Menu, MenuItem, Tooltip } from '@mui/material';
+// import CloseIcon from '@mui/icons-material/Close';
+// import SettingsIcon from '@mui/icons-material/Settings';
+// import LogoutIcon from '@mui/icons-material/Logout';
+// import LoginIcon from '@mui/icons-material/Login';
+import { Avatar, Box, Divider, List, ListItemIcon, Menu, MenuItem, Tooltip,ListItemButton } from '@mui/material';
 // import Typography from '@mui/material/Typography';
 // import ExpandLessOutlined from '@mui/icons-material/ExpandLessOutlined'
 // import ExpandMoreOutlined from '@mui/icons-material/ExpandMoreOutlined';
@@ -21,19 +21,19 @@ import { Avatar, Box, Divider, List, ListItemIcon, Menu, MenuItem, Tooltip } fro
 // import AddIcon from '@mui/icons-material/Add';
 
 
-import {
-    FacebookLoginButton,
-    GoogleLoginButton,
-    GithubLoginButton,
-    AmazonLoginButton,
-    InstagramLoginButton,
-    LinkedInLoginButton,
-    MicrosoftLoginButton,
-    TwitterLoginButton,
-    AppleLoginButton,
-    DiscordLoginButton,
-    BufferLoginButton
-} from 'react-social-login-buttons';
+// import {
+//     FacebookLoginButton,
+//     GoogleLoginButton,
+//     GithubLoginButton,
+//     AmazonLoginButton,
+//     InstagramLoginButton,
+//     LinkedInLoginButton,
+//     MicrosoftLoginButton,
+//     TwitterLoginButton,
+//     AppleLoginButton,
+//     DiscordLoginButton,
+//     BufferLoginButton
+// } from 'react-social-login-buttons';
 
 
 import { SignOut, auth, SignInAnonymously, SignInWithGoogle } from '../../../firebase-planner';
@@ -42,6 +42,7 @@ import { User } from 'firebase/auth';
 // import UserCard from './userCard';
 // import Card from './Card';
 import OutlinedLoginCard from './loginCard';
+import { Apple, Facebook, Google, Login, Person } from '@mui/icons-material';
 // import { MenuList } from 'react-select/dist/declarations/src/components/Menu';
 
 // import { Face, FaceSharp } from '@material-ui/icons';
@@ -100,7 +101,7 @@ function BootstrapDialogTitle(props: DialogTitleProps) {
                         color: (theme) => theme.palette.grey[500],
                     }}
                 >
-                    <CloseIcon />
+                    {/* <CloseIcon /> */}
                 </IconButton>
             ) : null}
         </DialogTitle>
@@ -159,7 +160,15 @@ export default function InitLogin(props: Props) {
 
             <Tooltip title={"Account settings"}>
                 <Button  onClick={handleClick}>
-                    {(user) ? <Avatar alt="Profile" src={'' + user.photoURL} /> : "LOGIN"}
+                    {
+                    (user) 
+                    ? 
+                        <Avatar alt="Profile" src={'' + user.photoURL} /> 
+                    :
+                    <ListItemIcon>
+                        <Login sx={{color:'#000000099'}}/>
+                    </ListItemIcon>
+                        }
                 </Button>
             </Tooltip>
 
@@ -214,13 +223,13 @@ export default function InitLogin(props: Props) {
                             <>
                                 <MenuItem onClick={settings}>
                                     <ListItemIcon>
-                                        <SettingsIcon fontSize="small" />
+                                        {/* <SettingsIcon fontSize="small" /> */}
                                     </ListItemIcon>
                                     Settings
                                 </MenuItem>
                                 <MenuItem onClick={logout}>
                                     <ListItemIcon>
-                                        <LogoutIcon fontSize="small" />
+                                        {/* <LogoutIcon fontSize="small" /> */}
                                     </ListItemIcon>
                                     Logout
                                 </MenuItem>
@@ -229,16 +238,17 @@ export default function InitLogin(props: Props) {
                             <>
 
                                 <MenuItem>
-                                    <BufferLoginButton className={'login__btn'} onClick={() => SignInAnonymously()}> Login anonymously </BufferLoginButton>
+                                    <ListItemButton className={'login__btn login__google'} onClick={() => SignInWithGoogle()}> <Google sx={{ m:'15px'}}/> Login with Google </ListItemButton>
                                 </MenuItem>
                                 <MenuItem>
-                                    <GoogleLoginButton className={'login__btn login__google'} onClick={() => SignInWithGoogle()}> Login with Google </GoogleLoginButton>
+                                    <ListItemButton className={'login__btn '} disabled={true} onClick={() => alert("Disabled")}> <Apple sx={{m:'15px'}}/>Login with Apple </ListItemButton>
                                 </MenuItem>
                                 <MenuItem>
-                                    <AppleLoginButton className={'login__btn '} disabled={true} onClick={() => alert("Disabled")}> Login with Apple </AppleLoginButton>
+                                    <ListItemButton className={'login__btn '} disabled={true} onClick={() => alert("Disabled")}><Facebook sx={{m:'15px'}}/>Login with Facebook</ListItemButton>
                                 </MenuItem>
+                                <Divider/>
                                 <MenuItem>
-                                    <FacebookLoginButton className={'login__btn '} disabled={true} onClick={() => alert("Disabled")}>Login with Facebook</FacebookLoginButton>
+                                    <ListItemButton className={'login__btn'} onClick={() => SignInAnonymously()}> <Person sx={{m:'15px'}}/> Login anonymously </ListItemButton>
                                 </MenuItem>
                             </>
                     }

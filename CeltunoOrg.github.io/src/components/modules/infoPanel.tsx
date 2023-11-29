@@ -4,6 +4,7 @@ import Typography from "@mui/material/Typography";
 import PlannerDataService from "../../services/planner-firebase-service"
 import { DataType } from "../../types/day.type";
 import { useTheOnValue } from "../../../firebase-planner";
+import { Box } from "@mui/material";
 
 
 const InfoPanel = () => {
@@ -50,6 +51,8 @@ const InfoPanel = () => {
     }
 
     return (
+        <Box sx= {{ mt:2}}>
+
         <React.Fragment>
             {/* <Typography component="p" variant="h4">
                 Overview
@@ -65,10 +68,11 @@ const InfoPanel = () => {
             </Typography>
             {/* <div>
                 <Link color="primary" href="#" onClick={preventDefault}>
-                    View balance
+                View balance
                 </Link>
             </div> */}
         </React.Fragment>
+            </Box>
     );
 }
 
